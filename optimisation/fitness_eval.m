@@ -28,7 +28,7 @@
 
 
 function [F,Xout] = fitness_eval(Xin,mpc)
-global CONSTANTS Qref mpopt;
+global CONSTANTS Qref mpopt pen;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);
@@ -41,6 +41,8 @@ for np = 1:NXin
     PFresults = runpf(mpc,mpopt);
 
 if PFresults.success == 1
+    %------------------------------------------------------------------------
+    %CONSTRAINTS:
     %% voltage violations
     %%1 if violation at bus j
     
@@ -52,33 +54,35 @@ if PFresults.success == 1
     PFresults.bus(slack,CONSTANTS.VMAX:CONSTANTS.VMIN) = vlimpcc;
     
     %compute the violations of bus voltages
-    vio_vbus_max = ones(Nbus,1) - (PFresults.bus(:,CONSTANTS.VM) <= PFresults.bus(:,CONSTANTS.VMAX));  %vmax
-    vio_vbus_min = ones(Nbus,1) - (PFresults.bus(:,CONSTANTS.VM) >= PFresults.bus(:,CONSTANTS.VMIN));  %vmax
-
+    vio_vbus_max = pen.p1*ones(Nbus,1) - (PFresults.bus(:,CONSTANTS.VM) <= PFresults.bus(:,CONSTANTS.VMAX));  %vmax
+    vio_vbus_min = pen.p1*ones(Nbus,1) - (PFresults.bus(:,CONSTANTS.VM) >= PFresults.bus(:,CONSTANTS.VMIN));  %vmax
+ 
     %% Compute Qref violation
     %%check if Q at PCC is near Qref within the range given by tolerance.
     %%If not, 'vQpcc' is 1
     
-    vio_Qpcc = 1 - (abs(Qpcc - Qref.setpoint) <= Qref.tolerance);
+    vio_Qpcc = pen.p2*(1 - (abs(Qpcc - Qref.setpoint) <= Qref.tolerance));
     %% line flow violations From
     %%1 if violation of current limit in a branch. The current limit is
     %%converted to an apparent power limit 'rate_A'
     
     sbranchFrom = sqrt(PFresults.branch(:,CONSTANTS.PF).^2 + PFresults.branch(:,CONSTANTS.QF).^2); %compute S through a branch in MVA
-    vio_sbranchFrom = ones(Nbranch,1) - (sbranchFrom <= PFresults.branch(:,CONSTANTS.RATE_A));
+    vio_sbranchFrom = pen.p3*ones(Nbranch,1) - (sbranchFrom <= PFresults.branch(:,CONSTANTS.RATE_A));
 
     %% line flow violations To
     %%1 if violation of current limit in a branch. The current limit is
     %%converted to an apparent power limit 'rate_A'
     
     sbranchTo = sqrt(PFresults.branch(:,CONSTANTS.PT).^2 + PFresults.branch(:,CONSTANTS.QT).^2); %compute S through a branch in MVA
-    vio_sbranchTo = ones(Nbranch,1) - (sbranchTo <= PFresults.branch(:,CONSTANTS.RATE_A));
+    vio_sbranchTo = pen.p3*ones(Nbranch,1) - (sbranchTo <= PFresults.branch(:,CONSTANTS.RATE_A));
 
     %% total violations
     
     vio = [vio_vbus_max; vio_vbus_min; vio_Qpcc; vio_sbranchFrom; vio_sbranchTo];
     total_violations = sum(vio);
     checklimits(PFresults);
+    %------------------------------------------------------------------------
+    %COSTS
     %% Ploss
     %%branch losses
     [losses] = get_losses(PFresults);

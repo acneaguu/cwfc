@@ -23,6 +23,12 @@ global Qref;
 Qref.setpoint = 0; %in p.u. of baseMVA
 Qref.tolerance = 1e-3;
 
+%global struct which contains penalty values for the different constraints
+global pen;
+pen.p1 = 1; %Penalty for voltage violation
+pen.p2 = 1; %Penalty for Qref violation
+pen.p3 = 1; %Penalty for power violation
+
 %%a random comment appeared
 %%another random comment
 mpc = test_sys41();

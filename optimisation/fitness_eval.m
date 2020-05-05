@@ -98,6 +98,7 @@ if PFresults.success == 1
     %% Reactor
 else
     %%penalise unsuccesful run
-    %%give chancla
+    F = 1e50; %%give chancla to unsuccessful run
+    
 end
 end

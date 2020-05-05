@@ -94,7 +94,7 @@ if PFresults.success == 1
     %sum(bus(nzsh, VM) .^ 2 .* bus(nzsh, BS))  %%shunt injection reactive
     
     %% Tap switches
-    
+    %kk kinderen 123
     %% Reactor
 else
     %%penalise unsuccesful run

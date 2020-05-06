@@ -14,4 +14,5 @@ global CONSTANTS Qref mpopt pen X;
     %% Tap switches
     
     %% Reactor
+    OF = 1;
 end

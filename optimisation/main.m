@@ -34,19 +34,4 @@ pen.p3 = 1; %Penalty for power violation
 mpc = test_sys41();
 Xin = magic(5);
 [F,Xout] = fitness_eval(Xin,mpc);
-%%
-%%
-%
 
-%
-%
-%
-%
-%
-%
-%
-
-%
-%%
-
-%%

@@ -55,20 +55,18 @@ Optimisation.discrete = logical([zeros(1,Optimisation.Nturbines + Optimisation.N
                                             %logic vector which is 1 for
                                             %discrete variables
 
+logic_optvars()                             %generate logic vectors vor different var indeces
 
 Optimisation.p1 = 1; %Penalty for voltage violation
 Optimisation.p2 = 1; %Penalty for Qref violation
 Optimisation.p3 = 1; %Penalty for power violation
-
-
-
 
 %%variables containing the best solutions at all evaluated time instances
 %%Xbest is a nxm matrix where n is the number of evaluated time instances
 %%and m is the number of optimisation variables. Fbest is a vector of
 %%length n which contains the fitness of set of variables in Xbest.
 global Fbest Xbest; 
-Xbest = zeros(
+%Xbest = zeros(
 
 
 Xin = magic(5);

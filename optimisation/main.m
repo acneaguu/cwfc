@@ -17,17 +17,15 @@ global Qref;
 Qref.setpoint = 0; %in p.u. of baseMVA
 Qref.tolerance = 1e-3;
 
-%global struct which contains penalty values for the different constraints
-global pen;
-pen.p1 = 1; %Penalty for voltage violation
-pen.p2 = 1; %Penalty for Qref violation
-pen.p3 = 1; %Penalty for power violation
-
-%Casedata consists of relevant optimisation problem parameters
+%%Structure containing power system and optimization related information
+%That is, 
 global Casedata;
 Casedata.mpc = test_sys41();
 Casedata.Nbranch = size(Casedata.mpc.branch,1);
 Casedata.Nbus = size(Casedata.mpc.bus,1);
+Casedata.Nreactors = 1;
+Casedata.Nstrings = 13;
+
 
 
 %Optimisation containts the optimisation algorithm parameters
@@ -35,6 +33,10 @@ global Optimisation;
 Optimisation.Ncases = 1;     %number of evaluated time instances
 Optimisation.Nruns = 1;      %number of runs per case
 Optimisation.Neval = 1e4;    %max allowed function evaluations
+Optimisation.p1 = 1; %Penalty for voltage violation
+Optimisation.p2 = 1; %Penalty for Qref violation
+Optimisation.p3 = 1; %Penalty for power violation
+
 
 
 %%variables containing the best solutions at all evaluated time instances

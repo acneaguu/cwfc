@@ -3,6 +3,7 @@ close all;
 
 %%load MATPOWER constants for convenience in the struct CONSTANTS
 define_constants_struct();
+rng default  % For reproducibility
 
 %%surpress MATPOWER outputs
 global mpopt CONSTANTS;

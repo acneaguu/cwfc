@@ -1,5 +1,5 @@
-function OF = compute_costs(PFresults)%computes value of the OF
-global CONSTANTS Qref mpopt pen;
+function OF = compute_costs(PFresults,Xin)%computes value of the OF
+global CONSTANTS Qref mpopt pen X;
     %COSTS
     %% Ploss
     %%branch losses
@@ -12,6 +12,6 @@ global CONSTANTS Qref mpopt pen;
     %sum(bus(nzsh, VM) .^ 2 .* bus(nzsh, BS))  %%shunt injection reactive
     
     %% Tap switches
-    %kk kinderen 123
+    
     %% Reactor
 end

@@ -28,7 +28,7 @@
 
 
 function [F,Xout] = fitness_eval(Xin,mpc)
-global mpopt Casedata;
+global mpopt Casedata Optimisation;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);
@@ -36,6 +36,8 @@ NXin = size(Xin,1);
 
 for np = 1:NXin
     %% run powerflow
+    %%round discrete Xin 
+    Xin = round_discrete_vars(Xin,Optimisation.discrete);
     %%change casefile here
     PFresults = runpf(mpc,mpopt);
 

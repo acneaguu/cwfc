@@ -54,6 +54,8 @@ Optimisation.discrete = logical([zeros(1,Optimisation.Nturbines + Optimisation.N
     ones(1,(Optimisation.Ntr + Optimisation.Nr))]); 
                                             %logic vector which is 1 for
                                             %discrete variables
+
+
 Optimisation.p1 = 1; %Penalty for voltage violation
 Optimisation.p2 = 1; %Penalty for Qref violation
 Optimisation.p3 = 1; %Penalty for power violation

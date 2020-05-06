@@ -60,7 +60,7 @@ Optimisation.p3 = 1; %Penalty for power violation
 %%and m is the number of optimisation variables. Fbest is a vector of
 %%length n which contains the fitness of set of variables in Xbest.
 global Fbest Xbest; 
-Xbest = zeros(
+%Xbest = zeros(
 
 
 Xin = magic(5);

@@ -1,7 +1,7 @@
 function logic_optvars()
 global Optimisation
 Optimisation.wtg_pos = logical([ones(1,Optimisation.Nturbines) ...
-    zeros(1,(Optimisation.Npv+Optimisation.Ntr+Optimisation.Nr_)]); 
+    zeros(1,(Optimisation.Npv+Optimisation.Ntr+Optimisation.Nr))]); 
                                             %logic vector with 1 on wtg
                                             %positions
 Optimisation.pvg_pos = logical([zeros(1,Optimisation.Nturbines) ...

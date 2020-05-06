@@ -41,7 +41,7 @@ Optimisation.Ntr = 0;                       %number of transformers with discret
 Optimisation.Nr = 0;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
-logic_optvars()                             %generate logic vectors vor different var indeces
+logic_optvars()                             %generate logic vectors for different var indeces
 
 %%variables containing the best solutions at all evaluated time instances
 %%Xbest is a nxm matrix where n is the number of evaluated time instances

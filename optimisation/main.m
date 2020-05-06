@@ -50,10 +50,7 @@ Optimisation.Ntr = 2;                       %number of transformers with discret
 Optimisation.Nr = 1;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
-Optimisation.discrete = logical([zeros(1,Optimisation.Nturbines + Optimisation.Npv)...
-    ones(1,(Optimisation.Ntr + Optimisation.Nr))]); 
-                                            %logic vector which is 1 for
-                                            %discrete variables
+logic_optvars()                             %generate logic vectors vor different var indeces
 Optimisation.p1 = 1; %Penalty for voltage violation
 Optimisation.p2 = 1; %Penalty for Qref violation
 Optimisation.p3 = 1; %Penalty for power violation

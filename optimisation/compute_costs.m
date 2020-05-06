@@ -1,5 +1,5 @@
 function OF = compute_costs(PFresults,Xin)%computes value of the OF
-global CONSTANTS Qref mpopt pen X;
+global CONSTANTS Qref mpopt pen Xbest Fbest;
     %COSTS
     %% Ploss
     %%branch losses

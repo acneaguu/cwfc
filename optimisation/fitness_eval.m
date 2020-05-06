@@ -32,8 +32,7 @@ global mpopt Casedata;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);
-Casedata.Nbranch = size(mpc.branch,1);
-Casedata.Nbus = size(mpc.bus,1);
+
 
 for np = 1:NXin
     %% run powerflow

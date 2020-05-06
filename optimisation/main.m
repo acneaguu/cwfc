@@ -55,9 +55,6 @@ Optimisation.p1 = 1; %Penalty for voltage violation
 Optimisation.p2 = 1; %Penalty for Qref violation
 Optimisation.p3 = 1; %Penalty for power violation
 
-
-
-
 %%variables containing the best solutions at all evaluated time instances
 %%Xbest is a nxm matrix where n is the number of evaluated time instances
 %%and m is the number of optimisation variables. Fbest is a vector of

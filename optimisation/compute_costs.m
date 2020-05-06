@@ -1,5 +1,5 @@
-function OF = compute_costs(PFresults,Xin,t)%computes value of the OF
-global CONSTANTS Qref mpopt Systemdata Optimisation Xbest Fbest;
+function OF = compute_costs(Xin,t)%computes value of the OF
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Xbest Fbest;
     %COSTS
     %% Ploss
     %%branch losses
@@ -15,7 +15,7 @@ global CONSTANTS Qref mpopt Systemdata Optimisation Xbest Fbest;
     tap_changes = sum(abs(Xin(Optimisation.tr_pos)-Xbest(t-1,Optimisation.tr_pos)));
     
     %% Reactor
-    reactor_changes = sum(abs(Xin(Optimisation.r_pos) - Xbest(t-1,Optimisation.r_pos));
+    reactor_changes = sum(abs(Xin(Optimisation.r_pos) - Xbest(t-1,Optimisation.r_pos)));
     
     OF = Optimisation.w1*Ploss_tot+Optimisation.w2*tap_changes+Optimisation.w3*reactor_changes;
 end

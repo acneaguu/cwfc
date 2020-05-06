@@ -27,8 +27,8 @@
 
 
 
-function [F,Xout] = fitness_eval(Xin,mpc)
-global mpopt Casedata Optimisation;
+function [F,Xout] = fitness_eval(Xin,mpc,t)
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Xbest Fbest;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);
@@ -39,18 +39,22 @@ for np = 1:NXin
     %%round discrete Xin 
     Xin = round_discrete_vars(Xin,Optimisation.discrete);
     %%change casefile here
+    global PFresults; 
     PFresults = runpf(mpc,mpopt);
 
 if PFresults.success == 1
     %------------------------------------------------------------------------
     %CONSTRAINTS:
-    [violation_vec, total_violations] = compute_violation_constraints(PFresults);
-    checklimits(PFresults);
+    [violation_vec, total_violations] = compute_violation_constraints();
+    checklimits(PFresults); %Prints violations in command window
     %------------------------------------------------------------------------
-    OF = compute_costs(PFresults);
+    OF = compute_costs(Xin,t);
+    if total_violations == 0
+        F = OF;                    %feasible
+    else
+        F = total_violations*1e20; %infeasible
+    end
 else
-    %%penalise unsuccesful run
     F = 1e50; %%give chancla to unsuccessful run
-    
 end
 end

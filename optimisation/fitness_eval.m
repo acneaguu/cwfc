@@ -23,17 +23,17 @@
 %%Constraints:
 %%-DONE: vmin,vmaX
 %%-DONE: iline -> sline (from/to)
-%%-DONE (if assumption correct): stransformer -> probably done in sline
+%%-DONE: stransformer -> done in sline 
 
 
 
 function [F,Xout] = fitness_eval(Xin,mpc)
-global CONSTANTS Qref mpopt pen;
+global mpopt Casedata;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);
-Nbranch = size(mpc.branch,1);
-Nbus = size(mpc.bus,1);
+Casedata.Nbranch = size(mpc.branch,1);
+Casedata.Nbus = size(mpc.bus,1);
 
 for np = 1:NXin
     %% run powerflow
@@ -43,43 +43,7 @@ for np = 1:NXin
 if PFresults.success == 1
     %------------------------------------------------------------------------
     %CONSTRAINTS:
-    %% voltage violations
-    %%1 if violation at bus j
-    
-    %update slackbus voltage limits to the one corresponding to Qref
-    slack = find(PFresults.bus(:,CONSTANTS.BUS_TYPE) == 3);
-    index_slack = find(PFresults.gen(:,1) == slack);
-    Qpcc = PFresults.gen(index_slack,3)./PFresults.baseMVA;  %#ok<FNDSB>
-    vlimpcc = compute_vlimits(Qpcc);
-    PFresults.bus(slack,CONSTANTS.VMAX:CONSTANTS.VMIN) = vlimpcc;
-    
-    %compute the violations of bus voltages
-    vio_vbus_max = pen.p1*ones(Nbus,1) - (PFresults.bus(:,CONSTANTS.VM) <= PFresults.bus(:,CONSTANTS.VMAX));  %vmax
-    vio_vbus_min = pen.p1*ones(Nbus,1) - (PFresults.bus(:,CONSTANTS.VM) >= PFresults.bus(:,CONSTANTS.VMIN));  %vmax
- 
-    %% Compute Qref violation
-    %%check if Q at PCC is near Qref within the range given by tolerance.
-    %%If not, 'vQpcc' is 1
-    
-    vio_Qpcc = pen.p2*(1 - (abs(Qpcc - Qref.setpoint) <= Qref.tolerance));
-    %% line flow violations From
-    %%1 if violation of current limit in a branch. The current limit is
-    %%converted to an apparent power limit 'rate_A'
-    
-    sbranchFrom = sqrt(PFresults.branch(:,CONSTANTS.PF).^2 + PFresults.branch(:,CONSTANTS.QF).^2); %compute S through a branch in MVA
-    vio_sbranchFrom = pen.p3*ones(Nbranch,1) - (sbranchFrom <= PFresults.branch(:,CONSTANTS.RATE_A));
-
-    %% line flow violations To
-    %%1 if violation of current limit in a branch. The current limit is
-    %%converted to an apparent power limit 'rate_A'
-    
-    sbranchTo = sqrt(PFresults.branch(:,CONSTANTS.PT).^2 + PFresults.branch(:,CONSTANTS.QT).^2); %compute S through a branch in MVA
-    vio_sbranchTo = pen.p3*ones(Nbranch,1) - (sbranchTo <= PFresults.branch(:,CONSTANTS.RATE_A));
-
-    %% total violations
-    
-    vio = [vio_vbus_max; vio_vbus_min; vio_Qpcc; vio_sbranchFrom; vio_sbranchTo];
-    total_violations = sum(vio);
+    [violation_vec, total_violations] = compute_violation_constraints(PFresults);
     checklimits(PFresults);
     %------------------------------------------------------------------------
     OF = compute_costs(PFresults);

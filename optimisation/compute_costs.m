@@ -14,4 +14,5 @@ global CONSTANTS Qref mpopt pen;
     %% Tap switches
     %kk kinderen 123
     %% Reactor
+    OF = 1;
 end

@@ -12,7 +12,7 @@ mpopt = mpoption('verbose',0,'out.all',-1);
 
 %setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint = 0; %in p.u. of baseMVA
+Qref.setpoint = 0.2; %in p.u. of baseMVA
 Qref.tolerance = 0.1;
 
 %%Structure containing power system and optimization related information
@@ -36,9 +36,9 @@ Optimisation.w2 = 0;
 Optimisation.w3 = 0;
 
 Optimisation.Nturbines = 13;                %number of turbine strings
-Optimisation.Npv = 4;                       %number of pv generator strings
-Optimisation.Ntr = 2;                       %number of transformers with discrete tap positions
-Optimisation.Nr = 1;                        %number of discrete reactors
+Optimisation.Npv = 0;                       %number of pv generator strings
+Optimisation.Ntr = 0;                       %number of transformers with discrete tap positions
+Optimisation.Nr = 0;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
 logic_optvars()                             %generate logic vectors vor different var indeces

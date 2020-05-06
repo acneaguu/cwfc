@@ -30,9 +30,20 @@ Casedata.Nstrings = 13;
 
 %Optimisation containts the optimisation algorithm parameters
 global Optimisation;
-Optimisation.Ncases = 1;     %number of evaluated time instances
-Optimisation.Nruns = 1;      %number of runs per case
-Optimisation.Neval = 1e4;    %max allowed function evaluations
+Optimisation.Ncases = 1;                    %number of evaluated time instances
+Optimisation.Nruns = 1;                     %number of runs per case
+Optimisation.Neval = 1e4;                   %max allowed function evaluations
+
+Optimisation.Nturbines = 13;                %number of turbine strings
+Optimisation.Npv = 4;                       %number of pv generator strings
+Optimisation.Ntr = 2;                       %number of transformers with discrete tap positions
+Optimisation.Nr = 1;                        %number of discrete reactors
+Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
+    Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
+Optimisation.discrete = logical([zeros(1,Optimisation.Nturbines + Optimisation.Npv)...
+    ones(1,(Optimisation.Ntr + Optimisation.Nr))]); 
+                                            %logic vector which is 1 for
+                                            %discrete variables
 Optimisation.p1 = 1; %Penalty for voltage violation
 Optimisation.p2 = 1; %Penalty for Qref violation
 Optimisation.p3 = 1; %Penalty for power violation

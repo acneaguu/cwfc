@@ -9,40 +9,42 @@ rng default  % For reproducibility
 global mpopt CONSTANTS;
 mpopt = mpoption('verbose',0,'out.all',-1);
 
-%%variables containing the best solutions at all evaluated time instances
-%%Xbest is a nxm matrix where n is the number of evaluated time instances
-%%and m is the number of optimisation variables. Fbest is a vector of
-%%length n which contains the fitness of set of variables in Xbest.
-Ncases = 1;     %number of evaluated time instances
-Nruns = 1;      %number of runs per case
-Neval = 1e4;    %max allowed function evaluations
-
-global Fbest Xbest; 
-
+%%a random comment appeared
+%%another random comment
 
 %setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint = 0; %in p.u. of baseMVA
 Qref.tolerance = 1e-3;
 
-%global struct which contains penalty values for the different constraints
-global pen;
-pen.p1 = 1; %Penalty for voltage violation
-pen.p2 = 1; %Penalty for Qref violation
-pen.p3 = 1; %Penalty for power violation
-
-%%a random comment appeared
-%%another random comment
-mpc = test_sys41();
-
-%Casedata consists of relevant optimisation problem parameters
+%%Structure containing power system and optimization related information
+%That is, 
 global Casedata;
-Casedata.Nbranch = size(mpc.branch,1);
-Casedata.Nbus = size(mpc.bus,1);
-Casedata.mpc = mpc;
+Casedata.mpc = test_sys41();
+Casedata.Nbranch = size(Casedata.mpc.branch,1);
+Casedata.Nbus = size(Casedata.mpc.bus,1);
+Casedata.Nreactors = 1;
+Casedata.Nstrings = 13;
 
-%Optimisation containts the optimisation algorithm parametters
+
+
+%Optimisation containts the optimisation algorithm parameters
 global Optimisation;
+Optimisation.Ncases = 1;     %number of evaluated time instances
+Optimisation.Nruns = 1;      %number of runs per case
+Optimisation.Neval = 1e4;    %max allowed function evaluations
+Optimisation.Nvars = 16;     %number of optimisation variables
+Optimisation.p1 = 1; %Penalty for voltage violation
+Optimisation.p2 = 1; %Penalty for Qref violation
+Optimisation.p3 = 1; %Penalty for power violation
+
+
+
+%%variables containing the best solutions at all evaluated time instances
+%%Xbest is a nxm matrix where n is the number of evaluated time instances
+%%and m is the number of optimisation variables. Fbest is a vector of
+%%length n which contains the fitness of set of variables in Xbest.
+global Fbest Xbest; 
 
 
 Xin = magic(5);

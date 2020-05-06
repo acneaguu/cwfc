@@ -1,6 +1,6 @@
 %%Authors: Jinpowpow & Koper
 %%Date: 5 May 2020
-%%Price: 100€
+%%Price: 200€
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -39,13 +39,12 @@ for np = 1:NXin
     %%round discrete Xin 
     Xin = round_discrete_vars(Xin,Optimisation.discrete);
     %%change casefile here
-    global PFresults; 
     PFresults = runpf(mpc,mpopt);
 
 if PFresults.success == 1
     %------------------------------------------------------------------------
     %CONSTRAINTS:
-    [violation_vec, total_violations] = compute_violation_constraints();
+    [~, total_violations] = compute_violation_constraints();
     checklimits(PFresults); %Prints violations in command window
     %------------------------------------------------------------------------
     OF = compute_costs(Xin,t);

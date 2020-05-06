@@ -19,23 +19,25 @@ Qref.tolerance = 1e-3;
 
 %%Structure containing power system and optimization related information
 %That is, 
-global Casedata;
-Casedata.mpc = test_sys41();
-Casedata.Nbranch = size(Casedata.mpc.branch,1);
-Casedata.Nbus = size(Casedata.mpc.bus,1);
-Casedata.Nreactors = 1;
-Casedata.Nstrings = 13;
+global Systemdata;
+Systemdata.mpc = test_sys41();
+Systemdata.Nbranch = size(Systemdata.mpc.branch,1);
+Systemdata.Nbus = size(Systemdata.mpc.bus,1);
+
 
 
 
 %Optimisation containts the optimisation algorithm parameters
 global Optimisation;
-Optimisation.Ncases = 1;     %number of evaluated time instances
-Optimisation.Nruns = 1;      %number of runs per case
-Optimisation.Neval = 1e4;    %max allowed function evaluations
-Optimisation.p1 = 1; %Penalty for voltage violation
-Optimisation.p2 = 1; %Penalty for Qref violation
-Optimisation.p3 = 1; %Penalty for power violation
+Optimisation.Ncases = 1;        %number of evaluated time instances
+Optimisation.Nruns = 1;         %number of runs per case
+Optimisation.Neval = 1e4;       %max allowed function evaluations
+Optimisation.p1 = 1;            %Penalty for voltage violation
+Optimisation.p2 = 1;            %Penalty for Qref violation
+Optimisation.p3 = 1;            %Penalty for power violation
+Optimisation.w1 = 1;            %Weights of the OF
+Optimisation.w2 = 1;
+Optimisation.w3 = 1;
 
 
 
@@ -44,6 +46,7 @@ Optimisation.p3 = 1; %Penalty for power violation
 %%and m is the number of optimisation variables. Fbest is a vector of
 %%length n which contains the fitness of set of variables in Xbest.
 global Fbest Xbest; 
+Xbest = zeros(
 
 
 Xin = magic(5);

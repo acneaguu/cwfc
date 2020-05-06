@@ -1,4 +1,4 @@
-function OF = compute_costs(PFresults,Xin)%computes value of the OF
+function OF = compute_costs(PFresults,Xin,t)%computes value of the OF
 global CONSTANTS Qref mpopt Systemdata Optimisation Xbest Fbest;
     %COSTS
     %% Ploss
@@ -12,9 +12,8 @@ global CONSTANTS Qref mpopt Systemdata Optimisation Xbest Fbest;
     %sum(bus(nzsh, VM) .^ 2 .* bus(nzsh, BS))  %%shunt injection reactive
     
     %% Tap switches
-    for i = Optimisation.Nturbines:Optimisation.Nturbines+Optimisation.Ntr
-        
-    end
+    for i = Optimisation.Nturbines:Optimisation.
+    
     %% Reactor
     
     

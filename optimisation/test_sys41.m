@@ -7,13 +7,13 @@ nturbines = 18;
 
 for i = 1:ntest
     mpc.bus(24:end,4) = rand(nturbines,1) .* 1;%random MVAr
-    tic 
-    PFresults = runpf(mpc,mpopt);
-    time(i) = toc;
+%     tic 
+%     PFresults = runpf(mpc,mpopt);
+%     time(i) = toc;
 end
-
-maxtime = max(time);
-avgtime = mean(time);
+% 
+% maxtime = max(time);
+% avgtime = mean(time);
 
 %%check for limit violations
 %%Fv contains branch flow limits violations

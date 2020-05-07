@@ -6,7 +6,7 @@ rng default  % For reproducibility (needed for PS algorithm)
 
 %setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint = 0.2; %in p.u. of baseMVA
+Qref.setpoint = 0.0; %in p.u. of baseMVA
 Qref.tolerance = 0.1;
 
 %Optimisation containts the optimisation problem parameters
@@ -46,7 +46,14 @@ lb = -1*ones(Optimisation.Nvars,1);
 ub = 1*ones(Optimisation.Nvars,1);
 %options=optimoptions('particleswarm','MaxIterations',10);
 %X(i) = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
-X = ga(fun,Optimisation.Nvars);
+% options = optimoptions('ga', 'FunctionTolerance', 1e-9, 'MaxStallTime',...
+%     30,'MaxStallGenerations',1e3);
+options = optimoptions('ga', 'FunctionTolerance', 1e-9, ...
+    'MaxStallGenerations',3);
+X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
+Xbest(i+1,:) = X;
+
+animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest)
 end
 
 

@@ -6,8 +6,8 @@
 %%is plotted as function of the number of iterations
 function animated_plot_fitness(X,F,vars)
 drawrate = 1/144;   %refreshrate of the plot
-yres = 0.01;        %range of ylim w.r.t. final value of F
-Flim = F(end)*[1-yres,1+yres];
+yres = 0.005;        %range of ylim w.r.t. final value of F
+Flim = F(end)*[1-0.1 *yres,1+yres];
 
 %%open a new figure
 if ishandle(1)

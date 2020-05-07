@@ -40,29 +40,32 @@ Xbest(Optimisation.discrete) = 1;
 
 Xin = rand(1,Optimisation.Nvars);
 
-for i = 1:Optimisation.Nruns
-fun = @(X)fitness_eval(X,Systemdata.mpc,2);
-lb = [-1*ones(Optimisation.Nvars-2,1).' 0.851 0.87];
-ub = [1*ones(Optimisation.Nvars-2,1).' 1.149 1.13];
-options=optimoptions('particleswarm','MaxIterations',10);
-%options=optimoptions('particleswarm','FunctionTolerance',1e-9...
- %   ,'MaxStallIterations',1e9,'MaxStallTime',10);
-X = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
-%X = ga(fun,Optimisation.Nvars,lb,ub);
-animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
-
 %%parameters for GA
 fun = @(X)fitness_eval(X,2);
 lb = -1*ones(Optimisation.Nvars,1);
 ub = 1*ones(Optimisation.Nvars,1);
-options = optimoptions('ga', 'FunctionTolerance', 1e-9, ...
+algorithm = 1; %1 for ga, 2 for pso
+
+switch algorithm
+    case 1
+    options = optimoptions('ga', 'FunctionTolerance', 1e-9, ...
     'MaxStallGenerations',3);
+    case 2
+    options=optimoptions('particleswarm','MaxIterations',10);
+end
+%options=optimoptions('particleswarm','FunctionTolerance',1e-9...
+%   ,'MaxStallIterations',1e9,'MaxStallTime',10);
 plot = 0;
 
 %%run optimisation
 for i = 1:Optimisation.Nruns
 FCount = 0;
-X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
+switch algorithm
+    case 1
+    X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
+    case 2
+    X = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
+end
 Xbest(i+1,:) = X;
 Fbest(i+1) = fitness_eval(X,i+1);
 

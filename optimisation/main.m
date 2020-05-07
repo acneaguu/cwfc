@@ -47,6 +47,7 @@ ub = 1*ones(Optimisation.Nvars,1);
 %options=optimoptions('particleswarm','MaxIterations',10);
 %X(i) = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
 X = ga(fun,Optimisation.Nvars);
+animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
 end
 
 

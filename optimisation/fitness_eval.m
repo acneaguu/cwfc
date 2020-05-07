@@ -27,7 +27,7 @@
 
 
 
-function [F,Xout] = fitness_eval(Xin,mpc,t)
+function [F,Xout] = fitness_eval(Xin,t)
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Xbest Fbest Keeptrack FCount;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);

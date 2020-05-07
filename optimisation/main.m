@@ -6,7 +6,7 @@ rng default  % For reproducibility (needed for PS algorithm)
 
 %setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint = 0.2; %in p.u. of baseMVA
+Qref.setpoint = 0.0; %in p.u. of baseMVA
 Qref.tolerance = 0.1;
 
 %Optimisation containts the optimisation problem parameters
@@ -27,7 +27,6 @@ Optimisation.Ncases = 1;        %number of evaluated time instances
 Optimisation.Nruns = 1;         %number of runs per case
 Optimisation.Neval = 1e4;       %max allowed function evaluations
 global Keeptrack FCount;
-FCount = 0;
 
 %%Variables containing the best solutions at all evaluated optimisation
 %%runs
@@ -35,7 +34,8 @@ FCount = 0;
 %%and m is the number of optimisation variables. Fbest is a vector of
 %%length n which contains the fitness of set of variables in Xbest.
 global Fbest Xbest Systemdata; 
-Xbest = zeros(1,Optimisation.Nvars);
+Fbest = NaN * zeros(Optimisation.Nruns+1,1);
+Xbest = NaN * zeros(Optimisation.Nruns+1,Optimisation.Nvars);
 Xbest(Optimisation.discrete) = 1;
 
 Xin = rand(1,Optimisation.Nvars);
@@ -50,6 +50,22 @@ options=optimoptions('particleswarm','MaxIterations',10);
 X = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
 %X = ga(fun,Optimisation.Nvars,lb,ub);
 animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
+
+%%parameters for GA
+fun = @(X)fitness_eval(X,2);
+lb = -1*ones(Optimisation.Nvars,1);
+ub = 1*ones(Optimisation.Nvars,1);
+options = optimoptions('ga', 'FunctionTolerance', 1e-9, ...
+    'MaxStallGenerations',3);
+
+%%run optimisation
+for i = 1:Optimisation.Nruns
+FCount = 0;
+X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
+Xbest(i+1,:) = X;
+Fbest(i+1) = fitness_eval(X,i+1);
+animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest)
+
 end
 
 

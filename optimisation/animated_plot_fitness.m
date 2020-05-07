@@ -7,7 +7,7 @@
 function animated_plot_fitness(X,F,vars)
 drawrate = 1/144;   %refreshrate of the plot
 yres = 0.005;        %range of ylim w.r.t. final value of F
-Flim = F(end)*[1-0.1 *yres,1+yres];
+Flim = F(end)*[(1-yres*0.01),1+yres*0.4];
 
 %%open a new figure
 if ishandle(1)

@@ -12,7 +12,7 @@ Qref.tolerance = 0.1;
 %Optimisation containts the optimisation problem parameters
 global Optimisation;
 %Description of variables to optimise
-Optimisation.Nturbines = 18;                %number of turbine strings
+Optimisation.Nturbines = 20;                %number of turbine strings
 Optimisation.Npv = 0;                       %number of pv generator strings
 Optimisation.Ntr = 0;                       %number of transformers with discrete tap positions
 Optimisation.Nr = 0;                        %number of discrete reactors
@@ -42,11 +42,13 @@ Xin = rand(1,Optimisation.Nvars);
 
 for i = 1:Optimisation.Nruns
 fun = @(X)fitness_eval(X,Systemdata.mpc,2);
-lb = -1*ones(Optimisation.Nvars,1);
-ub = 1*ones(Optimisation.Nvars,1);
-%options=optimoptions('particleswarm','MaxIterations',10);
-%X(i) = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
-X = ga(fun,Optimisation.Nvars);
+lb = [-1*ones(Optimisation.Nvars-2,1).' 0.851 0.87];
+ub = [1*ones(Optimisation.Nvars-2,1).' 1.149 1.13];
+options=optimoptions('particleswarm','MaxIterations',10);
+%options=optimoptions('particleswarm','FunctionTolerance',1e-9...
+ %   ,'MaxStallIterations',1e9,'MaxStallTime',10);
+X = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
+%X = ga(fun,Optimisation.Nvars,lb,ub);
 animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
 end
 

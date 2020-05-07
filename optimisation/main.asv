@@ -44,9 +44,10 @@ for i = 1:Optimisation.Nruns
 fun = @(X)fitness_eval(X,Systemdata.mpc,2);
 lb = -1*ones(Optimisation.Nvars,1);
 ub = 1*ones(Optimisation.Nvars,1);
-%options=optimoptions('particleswarm','MaxIterations',10);
-%X(i) = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
-X = ga(fun,Optimisation.Nvars);
+options=optimoptions('particleswarm','FunctionTolerance',1e-9,'MaxStallIterations','MaxStallTime',30);
+X = particleswarm(fun,Optimisation.Nvars,lb,ub);
+%X = ga(fun,Optimisation.Nvars,lb,ub);
+animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
 end
 
 

@@ -24,7 +24,7 @@ initialise_systemdata(system_41());
 %Optimisation settings
 initialise_optimisation_options
 Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 1;         %number of runs per case
+Optimisation.Nruns = 20;         %number of runs per case
 Optimisation.Neval = 1e4;       %max allowed function evaluations
 global Keeptrack FCount;
 
@@ -46,6 +46,7 @@ lb = -1*ones(Optimisation.Nvars,1);
 ub = 1*ones(Optimisation.Nvars,1);
 options = optimoptions('ga', 'FunctionTolerance', 1e-9, ...
     'MaxStallGenerations',3);
+plot = 0;
 
 %%run optimisation
 for i = 1:Optimisation.Nruns
@@ -53,7 +54,10 @@ FCount = 0;
 X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
 Xbest(i+1,:) = X;
 Fbest(i+1) = fitness_eval(X,i+1);
-animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest)
+
+if plot == 1
+    animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest)
+end
 end
 
 

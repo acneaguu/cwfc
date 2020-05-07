@@ -66,8 +66,8 @@ savedata = 0;
 
 %%run optimisation
 for i = 1:Optimisation.Nruns
-if i == 2 %for i = 1 you dont optimise for minimal power losses, for i = 2 you do
-    Optimisation.w1 =1 ;
+if i == 2 %for i = 2 you dont optimise for minimal power losses
+    Optimisation.w1 =0 ;
 end
 FCount = 0;
 switch algorithm

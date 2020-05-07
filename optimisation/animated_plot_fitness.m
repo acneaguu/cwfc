@@ -8,15 +8,15 @@ function animated_plot_fitness(X,F,vars)
 drawrate = 1/144;   %refreshrate of the plot
 yres = 0.01;        %range of ylim w.r.t. final value of F
 Flim = F(end)*[1-yres,1+yres];
-h = animatedline('Color','red','LineWidth',2);
 
 %%open a new figure
-nfig = get(gcf,'Number');
-if nfig > 1
+if ishandle(1)
+    nfig = get(gcf,'Number');
     figure(nfig+1)
-else 
+else
     figure(1)
 end
+h = animatedline('Color','red','LineWidth',2);
 
 %%check for the number of input vars
 if nargin>2

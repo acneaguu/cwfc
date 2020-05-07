@@ -38,7 +38,9 @@ for np = 1:NXin
     %% run powerflow
     %%round discrete Xin 
     Xout(np,:) = round_discrete_vars(Xin(np,:),Optimisation.discrete);
-    Systemdata.mpc.bus(24:end,4) = Xout(np,:).';
+    Systemdata.mpc.bus(24:end,4) = Xout(np,1:18).';
+    Systemdata.mpc.branch(1,9) = Xout(np,19);
+    Systemdata.mpc.branch(13,9) = Xout(np,20);
     PFresults = runpf(Systemdata.mpc,mpopt);
 
 if PFresults.success == 1

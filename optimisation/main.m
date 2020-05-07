@@ -7,19 +7,19 @@ rng default  % For reproducibility (needed for PS algorithm)
 %setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint = 0.0; %in p.u. of baseMVA
-Qref.tolerance = 0.1;
+Qref.tolerance = 0.05;
 
 %Optimisation containts the optimisation problem parameters
 global Optimisation;
 %Description of variables to optimise
-Optimisation.Nturbines = 20;                %number of turbine strings
+Optimisation.Nturbines = 18;                %number of turbine strings
 Optimisation.Npv = 0;                       %number of pv generator strings
 Optimisation.Ntr = 0;                       %number of transformers with discrete tap positions
 Optimisation.Nr = 0;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
 logic_optvars                               %generate logic vectors for different var indeces
-initialise_systemdata(system_41());
+initialise_systemdata(system_41);
 
 %Optimisation settings
 initialise_optimisation_options
@@ -56,6 +56,7 @@ end
 %options=optimoptions('particleswarm','FunctionTolerance',1e-9...
 %   ,'MaxStallIterations',1e9,'MaxStallTime',10);
 plot = 0;
+savedata = 1;
 
 %%run optimisation
 for i = 1:Optimisation.Nruns
@@ -72,7 +73,12 @@ Fbest(i+1) = fitness_eval(X,i+1);
 if plot == 1
     animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest)
 end
-end
 
+if savedata == 1
+    rundata = sprintf('Nruns=%3.1d_Nvars=%3.1d',Optimisation.Nruns,Optimisation.Nvars);
+    namestr = strcat(rundata,'_',datestr(now,'dd-MM-yyyy HH-mm-ss'));
+    save(namestr)
+end
+end
 
 

@@ -1,11 +1,11 @@
-function initialise_systemdata()
+function initialise_systemdata(topology)
 %%surpress MATPOWER outputs
 global mpopt Optimisation Systemdata
-mpopt = mpoption('verbose',0,'out.all',-1);
+mpopt = mpoption('verbose',0,'out.all',0);
 
 %%Structure containing power system and optimization related information
 %That is, 
-Systemdata.mpc = system_41();
+Systemdata.mpc = topology;
 Systemdata.mpc.bus(24:end,4) = rand(18,1);%random MVAr
 Systemdata.Nbranch = size(Systemdata.mpc.branch,1);
 Systemdata.Nbus = size(Systemdata.mpc.bus,1);

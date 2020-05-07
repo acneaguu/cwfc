@@ -28,24 +28,24 @@
 
 
 function [F,Xout] = fitness_eval(Xin,mpc,t)
-global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Xbest Fbest;
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Xbest Fbest Keeptrack FCount;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);
 
-
 for np = 1:NXin
+    FCount = FCount+1;
     %% run powerflow
     %%round discrete Xin 
-    Xin = round_discrete_vars(Xin,Optimisation.discrete);
-    %%change casefile here
-    PFresults = runpf(mpc,mpopt);
+    Xout(np,:) = round_discrete_vars(Xin(np,:),Optimisation.discrete);
+    Systemdata.mpc.bus(24:end,4) = Xout(np,:).';
+    PFresults = runpf(Systemdata.mpc,mpopt);
 
 if PFresults.success == 1
     %------------------------------------------------------------------------
     %CONSTRAINTS:
     [~, total_violations] = compute_violation_constraints();
-    checklimits(PFresults); %Prints violations in command window
+    %checklimits(PFresults); %Prints violations in command window
     %------------------------------------------------------------------------
     OF = compute_costs(Xin,t);
     if total_violations == 0
@@ -54,6 +54,25 @@ if PFresults.success == 1
         F = total_violations*1e20; %infeasible
     end
 else
-    F = 1e50; %%give chancla to unsuccessful run
+    F = 1e50; %Big penalty if powerflow runs are unsuccesful
 end
+%Keeptrack.Fitness keeps track of fitness of every particle
+Keeptrack.Fitness(FCount) = F; 
+%Keeps track of the solutions corresponding to the fitnesses
+Keeptrack.solution(FCount,:)= Xout(np,:);
+%Keeps track of overall best fitnesses and solutions
+if FCount > 1
+    if Keeptrack.Fitness(FCount) <= Keeptrack.FitBest(FCount-1)
+        Keeptrack.FitBest(FCount) = Keeptrack.Fitness(FCount);
+        Keeptrack.SolBest(FCount,:) = Keeptrack.solution(FCount,:); 
+    else
+        Keeptrack.FitBest(FCount) = Keeptrack.FitBest(FCount-1);
+        Keeptrack.SolBest(FCount,:) = Keeptrack.SolBest(FCount-1,:);
+    end
+else
+    Keeptrack.FitBest(FCount) = Keeptrack.Fitness(FCount);
+    Keeptrack.SolBest(FCount,:) = Keeptrack.solution(FCount,:); 
+end
+end
+
 end

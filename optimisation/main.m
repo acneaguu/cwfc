@@ -24,7 +24,7 @@ initialise_systemdata(system_41);
 %Optimisation settings
 initialise_optimisation_options
 Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 2;         %number of runs per case
+Optimisation.Nruns = 1;         %number of runs per case
 Optimisation.Neval = 1e4;       %max allowed function evaluations
 global Keeptrack FCount;
 
@@ -61,8 +61,8 @@ switch algorithm
 end
 %options=optimoptions('particleswarm','FunctionTolerance',1e-9...
 %   ,'MaxStallIterations',1e9,'MaxStallTime',10);
-plot = 0;
-savedata = 1;
+plot = 1;
+savedata = 0;
 
 %%run optimisation
 for i = 1:Optimisation.Nruns
@@ -87,7 +87,6 @@ if plot == 1
 end
 
 end
-
 
 if savedata == 1
     rundata = sprintf('Nruns=%3.1d_Nvars=%3.1d',Optimisation.Nruns,Optimisation.Nvars);

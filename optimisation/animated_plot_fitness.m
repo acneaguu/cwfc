@@ -24,16 +24,23 @@ if nargin>2
         x1 = X(:,vars(1));
         x2 = X(:,vars(2));
         axis([min(x1),max(x1),min(x2),max(x2),Flim])
+        xlabel(sprintf('var %3.1d',vars(1)));
+        ylabel(sprintf('var %3.1d',vars(2)));
+        zlabel('Fitness')
         view([45 45])
         drawtype = 2;
     else
         x1 = X(:,vars(1));
         axis([0.9*min(x1),1.1*max(x1),Flim])
+        xlabel(sprintf('var %3.1d',vars(1)));
+        ylabel('Fitness')
         drawtype = 1;
     end
 else
     x1 = 1:length(F);
     ylim(Flim)
+    xlabel('iteration')
+    ylabel('Fitness')
     drawtype = 1;
 end 
    

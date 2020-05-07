@@ -94,6 +94,6 @@ if savedata == 1
     namestr = strcat(rundata,'_',datestr(now,'dd-MM-yyyy HH-mm-ss'));
     save(namestr)
 end
-end
+
 
 

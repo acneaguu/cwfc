@@ -17,5 +17,6 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Xbest Fbest;
     %% Reactor
     reactor_changes = sum(abs(Xin(Optimisation.r_pos) - Xbest(t-1,Optimisation.r_pos)));
     
+    %% Calculate OF
     OF = Optimisation.w1*Ploss_tot+Optimisation.w2*tap_changes+Optimisation.w3*reactor_changes;
 end

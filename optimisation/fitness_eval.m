@@ -28,11 +28,10 @@
 
 
 function [F,Xout] = fitness_eval(Xin,t)
-global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Xbest Fbest Keeptrack FCount;
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);
-
 for np = 1:NXin
     FCount = FCount+1;
     %% run powerflow
@@ -49,7 +48,7 @@ if PFresults.success == 1
     [~, total_violations] = compute_violation_constraints();
     %checklimits(PFresults); %Prints violations in command window
     %------------------------------------------------------------------------
-    OF = compute_costs(Xin,t);
+         OF = compute_costs(Xin,t);
     if total_violations == 0
         F = OF;                    %feasible
     else

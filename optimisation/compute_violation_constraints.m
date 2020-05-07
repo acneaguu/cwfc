@@ -1,5 +1,5 @@
 function [violation_vec, total_violations] = compute_violation_constraints()
-global CONSTANTS Qref Systemdata PFresults Optimisation
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;
 
     %% voltage violations
     %%1 if violation at bus j

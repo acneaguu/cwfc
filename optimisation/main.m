@@ -50,9 +50,9 @@ Xin = rand(1,Optimisation.Nvars);
 fun = @(X)fitness_eval(X,2);
 lb = -1*ones(Optimisation.Nvars,1);
 ub = 1*ones(Optimisation.Nvars,1);
-algorithm = 1; %1 for ga, 2 for pso
+Optimisation.algorithm = 2; %1 for ga, 2 for pso
 
-switch algorithm
+switch Optimisation.algorithm
     case 1
     options = optimoptions('ga', 'FunctionTolerance', 1e-9, ...
     'MaxStallGenerations',3);
@@ -70,7 +70,7 @@ for i = 1:Optimisation.Nruns
 %     Optimisation.w1 =0 ;
 % end
 FCount = 0;
-switch algorithm
+switch Optimisation.algorithm
     case 1
     X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
     case 2

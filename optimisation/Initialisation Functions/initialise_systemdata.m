@@ -1,6 +1,6 @@
 function initialise_systemdata(topology)
 %%surpress MATPOWER outputs
-global mpopt Optimisation Systemdata
+global mpopt Systemdata
 mpopt = mpoption('verbose',0,'out.all',0);
 
 %%Structure containing power system and optimization related information

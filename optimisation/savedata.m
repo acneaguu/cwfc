@@ -1,5 +1,6 @@
 function savedata
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;
+    name = 'sys41 with only turbine opt_';
     if or(or(Optimisation.w1,Optimisation.w2),Optimisation.w3)
         optstr = 'With Opt ';
     else
@@ -13,6 +14,6 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
     end
     
     rundata = sprintf('Nruns =%3.1d Nvars =%3.1d',Optimisation.Nruns,Optimisation.Nvars);
-    namestr = strcat(optstr," ",algstr,rundata,"_",datestr(now,'dd-MM-yyyy HH-mm-ss'));
+    namestr = strcat(name,optstr," ",algstr,rundata,"_",datestr(now,'dd-MM-yyyy HH-mm-ss'));
     save(namestr)
 end

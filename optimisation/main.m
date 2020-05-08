@@ -6,7 +6,7 @@ rng default  % For reproducibility (needed for PS algorithm)
 
 %setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint = 0.0; %in p.u. of baseMVA
+Qref.setpoint = -0.3; %in p.u. of baseMVA
 Qref.tolerance = 0.05;
 
 %Optimisation containts the optimisation problem parameters

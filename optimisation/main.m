@@ -24,7 +24,7 @@ initialise_systemdata(system_41);
 %Optimisation settings
 initialise_optimisation_options
 Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 31;         %number of runs per case
+Optimisation.Nruns = 1;         %number of runs per case
 Optimisation.Neval = 1e4;       %max allowed function evaluations
 global Keeptrack FCount;
 
@@ -49,9 +49,11 @@ Results.Xbest(Optimisation.discrete) = 1;
 Xin = rand(1,Optimisation.Nvars);
 %%parameters for GA
 fun = @(X)fitness_eval(X,2);
-lb = [-1*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -100 0];
-ub = [1*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 100];
-Optimisation.algorithm = 1; %1 for ga, 2 for pso
+
+%Ones describe the bounds of WTG Q's
+lb = [-2.5*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -20 0];
+ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
+Optimisation.algorithm = 2; %1 for ga, 2 for pso
 
 switch Optimisation.algorithm
     case 1

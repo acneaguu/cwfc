@@ -34,19 +34,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BENCHMARK_FUNC
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function fit = BENCHMARK_FUNC( x )
+function fit = BENCHMARK_FUNC( x)
 % Computes fitness fot the whole population
 % Optimization functions can be obtained from: http://infinity77.net/global_optimization/index.html
-global ff_par;
-switch ff_par.ff
-    case 1
-        fit = Rosenbrock(x);
-    case 2
-        fit = Griewank(x);
-    case 3
-        fit = Rastrigin(x);
-    otherwise
-end
+global Optimisation   
+fit = fitness_eval(x,Optimisation.t);
 end
 function fit = Rosenbrock( x )
 global ff_par;

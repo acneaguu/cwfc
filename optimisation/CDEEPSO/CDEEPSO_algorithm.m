@@ -34,8 +34,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % C-DEEPSO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [ gbestval, gbest ] = CDEEPSO( popSize, memGBestSize, strategyCDEEPSO, typeCDEEPSO, mutationRate, communicationProbability, maxGen, ...
-    maxFitEval, maxGenWoChangeBest, printConvergenceResults, printConvergenceChart )
+function [ gbestval, gbest ] = CDEEPSO_algorithm( popSize, memGBestSize, strategyCDEEPSO, typeCDEEPSO, mutationRate, communicationProbability, maxGen, ...
+    maxFitEval, maxGenWoChangeBest, printConvergenceResults, printConvergenceChart,lb,ub)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SETTING PARAMETERS
 % Global variable
@@ -76,9 +76,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RANDOMLY INITIALIZE CURRENT population
 % Particles' lower bounds
-Xmin = repmat( ff_par.Xmin, 1, ff_par.D );
+Xmin = lb;
 % Particles' upper bounds
-Xmax = repmat( ff_par.Xmax, 1, ff_par.D );
+Xmax = ub;
 Vmin = -Xmax + Xmin;
 Vmax = -Vmin;
 pos = zeros( cdeepso_par.popSize, ff_par.D );

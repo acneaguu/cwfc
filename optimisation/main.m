@@ -10,7 +10,7 @@ Qref.setpoint = -0.33; %in p.u. of baseMVA
 Qref.tolerance = 0.05;
 
 %Optimisation containts the optimisation problem parameters
-global Optimisation;
+global Optimisation ff_par CDEEPSO;
 %Description of variables to optimise
 Optimisation.Nturbines = 22;                %number of turbine strings
 Optimisation.Npv = 0;                       %number of pv generator strings
@@ -24,8 +24,8 @@ initialise_systemdata(system_41);
 %Optimisation settings
 initialise_optimisation_options
 Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 31;         %number of runs per case
-Optimisation.Neval = 1e4;       %max allowed function evaluations
+Optimisation.Nruns = 1;         %number of runs per case
+Optimisation.Neval = 1e5;       %max allowed function evaluations
 global Keeptrack FCount;
 
 global Systemdata ; 
@@ -46,12 +46,20 @@ Results.Fbest = NaN * zeros(Optimisation.Nruns+1,1);
 Results.Xbest = NaN * zeros(Optimisation.Nruns+1,Optimisation.Nvars);
 Results.Xbest(Optimisation.discrete) = 1;
 
-Xin = rand(1,Optimisation.Nvars);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%variable indicated which case is considered. For now, it is case 2 i.e.
+%%the case after the initalisation case. This value should change within a
+%%loop
+Optimisation.t = 2;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%parameters for GA
-fun = @(X)fitness_eval(X,2);
+
+fun = @(X)fitness_eval(X,Optimisation.t);
 lb = [-1*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -100 0];
 ub = [1*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 100];
-Optimisation.algorithm = 1; %1 for ga, 2 for pso
+Optimisation.algorithm = 3; %1 for ga, 2 for pso, 3 for cdeepso
 
 switch Optimisation.algorithm
     case 1
@@ -59,6 +67,8 @@ switch Optimisation.algorithm
     'MaxStallGenerations',3);
     case 2
     options=optimoptions('particleswarm','MaxIterations',1e4);
+    case 3
+    initialise_cdeepso
 end
 %options=optimoptions('particleswarm','FunctionTolerance',1e-9...
 %   ,'MaxStallIterations',1e9,'MaxStallTime',10);
@@ -70,15 +80,35 @@ for i = 1:Optimisation.Nruns
 % if i == 2 %for i = 2 you dont optimise for minimal power losses
 %     Optimisation.w1 =0 ;
 % end
+fprintf('************* Run %d *************\n', i);
 FCount = 0;
 switch Optimisation.algorithm
     case 1
     X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
     case 2
     X = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
+    case 3
+    ff_par.fitEval = 0;
+    ff_par.bestFitEval = 0;
+    ff_par.memNumFitEval = zeros( 1, Optimisation.Neval );
+    ff_par.memFitEval = zeros( 1, Optimisation.Neval);
+    [ gbestfit, X ] = CDEEPSO_algorithm(CDEEPSO.popSize,CDEEPSO.memGBestSize,...
+    CDEEPSO.strategyCDEEPSO, CDEEPSO.typeCDEEPSO, CDEEPSO.mutationRate,...
+    CDEEPSO.communicationProbability, CDEEPSO.maxGen, Optimisation.Neval, ...
+    CDEEPSO.maxGenWoChangeBest, CDEEPSO.printConvergenceResults,...
+    CDEEPSO.printConvergenceChart,lb,ub);
+    ff_par.memNumFitEval = ff_par.memNumFitEval( 1:Optimisation.Neval );
+    ff_par.memFitEval = ff_par.memFitEval( 1:Optimisation.Neval );
+    Results.resultsCDEEPSO(i+1,:) = ff_par.memFitEval;
 end
+
 Results.Xbest(i+1,:) = X;
-Results.Fbest(i+1) = fitness_eval(X,i+1);
+switch Optimisation.algorithm
+    case 1 || 2
+        Results.Fbest(i+1) = fitness_eval(X,i+1);
+    case 3
+        Results.Fbest(i+1) = gbestfit;
+end
 
 [Results.Ploss(i), Results.tchanges(i), Results.rchanges(i),Results.Qaccuracy(i)] = ...
     compute_results(X,i+1);

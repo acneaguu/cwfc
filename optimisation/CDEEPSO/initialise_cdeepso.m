@@ -47,7 +47,7 @@ global ff_par CDEEPSO Optimisation Results;
 %Function Definition
 ff_par.ff = 1;
 % Dimension of optimization problem
-ff_par.D = 50;
+ff_par.D = Optimisation.Nvars;
 ff_par.Xmin = -100;
 ff_par.Xmax = 100;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,8 +69,6 @@ CDEEPSO.typeCDEEPSO = 3; % 2 -> Rand/1/bin; % 3 -> Best/1/bin
 CDEEPSO.mutationRate = 0.8;
 %Communication rate 
 CDEEPSO.communicationProbability = 0.4;
-%fitness evaluate 
-CDEEPSO.maxFitEval = 100000;
 %generations
 CDEEPSO.maxGen =50000;
 CDEEPSO.maxGenWoChangeBest = 1000;
@@ -81,7 +79,7 @@ CDEEPSO.printConvergenceChart = 1; % 1 -> Chart ; 0 -> No Chart ;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Matrix results
-Results.resultsCDEEPSO = NaN*ones( Optimisation.Nruns, Optimisation.Neval);
+%Results.resultsCDEEPSO = NaN*ones( Optimisation.Nruns, Optimisation.Neval);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % PRINT message
     fprintf('           C-DEEPSO 2018             \n');
@@ -89,34 +87,12 @@ Results.resultsCDEEPSO = NaN*ones( Optimisation.Nruns, Optimisation.Neval);
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % PRINT simulation parameters
-    fprintf('\nMax Gen: %d\n', maxGen);
-    fprintf('Max Fit Evaluations: %d\n', maxFitEval);
-    fprintf('Max Gen With Equal Global Best: %d\n',maxGenWoChangeBest);
-    fprintf('Population Size: %d\n', popSize);
-    fprintf('Memory Size: %d\n', memGBestSize);
-    fprintf('Mutation Rate: %.3f\n', mutationRate);
-    fprintf('Communication Probability: %.3f\n\n', communicationProbability);
+    fprintf('\nMax Gen: %d\n', CDEEPSO.maxGen);
+    fprintf('Max Fit Evaluations: %d\n', Optimisation.Neval);
+    fprintf('Max Gen With Equal Global Best: %d\n',CDEEPSO.maxGenWoChangeBest);
+    fprintf('Population Size: %d\n', CDEEPSO.popSize);
+    fprintf('Memory Size: %d\n', CDEEPSO.memGBestSize);
+    fprintf('Mutation Rate: %.3f\n', CDEEPSO.mutationRate);
+    fprintf('Communication Probability: %.3f\n\n', CDEEPSO.communicationProbability);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
-
-
-    for i = 1 : maxRun
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % RUN CDEEPSO 
-        fprintf('************* Run %d *************\n', i);
-        ff_par.fitEval = 0;
-        ff_par.bestFitEval = 0;
-        ff_par.memNumFitEval = zeros( 1, maxFitEval );
-        ff_par.memFitEval = zeros( 1, maxFitEval );
-        [ gbestfit, gbest ] = CDEEPSO(CDEEPSO.popSize,CDEEPSO.memGBestSize,...
-            CDEEPSO.strategyCDEEPSO, CDEEPSO.typeCDEEPSO, CDEEPSO.mutationRate,...
-            CDEEPSO.communicationProbability, CDEEPSO.maxGen, CDEEPSO.maxFitEval, ...
-            CDEEPSO.maxGenWoChangeBest, CDEEPSO.printConvergenceResults,...
-            CDEEPSO.printConvergenceChart );
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        ff_par.memNumFitEval = ff_par.memNumFitEval( 1:maxFitEval );
-        ff_par.memFitEval = ff_par.memFitEval( 1:maxFitEval );
-        Results.Fbest(i+1,1) = gbestfit;
-        memBestSolution(i+1,:) = gbest;
-        resultsCDEEPSO(i+1,:) = ff_par.memFitEval;
-    end

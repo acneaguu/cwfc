@@ -55,7 +55,11 @@ cdeepso_par.memGBestMaxSize = 5;
 % 1 -> Sg ; % 2 -> Pb ; % 3 -> Sg-rnd ; % 4 -> Pb-rnd; % 5 -> SgPb-rnd
 cdeepso_par.strategyCDEEPSO = 5; 
 % DE Strategy 
+
+CDEEPSO.typeCDEEPSO = 2; % 2 -> Rand/1/bin; % 3 -> Best/1/bin
+
 cdeepso_par.typeCDEEPSO = 2; % 2 -> Rand/1/bin; % 3 -> Best/1/bin
+
 %Mutation rate 
 cdeepso_par.mutationRate = 0.8;
 %Communication rate 

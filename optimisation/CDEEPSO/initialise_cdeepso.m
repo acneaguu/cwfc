@@ -55,7 +55,7 @@ CDEEPSO.memGBestSize = 5;
 % 1 -> Sg ; % 2 -> Pb ; % 3 -> Sg-rnd ; % 4 -> Pb-rnd; % 5 -> SgPb-rnd
 CDEEPSO.strategyCDEEPSO = 5; 
 % DE Strategy 
-CDEEPSO.typeCDEEPSO = 3; % 2 -> Rand/1/bin; % 3 -> Best/1/bin
+CDEEPSO.typeCDEEPSO = 2; % 2 -> Rand/1/bin; % 3 -> Best/1/bin
 %Mutation rate 
 CDEEPSO.mutationRate = 0.8;
 %Communication rate 

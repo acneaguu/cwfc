@@ -51,7 +51,7 @@ Results.Xbest(Optimisation.discrete) = 1;
 %%variable indicated which case is considered. For now, it is case 2 i.e.
 %%the case after the initalisation case. This value should change within a
 %%loop
-Optimisation.t = 2;
+Optimisation.t = 3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%parameters for GA
@@ -68,7 +68,7 @@ switch Optimisation.algorithm
     case 2
     options=optimoptions('particleswarm','MaxIterations',1e4);
     case 3
-    initialise_cdeepso
+    initialise_cdeepso;
 end
 %options=optimoptions('particleswarm','FunctionTolerance',1e-9...
 %   ,'MaxStallIterations',1e9,'MaxStallTime',10);

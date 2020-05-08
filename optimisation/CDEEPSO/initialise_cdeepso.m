@@ -39,18 +39,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function initialise_cdeepso
 global ff_par CDEEPSO Optimisation Results;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Basic functions
-% 1 - Rosenbrock
-% 2 - Griewank
-% 3 - Rastrigin
-%Function Definition
-ff_par.ff = 1;
 % Dimension of optimization problem
 ff_par.D = Optimisation.Nvars;
-ff_par.Xmin = -100;
-ff_par.Xmax = 100;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % INITIALIZE random number generator
 seed = 1234;
 rng( seed, 'twister'  );
@@ -61,11 +51,12 @@ CDEEPSO.popSize = 50;
 %memory size 
 CDEEPSO.memGBestSize = 5;
 %strategyCDEEPSO 
+%for mutation of velocity w.r.t. other individuals
 % 1 -> Sg ; % 2 -> Pb ; % 3 -> Sg-rnd ; % 4 -> Pb-rnd; % 5 -> SgPb-rnd
 CDEEPSO.strategyCDEEPSO = 5; 
 % DE Strategy 
 CDEEPSO.typeCDEEPSO = 3; % 2 -> Rand/1/bin; % 3 -> Best/1/bin
-%Mutatoin rate 
+%Mutation rate 
 CDEEPSO.mutationRate = 0.8;
 %Communication rate 
 CDEEPSO.communicationProbability = 0.4;
@@ -79,13 +70,10 @@ CDEEPSO.printConvergenceChart = 1; % 1 -> Chart ; 0 -> No Chart ;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Matrix results
-%Results.resultsCDEEPSO = NaN*ones( Optimisation.Nruns, Optimisation.Neval);
+Results.resultsCDEEPSO = NaN*ones( Optimisation.Nruns, Optimisation.Neval);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % PRINT message
     fprintf('           C-DEEPSO 2018             \n');
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % PRINT simulation parameters
     fprintf('\nMax Gen: %d\n', CDEEPSO.maxGen);
     fprintf('Max Fit Evaluations: %d\n', Optimisation.Neval);

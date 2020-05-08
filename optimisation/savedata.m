@@ -11,6 +11,8 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
         algstr = 'GA_';
     elseif Optimisation.algorithm == 2
         algstr = 'PS_';
+    elseif Optimisation.algorithm == 3
+        algstr = 'CDEEPSO';
     end
     if isempty(name)
         name = [];

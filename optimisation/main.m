@@ -24,7 +24,7 @@ initialise_systemdata(system_41);
 %Optimisation settings
 initialise_optimisation_options
 Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 50;         %number of runs per case
+Optimisation.Nruns = 1;         %number of runs per case
 Optimisation.Neval = 1e4;       %max allowed function evaluations
 global Keeptrack FCount;
 
@@ -41,6 +41,7 @@ global Results;
 Results.Ploss = NaN * zeros(Optimisation.Nruns,1);
 Results.tchanges = NaN * zeros(Optimisation.Nruns,1);
 Results.rchanges = NaN * zeros(Optimisation.Nruns,1);
+Results.Qaccuracy = NaN * zeros(Optimisation.Nruns,1);
 Results.Fbest = NaN * zeros(Optimisation.Nruns+1,1);
 Results.Xbest = NaN * zeros(Optimisation.Nruns+1,Optimisation.Nvars);
 Results.Xbest(Optimisation.discrete) = 1;
@@ -79,7 +80,7 @@ end
 Results.Xbest(i+1,:) = X;
 Results.Fbest(i+1) = fitness_eval(X,i+1);
 
-[Results.Ploss(i), Results.tchanges(i), Results.rchanges(i)] = ...
+[Results.Ploss(i), Results.tchanges(i), Results.rchanges(i),Results.Qaccuracy(i)] = ...
     compute_results(X,i+1);
 
 if plot == 1

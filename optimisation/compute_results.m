@@ -1,4 +1,4 @@
-function [Ploss Tchanges Rchanges] = compute_results(Xopt,t)
+function [Ploss Tchanges Rchanges Q_accuracy] = compute_results(Xopt,t)
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;     
     %Changes systemdata according to optimal solution
     Systemdata.mpc.bus(24:end,4) = Xopt(Optimisation.continuous).';
@@ -16,4 +16,10 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
     
     %Computes resulting reactor changes
     Rchanges = sum(abs(Xopt(Optimisation.r_pos) - Results.Xbest(t-1,Optimisation.r_pos)));
+    
+    %Computes resulting |Qpcc-Qref|
+    slack = find(PFresults.bus(:,CONSTANTS.BUS_TYPE) == 3);
+    index_slack = find(PFresults.gen(:,1) == slack);
+    Qpcc = PFresults.gen(index_slack,3)./PFresults.baseMVA;  
+    Q_accuracy = abs(Qref.setpoint-Qpcc);
 end

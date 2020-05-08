@@ -68,19 +68,16 @@ cdeepso_par.printConvergenceResults = 100;
 cdeepso_par.printConvergenceChart = 1; % 1 -> Chart ; 0 -> No Chart ;
 %Maximun run 
 cdeepso_par.maxFitEval = Optimisation.Neval;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Matrix results
-Results.resultsCDEEPSO = NaN*ones( Optimisation.Nruns, Optimisation.Neval);
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % PRINT message
-    fprintf('           C-DEEPSO 2018             \n');
-    % PRINT simulation parameters
-    fprintf('\nMax Gen: %d\n', cdeepso_par.maxGen);
-    fprintf('Max Fit Evaluations: %d\n', Optimisation.Neval);
-    fprintf('Max Gen With Equal Global Best: %d\n',cdeepso_par.maxGenWoChangeBest);
-    fprintf('Population Size: %d\n', cdeepso_par.popSize);
-    fprintf('Memory Size: %d\n', cdeepso_par.memGBestMaxSize);
-    fprintf('Mutation Rate: %.3f\n', cdeepso_par.mutationRate);
-    fprintf('Communication Probability: %.3f\n\n', cdeepso_par.communicationProbability);
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PRINT message
+fprintf('           C-DEEPSO 2018             \n');
+% PRINT simulation parameters
+fprintf('\nMax Gen: %d\n', cdeepso_par.maxGen);
+fprintf('Max Fit Evaluations: %d\n', Optimisation.Neval);
+fprintf('Max Gen With Equal Global Best: %d\n',cdeepso_par.maxGenWoChangeBest);
+fprintf('Population Size: %d\n', cdeepso_par.popSize);
+fprintf('Memory Size: %d\n', cdeepso_par.memGBestMaxSize);
+fprintf('Mutation Rate: %.3f\n', cdeepso_par.mutationRate);
+fprintf('Communication Probability: %.3f\n\n', cdeepso_par.communicationProbability);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end

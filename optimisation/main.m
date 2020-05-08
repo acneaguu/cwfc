@@ -23,9 +23,10 @@ initialise_systemdata(system_41);
 
 %Optimisation settings
 initialise_optimisation_options
-Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 1;         %number of runs per case
-Optimisation.Neval = 1e5;       %max allowed function evaluations
+Optimisation.Ncases = 1;            %number of evaluated time instances
+Optimisation.Nruns = 1;             %number of runs per case
+Optimisation.Neval = 1e5;           %max allowed function evaluations
+Optimisation.Populationsize = 50;   %size of the population for GA/
 global Keeptrack FCount;
 
 global Systemdata ; 
@@ -38,13 +39,14 @@ global Systemdata ;
 %%length n which contains the fitness of set of variables in Xbest.
 
 global Results;
-Results.Ploss = NaN * zeros(Optimisation.Nruns,1);
-Results.tchanges = NaN * zeros(Optimisation.Nruns,1);
-Results.rchanges = NaN * zeros(Optimisation.Nruns,1);
-Results.Qaccuracy = NaN * zeros(Optimisation.Nruns,1);
+Results.Ploss = NaN * zeros(Optimisation.Nruns+1,1);
+Results.tchanges = NaN * zeros(Optimisation.Nruns+1,1);
+Results.rchanges = NaN * zeros(Optimisation.Nruns+1,1);
+Results.Qaccuracy = NaN * zeros(Optimisation.Nruns+1,1);
 Results.Fbest = NaN * zeros(Optimisation.Nruns+1,1);
 Results.Xbest = NaN * zeros(Optimisation.Nruns+1,Optimisation.Nvars);
 Results.Xbest(Optimisation.discrete) = 1;
+Results.Fit_progress = NaN * zeros(Optimisation.Nruns+1,Optimisation.Neval);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -64,9 +66,11 @@ Optimisation.algorithm = 3; %1 for ga, 2 for pso, 3 for cdeepso
 switch Optimisation.algorithm
     case 1
     options = optimoptions('ga', 'FunctionTolerance', 1e-9, ...
-    'MaxStallGenerations',3);
+    'MaxGenerations',Optimisation.Neval/Optimisation.Populationsize,...
+    'PopulationSize',Optimisation.Populationsize);
     case 2
-    options=optimoptions('particleswarm','MaxIterations',1e4);
+    options=optimoptions('particleswarm','MaxIterations',...
+        Optimisation.Neval,'SwarmSize',Optimisation.Populationsize);
     case 3
     initialise_cdeepso;
 end
@@ -90,16 +94,13 @@ switch Optimisation.algorithm
     case 3
     ff_par.fitEval = 0;
     ff_par.bestFitEval = 0;
-    ff_par.memNumFitEval = zeros( 1, Optimisation.Neval );
-    ff_par.memFitEval = zeros( 1, Optimisation.Neval);
-    [ gbestfit, X ] = CDEEPSO_algorithm(CDEEPSO.popSize,CDEEPSO.memGBestSize,...
-    CDEEPSO.strategyCDEEPSO, CDEEPSO.typeCDEEPSO, CDEEPSO.mutationRate,...
-    CDEEPSO.communicationProbability, CDEEPSO.maxGen, Optimisation.Neval, ...
-    CDEEPSO.maxGenWoChangeBest, CDEEPSO.printConvergenceResults,...
-    CDEEPSO.printConvergenceChart,lb,ub);
-    ff_par.memNumFitEval = ff_par.memNumFitEval( 1:Optimisation.Neval );
-    ff_par.memFitEval = ff_par.memFitEval( 1:Optimisation.Neval );
-    Results.resultsCDEEPSO(i+1,:) = ff_par.memFitEval;
+%     ff_par.memNumFitEval = zeros( 1, Optimisation.Neval );
+%     ff_par.memFitEval = zeros( 1, Optimisation.Neval);
+    [ gbestfit, X ] = CDEEPSO_algorithm(fun,lb,ub);
+%     ff_par.memNumFitEval = ff_par.memNumFitEval( 1:Optimisation.Neval );
+%     ff_par.memFitEval = ff_par.memFitEval( 1:Optimisation.Neval );
+%     Results.resultsCDEEPSO(i+1,:) = ff_par.memFitEval;
+    
 end
 
 Results.Xbest(i+1,:) = X;
@@ -110,9 +111,9 @@ switch Optimisation.algorithm
         Results.Fbest(i+1) = gbestfit;
 end
 
-[Results.Ploss(i), Results.tchanges(i), Results.rchanges(i),Results.Qaccuracy(i)] = ...
+[Results.Ploss(i+1), Results.tchanges(i+1), Results.rchanges(i+1),Results.Qaccuracy(i+1)] = ...
     compute_results(X,i+1);
-
+Results.Fit_progress(i+1,:) = Keeptrack.FitBest;
 if plot == 1
     animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
 end

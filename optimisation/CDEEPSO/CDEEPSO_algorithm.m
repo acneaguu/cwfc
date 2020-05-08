@@ -34,30 +34,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % C-DEEPSO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [ gbestval, gbest ] = CDEEPSO_algorithm( popSize, memGBestSize, strategyCDEEPSO, typeCDEEPSO, mutationRate, communicationProbability, maxGen, ...
-    maxFitEval, maxGenWoChangeBest, printConvergenceResults, printConvergenceChart,lb,ub)
+function [ gbestval, gbest ] = CDEEPSO_algorithm(fun,lb,ub)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SETTING PARAMETERS
 % Global variable
 global cdeepso_par;
 global ff_par;
-% Maximum number of generations
-cdeepso_par.maxGen = maxGen;
-% Maximum number of fitness evaluations
-cdeepso_par.maxFitEval = maxFitEval;
-% Maximum number of generations without changing global best
-cdeepso_par.maxGenWoChangeBest = maxGenWoChangeBest;
-% Print convergence results every n generations
-cdeepso_par.printConvergenceResults = printConvergenceResults;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% INITIALIZE strategic parameters of DEEPSO
-cdeepso_par.strategyCDEEPSO = strategyCDEEPSO;
-cdeepso_par.typeCDEEPSO = typeCDEEPSO;
-cdeepso_par.popSize = popSize;
-cdeepso_par.memGBestMaxSize = memGBestSize;
-cdeepso_par.mutationRate = mutationRate;
-cdeepso_par.communicationProbability = communicationProbability;
+
+cdeepso_par.fun = fun;
+
 % Weights matrix
 % 1 - inertia
 % 2 - memory
@@ -102,9 +87,9 @@ memGbestval( 1 ) = gbestval;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Memory of the CDEEPSO
 if cdeepso_par.memGBestMaxSize > 0
-    memGBestSize = 1;
-    memGBest( memGBestSize, : ) = gbest;
-    memGBestFit( 1, memGBestSize ) = gbestval;
+    cdeepso_par.memGBestSize = 1;
+    memGBest( cdeepso_par.memGBestSize, : ) = gbest;
+    memGBestFit( 1, cdeepso_par.memGBestSize ) = gbestval;
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -136,12 +121,12 @@ while countGen < cdeepso_par.maxGen && countGenWoChangeBest <= cdeepso_par.maxGe
         tmpMemGBest = pos;
     end
     if cdeepso_par.strategyCDEEPSO == 2 || cdeepso_par.strategyCDEEPSO == 4
-        tmpMemGBestSize = memGBestSize;
+        tmpMemGBestSize = cdeepso_par.memGBestSize;
         tmpMemGBestFit = memGBestFit;
         tmpMemGBest = memGBest;
     end
     if cdeepso_par.strategyCDEEPSO == 5
-        tmpMemGBestSize = memGBestSize + cdeepso_par.popSize;
+        tmpMemGBestSize = cdeepso_par.memGBestSize + cdeepso_par.popSize;
         tmpMemGBestFit = cat( 2, memGBestFit, fit );
         tmpMemGBest = cat( 1, memGBest, pos );
     end
@@ -178,10 +163,10 @@ while countGen < cdeepso_par.maxGen && countGenWoChangeBest <= cdeepso_par.maxGe
             gbest = pos( gbestid, : );
             % UPDATE MEMORY DEEPSO
             if cdeepso_par.memGBestMaxSize > 0
-                if memGBestSize < cdeepso_par.memGBestMaxSize
-                    memGBestSize = memGBestSize + 1;
-                    memGBest( memGBestSize, : ) = gbest;
-                    memGBestFit( 1, memGBestSize ) = gbestval;
+                if cdeepso_par.memGBestSize < cdeepso_par.memGBestMaxSize
+                    cdeepso_par.memGBestSize = cdeepso_par.memGBestSize + 1;
+                    memGBest( cdeepso_par.memGBestSize, : ) = gbest;
+                    memGBestFit( 1, cdeepso_par.memGBestSize ) = gbestval;
                 else
                     [ ~, tmpgworstid ] = max( memGBestFit );
                     memGBest( tmpgworstid, : ) = gbest;
@@ -275,10 +260,10 @@ while countGen < cdeepso_par.maxGen && countGenWoChangeBest <= cdeepso_par.maxGe
         gbest = pos( gbestid, : );
         % UPDATE MEMORY DEEPSO
         if cdeepso_par.memGBestMaxSize > 0
-            if memGBestSize < cdeepso_par.memGBestMaxSize
-                memGBestSize = memGBestSize + 1;
-                memGBest( memGBestSize, : ) = gbest;
-                memGBestFit( 1, memGBestSize ) = gbestval;
+            if cdeepso_par.memGBestSize < cdeepso_par.memGBestMaxSize
+                cdeepso_par.memGBestSize = cdeepso_par.memGBestSize + 1;
+                memGBest( cdeepso_par.memGBestSize, : ) = gbest;
+                memGBestFit( 1, cdeepso_par.memGBestSize ) = gbestval;
             else
                 [ ~, tmpgworstid ] = max( memGBestFit );
                 memGBest( tmpgworstid, : ) = gbest;
@@ -307,7 +292,7 @@ if rem( countGen, cdeepso_par.printConvergenceResults ) ~= 0
     fprintf('Gen: %-8d Best Fit: %.3e\n', countGen, gbestval );
 end
 fprintf('\n');
-if printConvergenceChart == 1
+if cdeepso_par.printConvergenceChart == 1
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % PRINT final results
     x = 0 : 1 : countGen;

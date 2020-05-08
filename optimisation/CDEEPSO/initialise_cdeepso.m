@@ -38,7 +38,7 @@
 % MAIN 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function initialise_cdeepso
-global ff_par CDEEPSO Optimisation Results;
+global ff_par  Optimisation Results cdeepso_par;
 % Dimension of optimization problem
 ff_par.D = Optimisation.Nvars;
 % INITIALIZE random number generator
@@ -47,27 +47,31 @@ rng( seed, 'twister'  );
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SET STRATEGIC PARAMETERS 
 %Population size
-CDEEPSO.popSize = 50;
+cdeepso_par.popSize = Optimisation.Populationsize;
 %memory size 
-CDEEPSO.memGBestSize = 5;
+cdeepso_par.memGBestMaxSize = 5;
 %strategyCDEEPSO 
 %for mutation of velocity w.r.t. other individuals
 % 1 -> Sg ; % 2 -> Pb ; % 3 -> Sg-rnd ; % 4 -> Pb-rnd; % 5 -> SgPb-rnd
-CDEEPSO.strategyCDEEPSO = 5; 
+cdeepso_par.strategyCDEEPSO = 5; 
 % DE Strategy 
-CDEEPSO.typeCDEEPSO = 2; % 2 -> Rand/1/bin; % 3 -> Best/1/bin
-%Mutation rate 
-CDEEPSO.mutationRate = 0.8;
-%Communication rate 
-CDEEPSO.communicationProbability = 0.4;
-%generations
-CDEEPSO.maxGen =50000;
-CDEEPSO.maxGenWoChangeBest = 1000;
-%% SET SIMULATION PARAMETERS
-CDEEPSO.printConvergenceResults = 100; 
-CDEEPSO.printConvergenceChart = 1; % 1 -> Chart ; 0 -> No Chart ;
-%Maximun run 
 
+CDEEPSO.typeCDEEPSO = 2; % 2 -> Rand/1/bin; % 3 -> Best/1/bin
+
+cdeepso_par.typeCDEEPSO = 2; % 2 -> Rand/1/bin; % 3 -> Best/1/bin
+
+%Mutation rate 
+cdeepso_par.mutationRate = 0.8;
+%Communication rate 
+cdeepso_par.communicationProbability = 0.4;
+%generations
+cdeepso_par.maxGen =50000;
+cdeepso_par.maxGenWoChangeBest = 1000;
+%% SET SIMULATION PARAMETERS
+cdeepso_par.printConvergenceResults = 100; 
+cdeepso_par.printConvergenceChart = 1; % 1 -> Chart ; 0 -> No Chart ;
+%Maximun run 
+cdeepso_par.maxFitEval = Optimisation.Neval;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Matrix results
 Results.resultsCDEEPSO = NaN*ones( Optimisation.Nruns, Optimisation.Neval);
@@ -75,12 +79,12 @@ Results.resultsCDEEPSO = NaN*ones( Optimisation.Nruns, Optimisation.Neval);
     % PRINT message
     fprintf('           C-DEEPSO 2018             \n');
     % PRINT simulation parameters
-    fprintf('\nMax Gen: %d\n', CDEEPSO.maxGen);
+    fprintf('\nMax Gen: %d\n', cdeepso_par.maxGen);
     fprintf('Max Fit Evaluations: %d\n', Optimisation.Neval);
-    fprintf('Max Gen With Equal Global Best: %d\n',CDEEPSO.maxGenWoChangeBest);
-    fprintf('Population Size: %d\n', CDEEPSO.popSize);
-    fprintf('Memory Size: %d\n', CDEEPSO.memGBestSize);
-    fprintf('Mutation Rate: %.3f\n', CDEEPSO.mutationRate);
-    fprintf('Communication Probability: %.3f\n\n', CDEEPSO.communicationProbability);
+    fprintf('Max Gen With Equal Global Best: %d\n',cdeepso_par.maxGenWoChangeBest);
+    fprintf('Population Size: %d\n', cdeepso_par.popSize);
+    fprintf('Memory Size: %d\n', cdeepso_par.memGBestMaxSize);
+    fprintf('Mutation Rate: %.3f\n', cdeepso_par.mutationRate);
+    fprintf('Communication Probability: %.3f\n\n', cdeepso_par.communicationProbability);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end

@@ -26,4 +26,5 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
     index_slack = find(PFresults.gen(:,1) == slack);
     Qpcc = PFresults.gen(index_slack,3)./PFresults.baseMVA;  
     Q_accuracy = abs(Qref.setpoint-Qpcc);
+    
 end

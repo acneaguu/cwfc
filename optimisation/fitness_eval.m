@@ -14,21 +14,15 @@
 %%should be and thus the fitness is worse. 
 
 %%'Xin' can be both a vector (only one particle) or a matrix (where each
-%%particle is represented by a different row.
+%%particle is represented by a different row. 't' is used to specify the
+%%current time case considered in order to compare the current transformer
+%%and reactor positions to the previous ones in order to penalise a change
+%%in these variables.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-%%Constraints:
-%%-DONE: vmin,vmaX
-%%-DONE: iline -> sline (from/to)
-%%-DONE: stransformer -> done in sline 
-
-
 
 function [F,Xout] = fitness_eval(Xin,t)
-global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;
+global CONSTANTS mpopt Systemdata PFresults Optimisation Keeptrack FCount;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);
@@ -45,15 +39,21 @@ for np = 1:NXin
     Systemdata.mpc.bus(2,CONSTANTS.BS) = Xout(np,21);%Changes inductor
     Systemdata.mpc.bus(5,CONSTANTS.BS) = Xout(np,22);%Changes capacitor
     
+    %run pf on the system
     PFresults = runpf(Systemdata.mpc,mpopt);
 
 if PFresults.success == 1
     %------------------------------------------------------------------------
     %CONSTRAINTS:
     [~, total_violations] = compute_violation_constraints();
-    %checklimits(PFresults); %Prints violations in command window
     %------------------------------------------------------------------------
-         OF = compute_costs(Xin,t);
+    %Objective function:
+    OF = compute_costs(Xin,t);
+    %------------------------------------------------------------------------
+    
+    
+    %consider only the OF if no violations and otherwise consider only the
+    %constraint violations.
     if total_violations == 0
         F = OF;                    %feasible
     else
@@ -62,11 +62,12 @@ if PFresults.success == 1
 else
     F = 1e50; %Big penalty if powerflow runs are unsuccesful
 end
+
 %Keeptrack.Fitness keeps track of fitness of every particle
 Keeptrack.Fitness(FCount) = F; 
 %Keeps track of the solutions corresponding to the fitnesses
 Keeptrack.solution(FCount,:)= Xout(np,:);
-%Keeps track of overall best fitnesses and solutions
+%Keeps track of overall best fitnesses and solutions.
 if FCount > 1
     if Keeptrack.Fitness(FCount) <= Keeptrack.FitBest(FCount-1)
         Keeptrack.FitBest(FCount) = Keeptrack.Fitness(FCount);

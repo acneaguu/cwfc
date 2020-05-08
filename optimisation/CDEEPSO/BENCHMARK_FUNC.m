@@ -37,7 +37,7 @@
 function fit = BENCHMARK_FUNC( x)
 % Computes fitness fot the whole population
 % Optimization functions can be obtained from: http://infinity77.net/global_optimization/index.html
-global Optimisation cdeepso_par  
+global cdeepso_par  
 fit = feval(cdeepso_par.fun,x);
 end
 function fit = Rosenbrock( x )

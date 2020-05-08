@@ -1,3 +1,5 @@
+%%This function creates the Result struct and initialises the variables
+%%with NaNs.
 function initialise_results_struct
 global Results Optimisation
 

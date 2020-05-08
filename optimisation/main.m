@@ -40,9 +40,8 @@ initialise_optimisation_options     %sets the weights of the different
 Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 1;             %number of runs per case
 Optimisation.Neval = 1e5;           %max allowed function evaluations
-Optimisation.Populationsize = 50;   %size of the population
-Optimisation.algorithm = 3; %1 for ga, 2 for pso, 3 for cdeepso
-
+Optimisation.Populationsize = 200;   %size of the population
+Optimisation.algorithm = 2; %1 for ga, 2 for pso, 3 for cdeepso
 
 %%settings to plot and store the results of the optimisation
 plot = 0;
@@ -111,7 +110,7 @@ end
 %%store the best solution and fitness of this run
 Results.Xbest(i+1,:) = X;
 switch Optimisation.algorithm
-    case 1 || 2
+    case {1,2}
         Results.Fbest(i+1) = fitness_eval(X,i+1);
     case 3
         Results.Fbest(i+1) = gbestfit;

@@ -1,3 +1,7 @@
+%%This function creates multiple logical vectors which indicate the
+%%position of the turbines, pv strings, transformer positions and reactor
+%%positions. Moreover, it makes two vectors indicating which variables are
+%%continuous and which variables are discontinuous
 function logic_optvars()
 global Optimisation
 Optimisation.wtg_pos = logical([ones(1,Optimisation.Nturbines) ...

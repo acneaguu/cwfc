@@ -93,5 +93,3 @@ if store_results == 1
     savedata
 end
 
-
-

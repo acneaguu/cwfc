@@ -37,9 +37,14 @@ for np = 1:NXin
     %% run powerflow
     %%round discrete Xin 
     Xout(np,:) = round_discrete_vars(Xin(np,:),Optimisation.discrete);
-    Systemdata.mpc.bus(24:end,4) = Xout(np,Optimisation.continuous).';
-%     Systemdata.mpc.branch(1,9) = Xout(np,19); change tf ratios
-%     Systemdata.mpc.branch(13,9) = Xout(np,20);
+    
+    %Change topology according to solutions
+    Systemdata.mpc.bus(24:end,4) = Xout(np,18).';
+    Systemdata.mpc.branch(1,9) = Xout(np,19); %change tf ratio 
+    Systemdata.mpc.branch(13,9) = Xout(np,20);
+    Systemdata.mpc.bus(2,CONSTANTS.BS) = Xout(np,21);%Changes inductor
+    Systemdata.mpc.bus(5,CONSTANTS.BS) = Xout(np,22);%Changes capacitor
+    
     PFresults = runpf(Systemdata.mpc,mpopt);
 
 if PFresults.success == 1

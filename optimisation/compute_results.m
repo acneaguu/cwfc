@@ -1,7 +1,11 @@
 function [Ploss Tchanges Rchanges Q_accuracy] = compute_results(Xopt,t)
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;     
-    %Changes systemdata according to optimal solution
-    Systemdata.mpc.bus(24:end,4) = Xopt(Optimisation.continuous).';
+    %Changes systemdata according to run optimal power flow
+    Systemdata.mpc.bus(24:end,4) = Xopt(18).';
+    Systemdata.mpc.branch(1,9) = Xopt(19); %change tf ratio 
+    Systemdata.mpc.branch(13,9) = Xopt(20);
+    Systemdata.mpc.bus(2,CONSTANTS.BS) = Xopt(21);%Changes inductor
+    Systemdata.mpc.bus(5,CONSTANTS.BS) = Xopt(22);%Changes capacitor
     %Runs system once more with optimised variables
     PFresults = runpf(Systemdata.mpc,mpopt);
     

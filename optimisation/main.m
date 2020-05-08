@@ -6,13 +6,13 @@ rng default  % For reproducibility (needed for PS algorithm)
 
 %setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint = 0.0; %in p.u. of baseMVA
+Qref.setpoint = -0.33; %in p.u. of baseMVA
 Qref.tolerance = 0.05;
 
 %Optimisation containts the optimisation problem parameters
 global Optimisation;
 %Description of variables to optimise
-Optimisation.Nturbines = 18;                %number of turbine strings
+Optimisation.Nturbines = 22;                %number of turbine strings
 Optimisation.Npv = 0;                       %number of pv generator strings
 Optimisation.Ntr = 0;                       %number of transformers with discrete tap positions
 Optimisation.Nr = 0;                        %number of discrete reactors
@@ -24,7 +24,7 @@ initialise_systemdata(system_41);
 %Optimisation settings
 initialise_optimisation_options
 Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 1;         %number of runs per case
+Optimisation.Nruns = 31;         %number of runs per case
 Optimisation.Neval = 1e4;       %max allowed function evaluations
 global Keeptrack FCount;
 
@@ -49,16 +49,16 @@ Results.Xbest(Optimisation.discrete) = 1;
 Xin = rand(1,Optimisation.Nvars);
 %%parameters for GA
 fun = @(X)fitness_eval(X,2);
-lb = -1*ones(Optimisation.Nvars,1);
-ub = 1*ones(Optimisation.Nvars,1);
-Optimisation.algorithm = 2; %1 for ga, 2 for pso
+lb = [-1*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -100 0];
+ub = [1*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 100];
+Optimisation.algorithm = 1; %1 for ga, 2 for pso
 
 switch Optimisation.algorithm
     case 1
     options = optimoptions('ga', 'FunctionTolerance', 1e-9, ...
     'MaxStallGenerations',3);
     case 2
-    options=optimoptions('particleswarm','MaxIterations',10);
+    options=optimoptions('particleswarm','MaxIterations',1e4);
 end
 %options=optimoptions('particleswarm','FunctionTolerance',1e-9...
 %   ,'MaxStallIterations',1e9,'MaxStallTime',10);

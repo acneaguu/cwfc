@@ -24,7 +24,7 @@ initialise_systemdata(system_41);
 %Optimisation settings
 initialise_optimisation_options
 Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 1;         %number of runs per case
+Optimisation.Nruns = 50;         %number of runs per case
 Optimisation.Neval = 1e4;       %max allowed function evaluations
 global Keeptrack FCount;
 
@@ -61,14 +61,14 @@ switch algorithm
 end
 %options=optimoptions('particleswarm','FunctionTolerance',1e-9...
 %   ,'MaxStallIterations',1e9,'MaxStallTime',10);
-plot = 1;
-store_results = 1;
+plot = 0;
+store_results = 0;
 
 %%run optimisation
 for i = 1:Optimisation.Nruns
-if i == 2 %for i = 2 you dont optimise for minimal power losses
-    Optimisation.w1 =0 ;
-end
+% if i == 2 %for i = 2 you dont optimise for minimal power losses
+%     Optimisation.w1 =0 ;
+% end
 FCount = 0;
 switch algorithm
     case 1

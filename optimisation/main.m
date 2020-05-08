@@ -62,12 +62,12 @@ end
 %options=optimoptions('particleswarm','FunctionTolerance',1e-9...
 %   ,'MaxStallIterations',1e9,'MaxStallTime',10);
 plot = 1;
-savedata = 0;
+store_results = 1;
 
 %%run optimisation
 for i = 1:Optimisation.Nruns
-if i == 2 %for i = 1 you dont optimise for minimal power losses, for i = 2 you do
-    Optimisation.w1 =1 ;
+if i == 2 %for i = 2 you dont optimise for minimal power losses
+    Optimisation.w1 =0 ;
 end
 FCount = 0;
 switch algorithm
@@ -88,10 +88,8 @@ end
 
 end
 
-if savedata == 1
-    rundata = sprintf('Nruns=%3.1d_Nvars=%3.1d',Optimisation.Nruns,Optimisation.Nvars);
-    namestr = strcat(rundata,'_',datestr(now,'dd-MM-yyyy HH-mm-ss'));
-    save(namestr)
+if store_results == 1
+    savedata
 end
 
 

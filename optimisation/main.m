@@ -19,6 +19,8 @@ Optimisation.Nr = 0;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
 logic_optvars                               %generate logic vectors for different var indeces
+
+global Systemdata ; 
 initialise_systemdata(system_41);
 
 %Optimisation settings
@@ -29,7 +31,7 @@ Optimisation.Neval = 1e5;           %max allowed function evaluations
 Optimisation.Populationsize = 50;   %size of the population for GA/
 global Keeptrack FCount;
 
-global Systemdata ; 
+
 
 %Results struct consits of the results of each optimal powerflow
 %%Variables containing the best solutions at all evaluated optimisation

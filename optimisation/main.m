@@ -62,7 +62,7 @@ end
 %options=optimoptions('particleswarm','FunctionTolerance',1e-9...
 %   ,'MaxStallIterations',1e9,'MaxStallTime',10);
 plot = 1;
-savedata = 0;
+store_results = 1;
 
 %%run optimisation
 for i = 1:Optimisation.Nruns
@@ -88,10 +88,11 @@ end
 
 end
 
-if savedata == 1
-    rundata = sprintf('Nruns=%3.1d_Nvars=%3.1d',Optimisation.Nruns,Optimisation.Nvars);
-    namestr = strcat(rundata,'_',datestr(now,'dd-MM-yyyy HH-mm-ss'));
-    save(namestr)
+if store_results == 1
+%     rundata = sprintf('Nruns=%3.1d_Nvars=%3.1d',Optimisation.Nruns,Optimisation.Nvars);
+%     namestr = strcat(rundata,'_',datestr(now,'dd-MM-yyyy HH-mm-ss'));
+%     save(namestr)
+    savedata
 end
 
 

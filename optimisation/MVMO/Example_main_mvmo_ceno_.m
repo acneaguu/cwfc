@@ -13,7 +13,7 @@ clc
 % =========================================================================
 % global parameter
 % global printff sn
-global proc ps
+global proc ps  parameter
 % =========================================================================
 
 
@@ -45,6 +45,17 @@ initialise_mvmoshm();
 ps.ofcn_evol=zeros(args{3},1);
 ps.fit_evol=zeros(args{3},1);
 ps.param_evol=zeros(args{3},ps.D);
+
+parameter.n_par=2;                          %Requested by competition. Check lines 16 and 32 of main file %45; %Number of particles  
+parameter.n_tosave=4;                       %Archive size
+parameter.fs_factor_start=1;                %Initial fs-factor 
+parameter.fs_factor_end=2;                  %Final fs-factor
+parameter.ratio_gute_max=0.3;               %Initial portion of good particles    
+parameter.ratio_gute_min=0.3;               %Final portion of good particles
+parameter.local_prob= 0;                    %ACHTUNG: Probability value between 0 and 1. Set to 0 to deactivate local search
+parameter.n_random_ini =round(ps.D/1.0);    %initial number of variables selected for mutation ;  
+parameter.n_random_last=round(ps.D/1.0 );   %final number of variables selected for mutation 
+parameter.ratio_local = 0.09;
 
 op_runs=1;%In case you want to run the whole optimizatin several times (i.e. number of optimization runs)
 for iii=1:op_runs

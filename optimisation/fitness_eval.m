@@ -82,4 +82,14 @@ else
 end
 end
 
+
+%%mvmo
+global proc
+proc.i_eval = FCount;
+if proc.i_eval>=proc.n_eval 
+    proc.finish=1;
+    
+end
+%%%%%
+
 end

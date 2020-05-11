@@ -12,7 +12,7 @@ rng default
 %%setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint = -0.33; %in p.u. of baseMVA
-Qref.tolerance = 0.05;
+Qref.tolerance = 0.1 ;
 
 %%Optimisation containts the optimisation problem parameters
 global Optimisation ff_par;
@@ -52,12 +52,12 @@ ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
 initialise_optimisation_options();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 1;             %number of runs per case
-Optimisation.Neval = 1e5;           %max allowed function evaluations
+Optimisation.Nruns = 10;             %number of runs per case
+Optimisation.Neval = 1e4;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso
-Optimisation.print = 0;
-Optimisation.print_interval = 100; %Prints optimisation status every 100 Fcounts
+Optimisation.print = 1;
+Optimisation.print_interval = 1000; %Prints optimisation status every 100 Fcounts
 
 %%settings to plot and store the results of the optimisation
 plot = 0;
@@ -83,14 +83,12 @@ initialise_results_struct%%initialise the Results struct with NaNs
 
 %%Fitness evaluation function
 Optimisation.t = 2;
-
 switch Optimisation.algorithm
-    case{1,2,3}
+    case {1,2,3}
     fun = @(X)fitness_eval(X,Optimisation.t);
     case 4
-    fun = fitness_eval(X,Optimisation.t);
+    fun = str2func('fitness_eval');
 end
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -137,7 +135,7 @@ switch Optimisation.algorithm
         ff_par.bestFitEval = 0;
         [gbestfit, X] = CDEEPSO_algorithm(fun,lb,ub);
     case 4
-        [gbestfit, X] = mvmo_ceno(fun,i,lb,ub);
+        [gbestfit, X] = mvmo_ceno(fun,lb,ub);
 end
 
 %%store the best solution and fitness of this run

@@ -18,8 +18,8 @@ proc.n_eval = Optimisation.Neval;
 
 parameter.n_par=1;                          %Requested by competition. Check lines 16 and 32 of main file %45; %Number of particles  
 parameter.n_tosave=4;                       %Archive size
-parameter.fs_factor_start=1;                %Initial fs-factor 
-parameter.fs_factor_end=2;                  %Final fs-factor
+parameter.fs_factor_start=0.5;                %Initial fs-factor 
+parameter.fs_factor_end=3;                  %Final fs-factor
 parameter.ratio_gute_max=0.3;               %Initial portion of good particles    
 parameter.ratio_gute_min=0.3;               %Final portion of good particles
 parameter.local_prob= 0;                    %ACHTUNG: Probability value between 0 and 1. Set to 0 to deactivate local search

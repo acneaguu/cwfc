@@ -41,7 +41,7 @@ tic;
 tStart = tic;
 
 fhandle = @test_func2; % Definition of objective/fitness function as a function handle
-
+initialise_mvmoshm();
 ps.ofcn_evol=zeros(args{3},1);
 ps.fit_evol=zeros(args{3},1);
 ps.param_evol=zeros(args{3},ps.D);

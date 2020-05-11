@@ -1,4 +1,4 @@
-function mvmo_ceno(fhd,iii,lb,ub,args)
+function [Fout, Xout] = mvmo_ceno(fhd,iii,lb,ub,args)
   
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,7 +52,7 @@ function mvmo_ceno(fhd,iii,lb,ub,args)
     parameter.local_prob= 0;               % ACHTUNG: Probability value between 0 and 1. Set to 0 to deactivate local search
     parameter.n_random_ini =round(ps.D/1.0) ;       % initial number of variables selected for mutation ;  
     parameter.n_random_last=round(ps.D/1.0 ) ;       % final number of variables selected for mutation 
-    min_eval_LS =round(parameter.ratio_locald0*proc.n_eval);           %  minimum number of runs without local search
+    min_eval_LS =round(parameter.ratio_local*proc.n_eval);           %  minimum number of runs without local search
     max_eval_LS =round(1.00*proc.n_eval+10);
     derivative='forward';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
@@ -429,6 +429,9 @@ function mvmo_ceno(fhd,iii,lb,ub,args)
                  fitness_new=ffx;%oox+1.d-12*(ffx-oox); % Constraint handling outsourced so far   
             
             if proc.finish
+                Fout = min(fitness(1,:));
+                bp_index = fitness(1,:)==Fout;
+                Xout = bests(1,:,bp_index);
                 return;
             end
 %

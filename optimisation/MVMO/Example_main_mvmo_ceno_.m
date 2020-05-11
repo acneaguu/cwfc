@@ -70,9 +70,12 @@ plot(ps.fit_evol);
 xlabel('No. of objective function evaluations'); 
 ylabel('Fitness value'); 
 
+
+plot(ps.param_evol(:,1),'red'); %plots x(1)
+
 figure(2)
-plot(ps.param_evol(:,1)); 
+
 hold on
-plot(ps.param_evol(:,2)); 
+plot(ps.param_evol(:,2),'yellow'); %plots x(2)
 %========================================================================== 
 

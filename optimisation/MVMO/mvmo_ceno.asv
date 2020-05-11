@@ -424,9 +424,7 @@ function  [Fout,Xout] = mvmo_ceno(fhd,lb,ub)
                 Fout = min(fitness(1,:));
                 bp_index = fitness(1,:)==Fout;
                 Xout = bests(1,:,bp_index).*parameter.scaling +ps.x_min;
-                if size(Xout,3) > 1
-                   Xout = Xout(:,:,1); 
-                end
+                if size(Xout()
                 return;
             end
 %

@@ -15,8 +15,9 @@ global Optimisation%%Vars for main
 ps.D=Optimisation.Nvars; %Dimension of optimization problem (in this example 2 optimization variables)     
 proc.n_eval = Optimisation.Neval;
 % =========================================================================
+%%Strategic parameters MVMO
+parameter.n_par=Optimisation.Populationsize;%Number of particles 
 
-parameter.n_par=1;                          %Requested by competition. Check lines 16 and 32 of main file %45; %Number of particles  
 parameter.n_tosave=4;                       %Archive size
 parameter.fs_factor_start=1;                %Initial fs-factor 
 parameter.fs_factor_end=2;                  %Final fs-factor

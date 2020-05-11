@@ -1,3 +1,5 @@
+%%This function is used to initialise the system topology and powerflow
+%%options
 function initialise_systemdata(topology)
 %%surpress MATPOWER outputs
 global mpopt Systemdata

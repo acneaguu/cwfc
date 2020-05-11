@@ -1,5 +1,8 @@
+%%This function is used to compute the constraint violations of the system.
+%%It returns a vector containing which constraints are violated ('1') and a
+%%number indicating the total number of violations.
 function [violation_vec, total_violations] = compute_violation_constraints()
-global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;
+global CONSTANTS Qref Systemdata PFresults Optimisation;
 
     %% voltage violations
     %%1 if violation at bus j

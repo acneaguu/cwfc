@@ -1,3 +1,5 @@
+%%This function initialises the weights for the different constraint
+%%violation factors and the objectives of the objective function.
 function initialise_optimisation_options()
 global Optimisation
 

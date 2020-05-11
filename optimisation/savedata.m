@@ -1,3 +1,7 @@
+%%This function is used to save the workspace. It is possible to specify a
+%%prefix which is saved before the rest of the file name. The format is as
+%%follows: userstring_With/No Opt_Algorithm name_Number of runs_Number of
+%%variables_date + time
 function savedata
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;
     name = input('Enter custom prefix:\n','s');
@@ -11,6 +15,8 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
         algstr = 'GA_';
     elseif Optimisation.algorithm == 2
         algstr = 'PS_';
+    elseif Optimisation.algorithm == 3
+        algstr = 'CDEEPSO';
     end
     if isempty(name)
         name = [];

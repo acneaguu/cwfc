@@ -56,7 +56,7 @@ Optimisation.Nruns = 1;             %number of runs per case
 Optimisation.Neval = 1e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso
-Optimisation.print = 0;
+Optimisation.print = 1;
 Optimisation.print_interval = 100; %Prints optimisation status every 100 Fcounts
 
 %%settings to plot and store the results of the optimisation

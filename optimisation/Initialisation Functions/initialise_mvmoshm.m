@@ -29,5 +29,4 @@ parameter.n_random_ini =round(ps.D/1.0);    %initial number of variables selecte
 parameter.n_random_last=round(ps.D/1.0 );   %final number of variables selected for mutation 
 parameter.ratio_local = 0.09;
 
-
 end

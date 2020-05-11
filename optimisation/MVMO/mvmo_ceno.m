@@ -1,4 +1,4 @@
-function mvmo_ceno(fhd,iii,lb,ub,args)
+function [Fout, Xout] = mvmo_ceno(fhd,iii,lb,ub,args)
   
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -420,6 +420,9 @@ function mvmo_ceno(fhd,iii,lb,ub,args)
                  fitness_new=ffx;%oox+1.d-12*(ffx-oox); % Constraint handling outsourced so far   
             
             if proc.finish
+                Fout = min(fitness(1,:));
+                bp_index = fitness(1,:)==Fout;
+                Xout = bests(1,:,bp_index);
                 return;
             end
 %

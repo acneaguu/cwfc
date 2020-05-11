@@ -54,10 +54,12 @@ end
 tElapsed = toc(tStart);
 Ctime_min = min(tElapsed, minTime);
 
+figure(1)
 plot(ps.fit_evol); 
 xlabel('No. of objective function evaluations'); 
 ylabel('Fitness value'); 
 
+figure(2)
 plot(ps.param_evol(:,1)); 
 hold on
 plot(ps.param_evol(:,2)); 

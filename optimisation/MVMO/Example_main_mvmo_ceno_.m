@@ -41,12 +41,12 @@ tic;
 tStart = tic;
 
 fhandle = @test_func2; % Definition of objective/fitness function as a function handle
-initialise_mvmoshm();
+
 ps.ofcn_evol=zeros(args{3},1);
 ps.fit_evol=zeros(args{3},1);
 ps.param_evol=zeros(args{3},ps.D);
 
-parameter.n_par=2;                          %Requested by competition. Check lines 16 and 32 of main file %45; %Number of particles  
+parameter.n_par=5;                          %Requested by competition. Check lines 16 and 32 of main file %45; %Number of particles  
 parameter.n_tosave=4;                       %Archive size
 parameter.fs_factor_start=1;                %Initial fs-factor 
 parameter.fs_factor_end=2;                  %Final fs-factor
@@ -59,7 +59,7 @@ parameter.ratio_local = 0.09;
 
 op_runs=1;%In case you want to run the whole optimizatin several times (i.e. number of optimization runs)
 for iii=1:op_runs
-    feval(algorithm_hd,of_apg_hd,iii,lb,ub,args);
+    [F, X]=feval(algorithm_hd,of_apg_hd,iii,lb,ub,args);
 end
 
 tElapsed = toc(tStart);
@@ -70,11 +70,8 @@ plot(ps.fit_evol);
 xlabel('No. of objective function evaluations'); 
 ylabel('Fitness value'); 
 
-
-plot(ps.param_evol(:,1),'red'); %plots x(1)
-
 figure(2)
-
+plot(ps.param_evol(:,1),'red'); %plots x(1)
 hold on
 plot(ps.param_evol(:,2),'yellow'); %plots x(2)
 %========================================================================== 

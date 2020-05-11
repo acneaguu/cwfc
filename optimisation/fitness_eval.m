@@ -1,6 +1,6 @@
 %%Authors: Jinpowpow & Koper
 %%Date: 5 May 2020
-%%Price: 100€
+%%Price: 300€
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -14,78 +14,72 @@
 %%should be and thus the fitness is worse. 
 
 %%'Xin' can be both a vector (only one particle) or a matrix (where each
-%%particle is represented by a different row.
+%%particle is represented by a different row. 't' is used to specify the
+%%current time case considered in order to compare the current transformer
+%%and reactor positions to the previous ones in order to penalise a change
+%%in these variables.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-%%Constraints:
-%%-DONE: vmin,vmaX
-%%-DONE: iline -> sline (from/to)
-%%-DONE (if assumption correct): stransformer -> probably done in sline
-
-
-
-function [F,Xout] = fitness_eval(Xin,mpc)
-global CONSTANTS Qref mpopt pen;
+function [F,Xout] = fitness_eval(Xin,t)
+global CONSTANTS mpopt Systemdata PFresults Optimisation Keeptrack FCount;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);
-Nbranch = size(mpc.branch,1);
-Nbus = size(mpc.bus,1);
-
 for np = 1:NXin
+    FCount = FCount+1;
     %% run powerflow
-    %%change casefile here
-    PFresults = runpf(mpc,mpopt);
+    %%round discrete Xin 
+    Xout(np,:) = round_discrete_vars(Xin(np,:),Optimisation.discrete);
+    
+    %Change topology according to solutions
+    Systemdata.mpc.bus(24:end,4) = Xout(np,18).';
+    Systemdata.mpc.branch(1,9) = Xout(np,19); %change tf ratio 
+    Systemdata.mpc.branch(13,9) = Xout(np,20);
+    Systemdata.mpc.bus(2,CONSTANTS.BS) = Xout(np,21);%Changes inductor
+    Systemdata.mpc.bus(5,CONSTANTS.BS) = Xout(np,22);%Changes capacitor
+    
+    %run pf on the system
+    PFresults = runpf(Systemdata.mpc,mpopt);
 
 if PFresults.success == 1
     %------------------------------------------------------------------------
     %CONSTRAINTS:
-    %% voltage violations
-    %%1 if violation at bus j
-    
-    %update slackbus voltage limits to the one corresponding to Qref
-    slack = find(PFresults.bus(:,CONSTANTS.BUS_TYPE) == 3);
-    index_slack = find(PFresults.gen(:,1) == slack);
-    Qpcc = PFresults.gen(index_slack,3)./PFresults.baseMVA;  %#ok<FNDSB>
-    vlimpcc = compute_vlimits(Qpcc);
-    PFresults.bus(slack,CONSTANTS.VMAX:CONSTANTS.VMIN) = vlimpcc;
-    
-    %compute the violations of bus voltages
-    vio_vbus_max = pen.p1*ones(Nbus,1) - (PFresults.bus(:,CONSTANTS.VM) <= PFresults.bus(:,CONSTANTS.VMAX));  %vmax
-    vio_vbus_min = pen.p1*ones(Nbus,1) - (PFresults.bus(:,CONSTANTS.VM) >= PFresults.bus(:,CONSTANTS.VMIN));  %vmax
- 
-    %% Compute Qref violation
-    %%check if Q at PCC is near Qref within the range given by tolerance.
-    %%If not, 'vQpcc' is 1
-    
-    vio_Qpcc = pen.p2*(1 - (abs(Qpcc - Qref.setpoint) <= Qref.tolerance));
-    %% line flow violations From
-    %%1 if violation of current limit in a branch. The current limit is
-    %%converted to an apparent power limit 'rate_A'
-    
-    sbranchFrom = sqrt(PFresults.branch(:,CONSTANTS.PF).^2 + PFresults.branch(:,CONSTANTS.QF).^2); %compute S through a branch in MVA
-    vio_sbranchFrom = pen.p3*ones(Nbranch,1) - (sbranchFrom <= PFresults.branch(:,CONSTANTS.RATE_A));
-
-    %% line flow violations To
-    %%1 if violation of current limit in a branch. The current limit is
-    %%converted to an apparent power limit 'rate_A'
-    
-    sbranchTo = sqrt(PFresults.branch(:,CONSTANTS.PT).^2 + PFresults.branch(:,CONSTANTS.QT).^2); %compute S through a branch in MVA
-    vio_sbranchTo = pen.p3*ones(Nbranch,1) - (sbranchTo <= PFresults.branch(:,CONSTANTS.RATE_A));
-
-    %% total violations
-    
-    vio = [vio_vbus_max; vio_vbus_min; vio_Qpcc; vio_sbranchFrom; vio_sbranchTo];
-    total_violations = sum(vio);
-    checklimits(PFresults);
+    [~, total_violations] = compute_violation_constraints();
     %------------------------------------------------------------------------
-    OF = compute_costs(PFresults);
-else
-    %%penalise unsuccesful run
-    F = 1e50; %%give chancla to unsuccessful run
+    %Objective function:
+    OF = compute_costs(Xin,t);
+    %------------------------------------------------------------------------
     
+    
+    %consider only the OF if no violations and otherwise consider only the
+    %constraint violations.
+    if total_violations == 0
+        F = OF;                    %feasible
+    else
+        F = total_violations*1e20; %infeasible
+    end
+else
+    F = 1e50; %Big penalty if powerflow runs are unsuccesful
 end
+
+%Keeptrack.Fitness keeps track of fitness of every particle
+Keeptrack.Fitness(FCount) = F; 
+%Keeps track of the solutions corresponding to the fitnesses
+Keeptrack.solution(FCount,:)= Xout(np,:);
+%Keeps track of overall best fitnesses and solutions.
+if FCount > 1
+    if Keeptrack.Fitness(FCount) <= Keeptrack.FitBest(FCount-1)
+        Keeptrack.FitBest(FCount) = Keeptrack.Fitness(FCount);
+        Keeptrack.SolBest(FCount,:) = Keeptrack.solution(FCount,:); 
+    else
+        Keeptrack.FitBest(FCount) = Keeptrack.FitBest(FCount-1);
+        Keeptrack.SolBest(FCount,:) = Keeptrack.SolBest(FCount-1,:);
+    end
+else
+    Keeptrack.FitBest(FCount) = Keeptrack.Fitness(FCount);
+    Keeptrack.SolBest(FCount,:) = Keeptrack.solution(FCount,:); 
+end
+end
+
 end

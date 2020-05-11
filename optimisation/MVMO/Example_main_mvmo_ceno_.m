@@ -21,8 +21,8 @@ global proc ps
 %                             Define MVMO parameters
 % =========================================================================
 ps.D=2; %Dimension of optimization problem (in this example 2 optimization variables)
-ps.x_min = -2.048*ones(1,ps.D); %row vector
-ps.x_max = 2.048*ones(1,ps.D); %row vector
+lb = -2.048*ones(1,ps.D); %row vector
+ub = 2.048*ones(1,ps.D); %row vector
 
 algorithm_name='mvmo_ceno'; %For function hanlde of MVMO
 algorithm_hd=str2func(algorithm_name); %Function hanlde of MVMO
@@ -48,17 +48,22 @@ ps.param_evol=zeros(args{3},ps.D);
 
 op_runs=1;%In case you want to run the whole optimizatin several times (i.e. number of optimization runs)
 for iii=1:op_runs
-    feval(algorithm_hd,of_apg_hd,iii,args);
+    feval(algorithm_hd,of_apg_hd,iii,lb,ub,args);
 end
 
 tElapsed = toc(tStart);
 Ctime_min = min(tElapsed, minTime);
 
+figure(1)
 plot(ps.fit_evol); 
 xlabel('No. of objective function evaluations'); 
 ylabel('Fitness value'); 
 
+
 plot(ps.param_evol(:,1),'red'); %plots x(1)
+
+figure(2)
+
 hold on
 plot(ps.param_evol(:,2),'yellow'); %plots x(2)
 %========================================================================== 

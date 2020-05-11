@@ -21,7 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [F,Xout] = fitness_eval(Xin,t)
+function [F,OF,g,Xout] = fitness_eval(Xin)
 global CONSTANTS mpopt Systemdata PFresults Optimisation Keeptrack FCount;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
@@ -29,7 +29,7 @@ NXin = size(Xin,1);
 for np = 1:NXin
     FCount = FCount+1;
     %% run powerflow
-    %%round discrete Xin 
+    %%round discrete Xin(i)
     Xout(np,:) = round_discrete_vars(Xin(np,:),Optimisation.discrete);
     
     %Change topology according to solutions
@@ -45,10 +45,10 @@ for np = 1:NXin
 if PFresults.success == 1
     %------------------------------------------------------------------------
     %CONSTRAINTS:
-    [~, total_violations] = compute_violation_constraints();
+    [g, total_violations] = compute_violation_constraints();
     %------------------------------------------------------------------------
     %Objective function:
-    OF = compute_costs(Xin,t);
+    OF = compute_costs(Xin);
     %------------------------------------------------------------------------
     
     
@@ -60,7 +60,9 @@ if PFresults.success == 1
         F = total_violations*1e20; %infeasible
     end
 else
-    F = 1e50; %Big penalty if powerflow runs are unsuccesful
+    g = 100*ones(2*(Systemdata.Nbus+Systemdata.Nbranch)+1,1);
+    OF = 1e50;
+    F = OF; %Big penalty if powerflow runs are unsuccesful
 end
 
 %Keeptrack.Fitness keeps track of fitness of every particle

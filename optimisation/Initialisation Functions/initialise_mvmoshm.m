@@ -8,14 +8,12 @@
 %%MVMO-SHM algorithm using the main. Call this function before running the
 %%MVMO-SHM algorithm
 function initialise_mvmoshm()
-global ps parameter %%vars of MVMO-SHM
+global ps proc parameter %%vars of MVMO-SHM
 global Optimisation%%Vars for main
 
 
-ps.D=Optimisation.Nvars; %Dimension of optimization problem (in this example 2 optimization variables)
-args{1}=1; %Print in Matlab command window (1 means yes, 0 means No)
-args{2}=1; %Printing step
-args{3}=Optimisation.Neval; %Maximum function evaluations        
+ps.D=Optimisation.Nvars; %Dimension of optimization problem (in this example 2 optimization variables)     
+proc.n_eval = Optimisation.Neval;
 % =========================================================================
 
 parameter.n_par=1;                          %Requested by competition. Check lines 16 and 32 of main file %45; %Number of particles  

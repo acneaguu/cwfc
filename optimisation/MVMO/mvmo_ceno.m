@@ -1,4 +1,4 @@
-function [Fout, Xout] = mvmo_ceno(fhd,iii,lb,ub,args)
+function  [Fout,Xout] = mvmo_ceno(fhd,lb,ub)
   
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -16,6 +16,7 @@ function [Fout, Xout] = mvmo_ceno(fhd,iii,lb,ub,args)
     global ipp
     global updated
     global nnnnnn
+    global Optimisation
     
     % put the bounds into the corresponding internal variables
     ps.x_min = lb;
@@ -39,7 +40,7 @@ function [Fout, Xout] = mvmo_ceno(fhd,iii,lb,ub,args)
     D=ps.D;
     DD=1:D;
     
-    proc.n_eval=args{3};
+    
     n_eval =proc.n_eval;
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -406,7 +407,7 @@ function [Fout, Xout] = mvmo_ceno(fhd,iii,lb,ub,args)
                          x_normalized_save(ipp,:)= x_normalized(ipp,:);
                       end
                      x_normalized_save(ipp,:) = ps.x_min+parameter.scaling.* x_normalized_save(ipp,:);
-                 [ffx,~,~,x_normalized(ipp,:),FEVALS] = LocalSearchMVMOSH(fhd,iii,args,x_normalized_save(ipp,:),proc.n_eval -proc.i_eval); %Local search
+                 [ffx,~,~,x_normalized(ipp,:),FEVALS] = LocalSearchMVMOSH(fhd,x_normalized_save(ipp,:),proc.n_eval -proc.i_eval); %Local search
                  local_search(ipp)=local_search(ipp)+1; %COUNTING HOW MANY TIMES LOCAL SEARCH WAS CALLED
                  x_normalized(ipp,:) = (x_normalized(ipp,:)-ps.x_min)./parameter.scaling;
                   local_i=local_i+1  ;
@@ -414,7 +415,7 @@ function [Fout, Xout] = mvmo_ceno(fhd,iii,lb,ub,args)
 
              else
                  x_normalized(ipp,:) = ps.x_min+parameter.scaling.* x_normalized(ipp,:);
-                 [ffx,~,~,~]=feval(fhd,iii,args,x_normalized (ipp,:)); %Problem evaluation
+                 [ffx,~,~,~]=feval(fhd,x_normalized (ipp,:)); %Problem evaluation
                  x_normalized(ipp,:) = (x_normalized(ipp,:)-ps.x_min)./parameter.scaling;
             end
                  fitness_new=ffx;%oox+1.d-12*(ffx-oox); % Constraint handling outsourced so far   
@@ -525,13 +526,13 @@ end %End while loop
     
 
          %% ----------------------- Complementary functions ------------------------
-     function [ffx,oox,ggx,xn_out,FEVALS] = LocalSearchMVMOSH(fhd,iii,args,xx_yy,FEsAllowed)
+     function [ffx,oox,ggx,xn_out,FEVALS] = LocalSearchMVMOSH(fhd,xx_yy,FEsAllowed)
         global PPL GGL
         if FEsAllowed <= 0, return, end
         options = optimoptions(@fmincon,'algorithm',optimmethod,'UseParallel','never','MaxFunEvals',FEsAllowed,'FinDiffType',...
                           derivative,'TolFun',1.d-3,'TolX',1d-10,'HessianApproximation','lbfgs','DiffMinChange',1.d-10);
         [Xsqp, FUN , ~ , output]=...
-            fmincon(@(xx_yy)LSearch(xx_yy,fhd,iii,args),xx_yy,[],[],[],[],ps.x_min,ps.x_max,[],options);
+            fmincon(@(xx_yy)LSearch(xx_yy,fhd),xx_yy,[],[],[],[],ps.x_min,ps.x_max,[],options);
 
         
         FEVALS=output.funcCount  ;
@@ -548,9 +549,9 @@ end %End while loop
         ggx=GGL;
     end
 
-    function J=LSearch(xx_yy2,fhd,iii,args)
+    function J=LSearch(xx_yy2,fhd)
         global PPL GGL 
-        [J,PPL,GGL,~] = feval(fhd,iii,args,xx_yy2);
+        [J,PPL,GGL,~] = feval(fhd,xx_yy2);
         
     end
         

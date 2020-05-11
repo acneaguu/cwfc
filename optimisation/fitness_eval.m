@@ -85,13 +85,18 @@ end
 end
 
 
-%%mvmo
+if Optimisation.algorithm == 4
 global proc
-proc.i_eval = FCount;
-if proc.i_eval>=proc.n_eval 
-    proc.finish=1;
-    
+    proc.i_eval = FCount;
+    if proc.i_eval>=proc.n_eval 
+        proc.finish=1;  
+    end
 end
-%%%%%
 
+if Optimisation.print == 1 
+    if (FCount == 1) || mod(FCount,Optimisation.print_interval) == 0
+      printf('Neval: %7d,   fitness: %12.7E \n',...
+          FCount, Keeptrack.FitBest(FCount))
+    end
+end
 end

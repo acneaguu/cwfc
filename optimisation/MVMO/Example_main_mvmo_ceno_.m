@@ -46,7 +46,7 @@ ps.ofcn_evol=zeros(args{3},1);
 ps.fit_evol=zeros(args{3},1);
 ps.param_evol=zeros(args{3},ps.D);
 
-parameter.n_par=1;                          %Requested by competition. Check lines 16 and 32 of main file %45; %Number of particles  
+parameter.n_par=2;                          %Requested by competition. Check lines 16 and 32 of main file %45; %Number of particles  
 parameter.n_tosave=4;                       %Archive size
 parameter.fs_factor_start=1;                %Initial fs-factor 
 parameter.fs_factor_end=2;                  %Final fs-factor

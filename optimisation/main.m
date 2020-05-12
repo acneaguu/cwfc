@@ -162,7 +162,7 @@ Results.Ploss_best = min(Results.Fbest);
 Results.Ploss_worst = max(Results.Fbest(Results.Fbest < 10));
 Results.Ploss_mean = mean(Results.Fbest(Results.Fbest < 10));
 Results.Times_converged = sum(Results.Fbest<10);
-
+Results.avg_runtime = mean(Results.runtime(:,1));
 %%save the result if desired
 if store_results == 1
     savedata

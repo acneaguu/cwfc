@@ -171,6 +171,12 @@ if plot == 1
 end
 end
 
+MaxPloss = 10;
+Results.Ploss_best = min(Results.Fbest);
+Results.Ploss_worst = max(Results.Fbest(Results.Fbest < 10));
+Results.Ploss_mean = mean(Results.Fbest(Results.Fbest < 10));
+Results.Times_converged = sum(Results.Fbest<10);
+
 %%save the result if desired
 if store_results == 1
     savedata

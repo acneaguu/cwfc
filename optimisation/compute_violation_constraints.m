@@ -1,8 +1,8 @@
 %%This function is used to compute the constraint violations of the system.
 %%It returns a vector containing which constraints are violated ('1') and a
 %%number indicating the total number of violations.
-function [violation_vec, total_violations] = compute_violation_constraints()
-global CONSTANTS Qref Systemdata PFresults Optimisation Keeptrack FCount;
+function [violation_vec, total_violations, composition] = compute_violation_constraints()
+global CONSTANTS Qref Systemdata PFresults Optimisation;
 
     %% voltage violations
     %%1 if violation at bus j
@@ -40,6 +40,6 @@ global CONSTANTS Qref Systemdata PFresults Optimisation Keeptrack FCount;
     %% total violations
     
     violation_vec = [violation_vbus_max; violation_vbus_min; violation_Qpcc; violation_sbranchFrom; violation_sbranchTo];
-    Keeptrack.violation_composition(FCount,:) = [sum(violation_vbus_max+violation_vbus_min), violation_Qpcc, sum(violation_sbranchFrom+violation_sbranchTo)];
+    composition = [sum(violation_vbus_max+violation_vbus_min), violation_Qpcc, sum(violation_sbranchFrom+violation_sbranchTo)];
     total_violations = sum(violation_vec);
 end

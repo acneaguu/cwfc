@@ -30,7 +30,7 @@ initialise_systemdata(system_41);
 %Optimisation settings
 initialise_optimisation_options();
 Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 1;         %number of runs per case
+Optimisation.Nruns = 10;         %number of runs per case
 Optimisation.Neval = 1e4;       %max allowed function evaluations
 
 global Keeptrack FCount;
@@ -174,6 +174,12 @@ if plot == 1
 end
 
 end
+
+MaxPloss = 10;
+Results.Ploss_best = min(Results.Fbest);
+Results.Ploss_worst = max(Results.Fbest(Results.Fbest < 10));
+Results.Ploss_mean = mean(Results.Fbest(Results.Fbest < 10));
+Results.Times_converged = sum(Results.Fbest<10);
 
 %%save the result if desired
 if store_results == 1

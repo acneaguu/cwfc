@@ -27,35 +27,17 @@ Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
 logic_optvars();                            %generate logic vectors for different var indeces
 initialise_systemdata(system_41);
 
-%Optimisation settings
-initialise_optimisation_options();
-Optimisation.Ncases = 1;        %number of evaluated time instances
-Optimisation.Nruns = 10;         %number of runs per case
-Optimisation.Neval = 1e4;       %max allowed function evaluations
-
-global Keeptrack FCount;
-
-
-global Results;
-Results.Ploss = NaN * zeros(Optimisation.Nruns,1);
-Results.tchanges = NaN * zeros(Optimisation.Nruns,1);
-Results.rchanges = NaN * zeros(Optimisation.Nruns,1);
-Results.Qaccuracy = NaN * zeros(Optimisation.Nruns,1);
-Results.Fbest = NaN * zeros(Optimisation.Nruns+1,1);
-Results.Xbest = NaN * zeros(Optimisation.Nruns+1,Optimisation.Nvars);
-Results.Xbest(Optimisation.discrete) = 1;
-
 %Ones describe the bounds of optimisation variables
 %lb = -30% of Pn (5MW), ub = 40% of Pn
 lb = [-2.5*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -20 0];
 ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
 
 %%Optimisation run settings
-initialise_optimisation_options();  %sets the weights of the different 
+initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 33;             %number of runs per case
-Optimisation.Neval = 5000;           %max allowed function evaluations
+Optimisation.Neval = 5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 

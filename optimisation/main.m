@@ -11,8 +11,8 @@ rng default
 %%Optimisation problem specification and settings 
 %%setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint = -0.33; %in p.u. of baseMVA
-Qref.tolerance = 0.1;
+Qref.setpoint = 0; %in p.u. of baseMVA
+Qref.tolerance = 0.3;
 
 
 %%Optimisation containts the optimisation problem parameters
@@ -36,9 +36,9 @@ ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 1;             %number of runs per case
+Optimisation.Nruns = 33;             %number of runs per case
 Optimisation.Neval = 5e3;           %max allowed function evaluations
-Optimisation.Populationsize = 200;   %size of the population
+Optimisation.Populationsize = 1;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print = 1;

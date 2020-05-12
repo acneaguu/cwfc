@@ -10,7 +10,7 @@ global CONSTANTS Qref Systemdata PFresults Optimisation;
     %update slackbus voltage limits to the one corresponding to Qref
     slack = find(PFresults.bus(:,CONSTANTS.BUS_TYPE) == 3);
     index_slack = find(PFresults.gen(:,1) == slack);
-    Qpcc = PFresults.gen(index_slack,3)./PFresults.baseMVA;  %#ok<FNDSB>
+    Qpcc = PFresults.gen(index_slack,3)./PFresults.baseMVA;  
     vlimpcc = compute_vlimits(Qpcc);
     PFresults.bus(slack,CONSTANTS.VMAX:CONSTANTS.VMIN) = vlimpcc;
     
@@ -20,9 +20,9 @@ global CONSTANTS Qref Systemdata PFresults Optimisation;
  
     %% Compute Qref violation
     %%check if Q at PCC is near Qref within the range given by tolerance.
-    %%If not, 'vQpcc' is 1
-    
-    violation_Qpcc = Optimisation.p2*(1 - (abs(Qpcc - Qref.setpoint) <= Qref.tolerance));
+    %%1 if Qpcc is outside the dynamic limits calculated using
+    %%qpcc_limits();
+    violation_Qpcc = ((Qpcc > Qref.limits(2)) | (Qpcc < Qref.limits(1)));
     %% line flow violations From
     %%1 if violation of current limit in a branch. The current limit is
     %%converted to an apparent power limit 'rate_A'

@@ -5,7 +5,7 @@ global Optimisation
 
 %Weights of constraint violation
 Optimisation.p1 = 1;            %Penalty for voltage violation
-Optimisation.p2 = 2;            %Penalty for Qref violation
+Optimisation.p2 = 1.5;            %Penalty for Qref violation
 Optimisation.p3 = 1;            %Penalty for power violation
 
 %Weights of the OF

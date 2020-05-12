@@ -71,7 +71,7 @@ initialise_results_struct%%initialise the Results struct with NaNs
 Optimisation.t = 2;
 switch Optimisation.algorithm
     case {1,2,3}
-    fun = @(X)fitness_eval(X,Optimisation.t);
+    fun = @(X)fitness_eval(X);
     case 4
     fun = str2func('fitness_eval');
 end

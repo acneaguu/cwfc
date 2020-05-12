@@ -43,10 +43,10 @@ for np = 1:NXin
     PFresults = runpf(Systemdata.mpc,mpopt);
 
 if PFresults.success == 1
-    %------------------------------------------------------------------------
+    %----------------------------------------------------------------------
     %CONSTRAINTS:
-    [g, total_violations] = compute_violation_constraints();
-    %------------------------------------------------------------------------
+    [g, total_violations,composition] = compute_violation_constraints();
+    %----------------------------------------------------------------------
     %Objective function:
     OF = compute_costs(Xin);
     %------------------------------------------------------------------------
@@ -61,6 +61,8 @@ if PFresults.success == 1
     end
 else
     g = 100*ones(2*(Systemdata.Nbus+Systemdata.Nbranch)+1,1);
+    composition = [2*Optimisation.p1*Systemdata.Nbus,Optimisation.p2,...
+        2*Optimisation.p3*Systemdata.Nbranch];
     OF = 1e50;
     F = OF; %Big penalty if powerflow runs are unsuccesful
 end
@@ -74,13 +76,17 @@ if FCount > 1
     if Keeptrack.Fitness(FCount) <= Keeptrack.FitBest(FCount-1)
         Keeptrack.FitBest(FCount) = Keeptrack.Fitness(FCount);
         Keeptrack.SolBest(FCount,:) = Keeptrack.solution(FCount,:); 
+        Keeptrack.violation_composition(FCount,:) = composition;
     else
         Keeptrack.FitBest(FCount) = Keeptrack.FitBest(FCount-1);
         Keeptrack.SolBest(FCount,:) = Keeptrack.SolBest(FCount-1,:);
+        Keeptrack.violation_composition(FCount,:) = ...
+            Keeptrack.violation_composition(FCount-1,:);
     end
 else
     Keeptrack.FitBest(FCount) = Keeptrack.Fitness(FCount);
     Keeptrack.SolBest(FCount,:) = Keeptrack.solution(FCount,:); 
+    Keeptrack.violation_composition(FCount,:) = composition;
 end
 end
 

@@ -166,7 +166,7 @@ end
 %%store the progress of FitBest of this iteration
 Results.Fit_progress(i+1,:) = Keeptrack.FitBest;
 Results.Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
-Results.runtime(i) = toc;
+Results.runtime(i,1) = toc;
 fprintf('Run %2d: %d seconds \n',i,Results.runtime(i));
 %%plot if desired
 if plot == 1

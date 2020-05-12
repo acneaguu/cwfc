@@ -159,6 +159,7 @@ end
 %%initilise matrix with FitBest progress at each iteration
 if i == 1
     Results.Fit_progress = NaN * zeros(Optimisation.Nruns+1,FCount);
+    Results.Violation_composition_progress = NaN * zeros(FCount,3,Optimisation.Nruns+1);
 end
 %%store the progress of FitBest of this iteration
 Results.Fit_progress(i+1,:) = Keeptrack.FitBest;

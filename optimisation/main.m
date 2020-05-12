@@ -46,6 +46,7 @@ Results.Xbest = NaN * zeros(Optimisation.Nruns+1,Optimisation.Nvars);
 Results.Xbest(Optimisation.discrete) = 1;
 
 %Ones describe the bounds of optimisation variables
+%lb = -30% of Pn (5MW), ub = 40% of Pn
 lb = [-2.5*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -20 0];
 ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
 
@@ -53,9 +54,9 @@ ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
 initialise_optimisation_options();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 1;             %number of runs per case
+Optimisation.Nruns = 33;             %number of runs per case
 Optimisation.Neval = 1e4;           %max allowed function evaluations
-Optimisation.Populationsize = 200;   %size of the population
+Optimisation.Populationsize = 1;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print = 1;
@@ -121,6 +122,7 @@ for i = 1:Optimisation.Nruns
 % if i == 2 %for i = 2 you dont optimise for minimal power losses
 %     Optimisation.w1 =0 ;
 % end
+tic;
 fprintf('************* Run %d *************\n', i);
 
 %%reinitialise fitness evaluation counter
@@ -164,11 +166,13 @@ end
 %%store the progress of FitBest of this iteration
 Results.Fit_progress(i+1,:) = Keeptrack.FitBest;
 Results.Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
-
+Results.runtime(i) = toc;
+fprintf('Run %2d: %d seconds \n',i,Results.runtime(i));
 %%plot if desired
 if plot == 1
     animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
 end
+
 end
 
 %%save the result if desired

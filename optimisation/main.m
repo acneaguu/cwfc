@@ -167,7 +167,7 @@ end
 Results.Fit_progress(i+1,:) = Keeptrack.FitBest;
 Results.Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
 Results.runtime(i) = toc;
-fprintf('Run %2d: %d seconds \n',i,Results.runtime(i));
+fprintf('Run %2d: %2f seconds \n',i,Results.runtime(i));
 %%plot if desired
 if plot == 1
     animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);

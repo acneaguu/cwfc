@@ -12,7 +12,8 @@ rng default
 %%setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint = -0.33; %in p.u. of baseMVA
-Qref.tolerance = 0.1;
+Qref.tolerance = 0.1;  %tolerance at Q = 0 MVar
+qpcc_limits            %compute the allowed range of Qpcc w.r.t. the setpoints
 
 
 %%Optimisation containts the optimisation problem parameters
@@ -36,13 +37,13 @@ ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 1;             %number of runs per case
-Optimisation.Neval = 5e3;           %max allowed function evaluations
+Optimisation.Nruns = 10;             %number of runs per case
+Optimisation.Neval = 3.5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print = 1;
-Optimisation.print_interval = 1000; %Prints optimisation status every 100 Fcounts
+Optimisation.print_interval = 500; %Prints optimisation status every 100 Fcounts
 
 %%settings to plot and store the results of the optimisation
 plot = 0;

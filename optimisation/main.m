@@ -28,7 +28,6 @@ logic_optvars();                            %generate logic vectors for differen
 initialise_systemdata(system_41);
 
 %Optimisation settings
-initialise_optimisation_options();
 Optimisation.Ncases = 1;        %number of evaluated time instances
 Optimisation.Nruns = 10;         %number of runs per case
 Optimisation.Neval = 5e3;       %max allowed function evaluations
@@ -44,7 +43,7 @@ initialise_optimisation_weights();  %sets the weights of the different
 Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 33;             %number of runs per case
 Optimisation.Neval = 1e4;           %max allowed function evaluations
-Optimisation.Populationsize = 50;   %size of the population
+Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print = 1;

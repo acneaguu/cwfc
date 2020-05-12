@@ -17,6 +17,8 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
         algstr = 'PS_';
     elseif Optimisation.algorithm == 3
         algstr = 'CDEEPSO';
+    elseif Optimisation.algorithm == 4
+        algstr = 'MVMO-SHM';
     end
     if isempty(name)
         name = [];

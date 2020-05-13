@@ -2,7 +2,7 @@
 %%changes and the q accuracy for the last iteration. It actually  is a
 %%modified version of fitness_eval and
 %%compute_costs/compute_violation_constraints
-function [Ploss, Tchanges, Rchanges, Q_accuracy] = compute_results(Xopt,t)
+function [Ploss, Tchanges, Rchanges, Q_accuracy] = compute_results(Xopt)
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;     
     
     %Changes systemdata according to run optimal power flow
@@ -22,10 +22,10 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     Ploss = Ploss_branch + Ploss_shunt;
     
     %Computes resulting tap changes
-    Tchanges = sum(abs(Xopt(Optimisation.tr_pos)-Results.Xbest(t-1,Optimisation.tr_pos)));
+    Tchanges = sum(abs(Xopt(Optimisation.tr_pos)-Results.Xbest(Optimisation.t-1,Optimisation.tr_pos)));
     
     %Computes resulting reactor changes
-    Rchanges = sum(abs(Xopt(Optimisation.r_pos) - Results.Xbest(t-1,Optimisation.r_pos)));
+    Rchanges = sum(abs(Xopt(Optimisation.r_pos) - Results.Xbest(Optimisation.t-1,Optimisation.r_pos)));
     
     %Computes resulting |Qpcc-Qref|
     slack = find(PFresults.bus(:,CONSTANTS.BUS_TYPE) == 3);

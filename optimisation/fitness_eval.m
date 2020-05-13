@@ -21,7 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [F,Xout] = fitness_eval(Xin,t)
+function [F,OF,g,Xout] = fitness_eval(Xin)
 global CONSTANTS mpopt Systemdata PFresults Optimisation Keeptrack FCount;
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
@@ -29,7 +29,7 @@ NXin = size(Xin,1);
 for np = 1:NXin
     FCount = FCount+1;
     %% run powerflow
-    %%round discrete Xin 
+    %%round discrete Xin(i)
     Xout(np,:) = round_discrete_vars(Xin(np,:),Optimisation.discrete);
     
     %Change topology according to solutions
@@ -43,12 +43,12 @@ for np = 1:NXin
     PFresults = runpf(Systemdata.mpc,mpopt);
 
 if PFresults.success == 1
-    %------------------------------------------------------------------------
+    %----------------------------------------------------------------------
     %CONSTRAINTS:
-    [~, total_violations] = compute_violation_constraints();
-    %------------------------------------------------------------------------
+    [g, total_violations,composition] = compute_violation_constraints();
+    %----------------------------------------------------------------------
     %Objective function:
-    OF = compute_costs(Xin,t);
+    OF = compute_costs(Xin);
     %------------------------------------------------------------------------
     
     
@@ -60,7 +60,11 @@ if PFresults.success == 1
         F = total_violations*1e20; %infeasible
     end
 else
-    F = 1e50; %Big penalty if powerflow runs are unsuccesful
+    g = 100*ones(2*(Systemdata.Nbus+Systemdata.Nbranch)+1,1);
+    composition = [2*Optimisation.p1*Systemdata.Nbus,Optimisation.p2,...
+        2*Optimisation.p3*Systemdata.Nbranch];
+    OF = 1e50;
+    F = OF; %Big penalty if powerflow runs are unsuccesful
 end
 
 %Keeptrack.Fitness keeps track of fitness of every particle
@@ -72,14 +76,33 @@ if FCount > 1
     if Keeptrack.Fitness(FCount) <= Keeptrack.FitBest(FCount-1)
         Keeptrack.FitBest(FCount) = Keeptrack.Fitness(FCount);
         Keeptrack.SolBest(FCount,:) = Keeptrack.solution(FCount,:); 
+        Keeptrack.violation_composition(FCount,:) = composition;
     else
         Keeptrack.FitBest(FCount) = Keeptrack.FitBest(FCount-1);
         Keeptrack.SolBest(FCount,:) = Keeptrack.SolBest(FCount-1,:);
+        Keeptrack.violation_composition(FCount,:) = ...
+            Keeptrack.violation_composition(FCount-1,:);
     end
 else
     Keeptrack.FitBest(FCount) = Keeptrack.Fitness(FCount);
     Keeptrack.SolBest(FCount,:) = Keeptrack.solution(FCount,:); 
+    Keeptrack.violation_composition(FCount,:) = composition;
 end
 end
 
+
+if Optimisation.algorithm == 4
+global proc
+    proc.i_eval = FCount;
+    if proc.i_eval>=proc.n_eval 
+        proc.finish=1;  
+    end
+end
+
+if Optimisation.print == 1 
+    if (FCount == 1) || (FCount == Optimisation.Neval) || mod(FCount,Optimisation.print_interval) == 0
+      fprintf('Neval: %7d,   fitness: %12.7E \n',...
+          FCount, Keeptrack.FitBest(FCount))
+    end
+end
 end

@@ -1,4 +1,4 @@
-function mvmo_ceno(fhd,iii,args)
+function  [Fout,Xout] = mvmo_ceno(fhd,lb,ub)
   
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -16,7 +16,11 @@ function mvmo_ceno(fhd,iii,args)
     global ipp
     global updated
     global nnnnnn
-  
+    global Optimisation
+    
+    % put the bounds into the corresponding internal variables
+    ps.x_min = lb;
+    ps.x_max = ub;
     
     % Reinitialization of local
     % function evaluation counter.
@@ -36,20 +40,11 @@ function mvmo_ceno(fhd,iii,args)
     D=ps.D;
     DD=1:D;
     
-    proc.n_eval=args{3};
+    
     n_eval =proc.n_eval;
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-    parameter.n_par=1       ; %Requested by competition. Check lines 16 and 32 of main file %45; %Number of particles  
-    parameter.n_tosave=4;%5 ;               % Archive size
-    parameter.fs_factor_start=1;%5      ;          % Initial fs-factor 
-    parameter.fs_factor_end=2;%30         ;       % Final fs-factor
-    parameter.ratio_gute_max=0.3         ;        % Initial portion of good particles    
-    parameter.ratio_gute_min=0.3  ;        % Final portion of good particles
-    parameter.local_prob= 0;               % ACHTUNG: Probability value between 0 and 1. Set to 0 to deactivate local search
-    parameter.n_random_ini =round(ps.D/1.0) ;       % initial number of variables selected for mutation ;  
-    parameter.n_random_last=round(ps.D/1.0 ) ;       % final number of variables selected for mutation 
-    min_eval_LS =round(0.09d0*proc.n_eval);           %  minimum number of runs without local search
+    min_eval_LS =round(parameter.ratio_local*proc.n_eval);           %  minimum number of runs without local search
     max_eval_LS =round(1.00*proc.n_eval+10);
     derivative='forward';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
@@ -412,7 +407,7 @@ function mvmo_ceno(fhd,iii,args)
                          x_normalized_save(ipp,:)= x_normalized(ipp,:);
                       end
                      x_normalized_save(ipp,:) = ps.x_min+parameter.scaling.* x_normalized_save(ipp,:);
-                 [ffx,~,~,x_normalized(ipp,:),FEVALS] = LocalSearchMVMOSH(fhd,iii,args,x_normalized_save(ipp,:),proc.n_eval -proc.i_eval); %Local search
+                 [ffx,~,~,x_normalized(ipp,:),FEVALS] = LocalSearchMVMOSH(fhd,x_normalized_save(ipp,:),proc.n_eval -proc.i_eval); %Local search
                  local_search(ipp)=local_search(ipp)+1; %COUNTING HOW MANY TIMES LOCAL SEARCH WAS CALLED
                  x_normalized(ipp,:) = (x_normalized(ipp,:)-ps.x_min)./parameter.scaling;
                   local_i=local_i+1  ;
@@ -420,12 +415,18 @@ function mvmo_ceno(fhd,iii,args)
 
              else
                  x_normalized(ipp,:) = ps.x_min+parameter.scaling.* x_normalized(ipp,:);
-                 [ffx,~,~,~]=feval(fhd,iii,args,x_normalized (ipp,:)); %Problem evaluation
+                 [ffx,~,~,~]=feval(fhd,x_normalized (ipp,:)); %Problem evaluation
                  x_normalized(ipp,:) = (x_normalized(ipp,:)-ps.x_min)./parameter.scaling;
             end
                  fitness_new=ffx;%oox+1.d-12*(ffx-oox); % Constraint handling outsourced so far   
             
             if proc.finish
+                Fout = min(fitness(1,:));
+                bp_index = fitness(1,:)==Fout;
+                Xout = bests(1,:,bp_index).*parameter.scaling +ps.x_min;
+                if size(Xout,3) > 1
+                   Xout = Xout(:,:,1); 
+                end
                 return;
             end
 %
@@ -453,8 +454,8 @@ function mvmo_ceno(fhd,iii,args)
                     goodbad(ipp)=1   ;
                    end
 %                 end
-        end %End n_par loop
-    end %End while loop        
+     end %End n_par loop
+end %End while loop        
 
      %% ----------------------- Complementary functions ------------------------
      
@@ -528,13 +529,13 @@ function mvmo_ceno(fhd,iii,args)
     
 
          %% ----------------------- Complementary functions ------------------------
-     function [ffx,oox,ggx,xn_out,FEVALS] = LocalSearchMVMOSH(fhd,iii,args,xx_yy,FEsAllowed)
+     function [ffx,oox,ggx,xn_out,FEVALS] = LocalSearchMVMOSH(fhd,xx_yy,FEsAllowed)
         global PPL GGL
         if FEsAllowed <= 0, return, end
-        options = optimoptions(@fmincon,'algorithm',optimmethod,'UseParallel','never','MaxFunEvals',FEsAllowed,'FinDiffType',...
+        options = optimoptions(@fmincon,'Display','none','algorithm',optimmethod,'UseParallel','never','MaxFunEvals',FEsAllowed,'FinDiffType',...
                           derivative,'TolFun',1.d-3,'TolX',1d-10,'HessianApproximation','lbfgs','DiffMinChange',1.d-10);
         [Xsqp, FUN , ~ , output]=...
-            fmincon(@(xx_yy)LSearch(xx_yy,fhd,iii,args),xx_yy,[],[],[],[],ps.x_min,ps.x_max,[],options);
+            fmincon(@(xx_yy)LSearch(xx_yy,fhd),xx_yy,[],[],[],[],ps.x_min,ps.x_max,[],options);
 
         
         FEVALS=output.funcCount  ;
@@ -551,9 +552,9 @@ function mvmo_ceno(fhd,iii,args)
         ggx=GGL;
     end
 
-    function J=LSearch(xx_yy2,fhd,iii,args)
+    function J=LSearch(xx_yy2,fhd)
         global PPL GGL 
-        [J,PPL,GGL,~] = feval(fhd,iii,args,xx_yy2);
+        [J,PPL,GGL,~] = feval(fhd,xx_yy2);
         
     end
         

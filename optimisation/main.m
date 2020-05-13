@@ -11,7 +11,7 @@ rng default
 %%Optimisation problem specification and settings 
 %%setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint = 0; %in p.u. of baseMVA
+Qref.setpoint = -0.33; %in p.u. of baseMVA
 Qref.tolerance = 0.15;  %tolerance at Q = 0 MVar
 qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 
@@ -39,7 +39,7 @@ initialise_optimisation_weights();  %sets the weights of the different
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 5;            %number of runs per case
-Optimisation.Neval = 3.5e3;           %max allowed function evaluations
+Optimisation.Neval = 5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
@@ -55,7 +55,7 @@ store_results = 0;
 %%variables containing the best solutions at all evaluated optimisation
 %%runs (Fbest), a matrix containing the best solution at each optimisation
 %%run (Xbest), the progress of the best fitness value of each run
-%%(Fit_progess), the accuracy of Qpcc (Qaccuracy) and the values of the OF
+%%(Fit_progress), the accuracy of Qpcc (Qaccuracy) and the values of the OF
 %%paramers at each run (Ploss, tchanges and rchanges)
 
 global Results;
@@ -146,6 +146,11 @@ end
 if i == 1
     Results.Fit_progress = NaN * zeros(Optimisation.Nruns+1,FCount);
     Results.Violation_composition_progress = NaN * zeros(FCount,3,Optimisation.Nruns+1);
+elseif FCount > size(Results.Fit_progress,2)
+    dis = FCount-size(Results.Fit_progress,2);
+    Results.Fit_progress(:,end+1:FCount) = repmat(Results.Fit_progress(:,end),1,dis);
+    Results.Violation_composition_progress(end+1:FCount,:,:) = ...
+         repmat(Results.Violation_composition_progress(end,:,:),dis,1,1);
 end
 %%store the progress of FitBest of this iteration
 Results.Fit_progress(i+1,:) = Keeptrack.FitBest;

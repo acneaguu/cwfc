@@ -26,7 +26,7 @@ Optimisation.Nr = 0;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
 logic_optvars();                            %generate logic vectors for different var indeces
-initialise_systemdata(system_41);
+initialise_systemdata(system_13);
 
 %Ones describe the bounds of optimisation variables
 %lb = -30% of Pn (5MW), ub = 40% of Pn

@@ -24,7 +24,7 @@ mpc.baseMVA = 100;
 %% bus data 
 % bus_i	   type	    Pd	   Qd	    Gs	    Bs	   area	   Vm	   Va	   baseKV  zone	   Vmax	    Vmin
 mpc.bus = [
-	1       3       347.35  0       0       0       1       1       0        150     1       1.1424   0.8576;        
+	1       3       0       0       0       0       1       1       0        150     1       1.1424   0.8576;        
     2       1       0       0       0       0       1       1       0        150     1       1.1424   0.8576;
 	3       1       0       0       0       0       1       1       0        150     1       1.1424   0.8576;
 	4       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
@@ -44,14 +44,24 @@ mpc.bus = [
    18       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
    19       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
    20       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
+<<<<<<< Updated upstream
    21       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
+=======
+   21       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;%shunt reactor
+>>>>>>> Stashed changes
    22       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
    23       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
    24       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
    25       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
+<<<<<<< Updated upstream
    26       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
    27       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
    28       1       0       0       0       -12     1       1       0        33      1       1.1424   0.8576;%shunt reactor
+=======
+   26       1       0   	0       0       0       1       1       0        33      1       1.1424   0.8576;
+   27       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
+   28       1       0       0       0       -12     1       1       0        33      1       1.1424   0.8576;
+>>>>>>> Stashed changes
    ];
 %% generator data
 %% The Qmax and Qmin are set to 0 in order to test if the system convergs.
@@ -84,7 +94,7 @@ mpc.gen = [
 %%the p.u calculations are checked several times; lecture and the data of
 %%ABB are used in order to find the right p.u values for the transformer.
 
-% fbus  tbus	   r	       x	      b	       rateA   rateB   rateC   ratio   angle  status	    ratiomax	ratiomin
+% fbus  tbus	   r                    x                   b                rateA      rateB      rateC       ratio   angle  status    ratiomax ratiomin
 mpc.branch = [
     %Main bus to transformer
     1   2       0.01089111111       0.03198             0.1378373777         428.4      428.4      428.4        0       0       1       0        0;

@@ -15,7 +15,7 @@ clc;
 mpc_substation_system13 = loadcase('system_13');
 P_idx = find(mpc_substation_system13.gen(:,2)~=0); %Find indexes of generating strings in generator data
 P_wt_idx = P_idx(5:end);
-%P_pv_idx = P_idx(1:4);
+P_pv_idx = P_idx(1:4);
 %branch_status_idx = find(mpc_substation_system13.branch(:,11)==0); %Find indexes of generating strings in generator data
 
 %define all constants
@@ -25,6 +25,7 @@ P_wt_idx = P_idx(5:end);
   v_r = 14 ; %general rated speed in m/s, fixed for step 2a
   v_w = 14 ; %nominal wind speed in m/s
   v_c_off = 25 ; %general cut off speed in m/s
+  global P_wt_max;
   P_wt_max = [33.6 29.4 29.4 16.8 32 29.4 16 28 33 29.15 28 28.8 28.8]; %Rated power in MW for each string
   N_strings = 13;
   
@@ -330,9 +331,10 @@ while(stop == 0)
    for (j=1:N_strings) 
    %for (i=1:N_daily_dispatch)
         %mpc_substation_system13.status(var_branch,11) = upd_branch(k) %%update status of the branch
-        %results_pf = runpf(mpc_substation_system13); %run power flow once Q is loaded per dispatch
+       
         if(i < N_daily_dispatch)
         mpc_substation_system13.gen(P_wt_idx(j),3) = samples_Q(i,j);
+        %results_pf = runpf(mpc_substation_system13); %run power flow once Q is loaded per dispatch
         elseif(i == N_daily_dispatch)
             mpc_substation_system13.gen(P_wt_idx(j),3) = samples_Q(i,j);
             stop = 1;

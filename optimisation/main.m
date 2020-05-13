@@ -16,7 +16,6 @@ Qref.tolerance = 0.15;  %tolerance at Q = 0 MVar
 qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 
 
-
 %%Optimisation containts the optimisation problem parameters
 global Optimisation ff_par;
 %%Description of variables to optimise

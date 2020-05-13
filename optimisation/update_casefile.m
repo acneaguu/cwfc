@@ -7,7 +7,7 @@ if Systemdata.which_topology == 1
     Systemdata.mpc.bus(2,CONSTANTS.BS) = Xin(np,21);%Changes inductor
     Systemdata.mpc.bus(5,CONSTANTS.BS) = Xin(np,22);%Changes capacitor
 end
-
+%%kk zionisten
 
 
 end

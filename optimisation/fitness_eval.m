@@ -33,11 +33,7 @@ for np = 1:NXin
     Xout(np,:) = round_discrete_vars(Xin(np,:),Optimisation.discrete);
     
     %Change topology according to solutions
-    Systemdata.mpc.bus(24:end,4) = Xout(np,18).';
-    Systemdata.mpc.branch(1,9) = Xout(np,19); %change tf ratio 
-    Systemdata.mpc.branch(13,9) = Xout(np,20);
-    Systemdata.mpc.bus(2,CONSTANTS.BS) = Xout(np,21);%Changes inductor
-    Systemdata.mpc.bus(5,CONSTANTS.BS) = Xout(np,22);%Changes capacitor
+    update_casefile(Xout(np,:));
     
     %run pf on the system
     PFresults = runpf(Systemdata.mpc,mpopt);

@@ -100,7 +100,7 @@ global proc
 end
 
 if Optimisation.print == 1 
-    if (FCount == 1) || mod(FCount,Optimisation.print_interval) == 0
+    if (FCount == 1) || (FCount == Optimisation.Neval) || mod(FCount,Optimisation.print_interval) == 0
       fprintf('Neval: %7d,   fitness: %12.7E \n',...
           FCount, Keeptrack.FitBest(FCount))
     end

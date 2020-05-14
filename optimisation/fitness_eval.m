@@ -88,7 +88,7 @@ end
 
 
 if Optimisation.algorithm == 4
-global proc
+global proc %#ok<TLEV>
     proc.i_eval = FCount;
     if proc.i_eval>=proc.n_eval 
         proc.finish=1;  

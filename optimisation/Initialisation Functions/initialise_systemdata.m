@@ -4,7 +4,7 @@
 %%2 for system 13 i.e. WPZ topology
 function initialise_systemdata(topology,option)
 %%surpress MATPOWER outputs
-global mpopt Systemdata CONSTANTS
+global mpopt Systemdata CONSTANTS Optimisation
 mpopt = mpoption('verbose',0,'out.all',0);
 %%Structure containing power system and optimization related information
 Systemdata.mpc = topology;
@@ -18,8 +18,9 @@ Systemdata.mpc = topology;
 Systemdata.Nbranch = size(Systemdata.mpc.branch,1);
 Systemdata.Nbus = size(Systemdata.mpc.bus,1);
 Systemdata.Nstring = size(Systemdata.mpc.gen,1);
-Systemdata.strings = Systemdata.mpc.gen(:,CONSTANTS.PG) ~= 0;
-Systemdata.trans = find(Systemdata.mpc.branch(:,CONSTANTS.ANGMAX));
-Systemdata.shunts = find(Systemdata.mpc.bus(:,CONSTANTS.BS));
+Systemdata.wtg_strings = Systemdata.mpc.gen(2:Optimisation.Nturbines+1,CONSTANTS.PG) ~= 0;
+Systemdata.pvg_strings = Systemdata.mpc.gen(Optimisation.Nturbines+2:end,CONSTANTS.PG) ~= 0;
+Systemdata.trans = Systemdata.mpc.branch(:,CONSTANTS.ANGMAX) ~= 0;
+Systemdata.shunts = Systemdata.mpc.bus(:,CONSTANTS.BS)~= 0;
 
 end

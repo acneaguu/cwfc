@@ -51,7 +51,7 @@ mpc.bus = [
    25       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
    26       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
    27       1       0       0       0       0       1       1       0        33      1       1.1424   0.8576;
-   28       1       0       0       0       -12     1       1       0        33      1       1.1424   0.8576;
+   28       1       0       0       0       -12     1       1       0        33      1       1.1424   0.8576;%shunt reactor
    ];
 %% generator data
 %% The Qmax and Qmin are set to 0 in order to test if the system convergs.

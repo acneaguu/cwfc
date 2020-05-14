@@ -53,8 +53,8 @@ ub = Optimisation.ub;
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 5;            %number of runs per case
-Optimisation.Neval = 30e3;           %max allowed function evaluations
+Optimisation.Nruns = 15;            %number of runs per case
+Optimisation.Neval = 3.5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 1; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
@@ -180,11 +180,11 @@ end
 
 end
 
-MaxPloss = 10;
+MaxPloss = Systemdata.mpc.baseMVA;
 Results.Ploss_best = min(Results.Fbest);
-Results.Ploss_worst = max(Results.Fbest(Results.Fbest < 10));
-Results.Ploss_mean = mean(Results.Fbest(Results.Fbest < 10));
-Results.Times_converged = sum(Results.Fbest<10);
+Results.Ploss_worst = max(Results.Fbest(Results.Fbest < MaxPloss));
+Results.Ploss_mean = mean(Results.Fbest(Results.Fbest < MaxPloss));
+Results.Times_converged = sum(Results.Fbest<MaxPloss);
 Results.avg_runtime = mean(Results.runtime(:,1));
 %%save the result if desired
 if store_results == 1

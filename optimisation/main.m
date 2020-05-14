@@ -154,7 +154,7 @@ end
 %%compute the results of the different OF parameters and Qpcc using the
 %%final solution and store them in results
 [Results.Ploss(i+1), Results.tchanges(i+1), Results.rchanges(i+1),...
-    Results.Qaccuracy(i+1)] = compute_results(Xbest(i+1,:));
+    Results.Qaccuracy(i+1)] = compute_results(Results.Xbest(i+1,:));
 
 %%initilise matrix with FitBest progress at each iteration
 if i == 1

@@ -20,12 +20,12 @@ qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
 Optimisation.Nturbines = 13;                %number of turbine strings
-Optimisation.Npv = 4;                       %number of pv generator strings
+Optimisation.Npv = 0;                       %number of pv generator strings
 Optimisation.Ntr = 2;                       %number of transformers with discrete tap positions
 Optimisation.Nr = 1;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
-Optimisation.which_discrete = [18:20];%#ok<NBRAK> %indeces of the discrete variables
+Optimisation.which_discrete = [14:16];%#ok<NBRAK> %indeces of the discrete variables
 Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %generate logic vectors for different var indeces
 initialise_systemdata(system_13);
@@ -41,8 +41,8 @@ Q_pv_max = [10.1 10.1 10.1 10.1];
 Q_pv_min = -Q_pv_max;
 
 %Qmax and Qmin change depending on windspeed/solar irradiance
-Qmax = [Q_wt_max Q_pv_max];
-Qmin = [Q_wt_min Q_pv_min];
+Qmax = [Q_wt_max ];
+Qmin = [Q_wt_min ];
 boundary_initialise(Qmin, Qmax);
 lb = Optimisation.lb;
 ub = Optimisation.ub;
@@ -52,7 +52,7 @@ initialise_optimisation_weights();  %sets the weights of the different
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 1;            %number of runs per case
-Optimisation.Neval = 5e3;           %max allowed function evaluations
+Optimisation.Neval = 7.5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 

@@ -22,7 +22,7 @@ global CONSTANTS Qref Systemdata PFresults Optimisation;
     %%check if Q at PCC is near Qref within the range given by tolerance.
     %%1 if Qpcc is outside the dynamic limits calculated using
     %%qpcc_limits();
-    violation_Qpcc = ((Qpcc > Qref.limits(2)) | (Qpcc < Qref.limits(1)));
+    violation_Qpcc = Optimisation.p2*((Qpcc > Qref.limits(2)) | (Qpcc < Qref.limits(1)));
     %% line flow violations From
     %%1 if violation of current limit in a branch. The current limit is
     %%converted to an apparent power limit 'rate_A'

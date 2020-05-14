@@ -29,4 +29,12 @@ Systemdata.pvg_pos = logical([zeros(Optimisation.Nturbines+1,1); ...
 Systemdata.trans = Systemdata.mpc.branch(:,CONSTANTS.ANGMAX) ~= 0;
 Systemdata.shunts = Systemdata.mpc.bus(:,CONSTANTS.BS)~= 0;
 
+%ff alle reactances op 1 zetten om te kijken wat de losses nu zijn
+% x = rand(length(Systemdata.mpc.branch(5:end,1)),1);
+% for i = 1:length(x)
+%     if x(i) > 0.5
+%         x(i) =1;
+%     end
+% end
+% Systemdata.mpc.branch(5:end,CONSTANTS.BR_X) = x;
 end

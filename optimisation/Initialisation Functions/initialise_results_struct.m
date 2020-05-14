@@ -9,5 +9,5 @@ Results.rchanges = NaN * zeros(Optimisation.Nruns+1,1);
 Results.Qaccuracy = NaN * zeros(Optimisation.Nruns+1,1);
 Results.Fbest = NaN * zeros(Optimisation.Nruns+1,1);
 Results.Xbest = NaN * zeros(Optimisation.Nruns+1,Optimisation.Nvars);
-Results.Xbest(Optimisation.discrete) = 1;
+Results.Xbest(1,Optimisation.discrete) = 1;
 end

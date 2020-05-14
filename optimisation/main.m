@@ -12,7 +12,7 @@ rng default
 %%setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint =     0; %in p.u. of baseMVA
-Qref.tolerance = 0.4;  %tolerance at Q = 0 MVar
+Qref.tolerance = 0.15;  %tolerance at Q = 0 MVar
 qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 
 
@@ -180,11 +180,11 @@ end
 
 end
 
-MaxPloss = 10;
+MaxPloss = Systemdata.mpc.baseMVA;
 Results.Ploss_best = min(Results.Fbest);
-Results.Ploss_worst = max(Results.Fbest(Results.Fbest < 10));
-Results.Ploss_mean = mean(Results.Fbest(Results.Fbest < 10));
-Results.Times_converged = sum(Results.Fbest<10);
+Results.Ploss_worst = max(Results.Fbest(Results.Fbest < MaxPloss));
+Results.Ploss_mean = mean(Results.Fbest(Results.Fbest < MaxPloss));
+Results.Times_converged = sum(Results.Fbest<MaxPloss);
 Results.avg_runtime = mean(Results.runtime(:,1));
 %%save the result if desired
 if store_results == 1

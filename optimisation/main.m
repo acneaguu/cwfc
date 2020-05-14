@@ -37,8 +37,13 @@ initialise_systemdata(system_13);
 
 Q_wt_max = [21.2 18.55 19.15 10.9 22.4 19.15 12.2 19.6 22.4 13.248 19.6 19.6 19.6] ;
 Q_wt_min = -Q_wt_max;
+Q_pv_max = [10.1 10.1 10.1 10.1];
+Q_pv_min = -Q_pv_max;
 
-boundary_initialise(Q_wt_min, Q_wt_max);
+%Qmax and Qmin change depending on windspeed/solar irradiance
+Qmax = [Q_wt_max Q_pv_max];
+Qmin = [Q_wt_max Q_pv_min];
+boundary_initialise(Qmin, Qmax);
 lb = Optimisation.lb;
 ub = Optimisation.ub;
 

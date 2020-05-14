@@ -12,7 +12,7 @@ rng default
 %%setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint =     0; %in p.u. of baseMVA
-Qref.tolerance = 0.15;  %tolerance at Q = 0 MVar
+Qref.tolerance = 0.4;  %tolerance at Q = 0 MVar
 qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 
 

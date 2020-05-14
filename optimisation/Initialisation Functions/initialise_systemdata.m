@@ -18,7 +18,7 @@ Systemdata.mpc = topology;
 Systemdata.Nbranch = size(Systemdata.mpc.branch,1);
 Systemdata.Nbus = size(Systemdata.mpc.bus,1);
 Systemdata.Nstring = size(Systemdata.mpc.gen,1);
-Systemdata.strings = find(Systemdata.mpc.bus(:,CONSTANTS.PG));
+Systemdata.strings = find(Systemdata.mpc.gen(:,CONSTANTS.PG));
 Systemdata.trans = find(Systemdata.mpc.branch(:,CONSTANTS.ANGMAX));
 Systemdata.shunts = find(Systemdata.mpc.bus(:,CONSTANTS.BS));
 

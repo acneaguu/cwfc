@@ -59,6 +59,7 @@ mpc.bus = [
 %  bus	Pg	    Qg	    Qmax	Qmin	Vg	   mBase  status   Pmax    Pmin	    Pc1	   Pc2	  Qc1min  Qc1max  Qc2min  Qc2max  ramp_agc  ramp_10  ramp_30  ramp_q  apf
 mpc.gen = [
 	%%slack bus
+    1	0         0       0        0        1.0     100     1      0   0       0       0       0       0       0       0       0       0       0       0       0;
     1	0         0       0        0        1.0     100     1      0        0       0       0       0       0       0       0       0       0       0       0       0;
     %%wtg strings
     8	33        22.4    22.4     22.4     1.0     100     1      32       32      0       0       0       0       0       0       0       0       0       0       0;

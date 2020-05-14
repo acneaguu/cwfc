@@ -28,6 +28,6 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     index_slack = find(PFresults.gen(:,1) == slack);
     Qpcc = PFresults.gen(index_slack,3)./PFresults.baseMVA;   %#ok<FNDSB>
     Q_accuracy = abs(Qref.setpoint-Qpcc);
-    printpf(PFresults);
+    %printpf(PFresults);
     checklimits(PFresults);
 end

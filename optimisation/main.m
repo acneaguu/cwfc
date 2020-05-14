@@ -35,11 +35,13 @@ initialise_systemdata(system_13);
 % lb = [-2.5*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -20 0];
 % ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
 
-Q_wt_max = [21.2 18.55 19.15 10.9 22.4 19.15 12.2 19.6 22.4 13.248 19.6 19.6 19.6] ;
-Q_wt_min = -Q_wt_max;
+%Q_wt_max = [21.2 18.55 19.15 10.9 22.4 19.15 12.2 19.6 22.4 13.248 19.6 19.6 19.6] ;
+%Q_wt_min = -Q_wt_max;
 Q_pv_max = [10.1 10.1 10.1 10.1];
 Q_pv_min = -Q_pv_max;
 
+Q_wt_max = 2.5*ones(1,Optimisation.Nturbines);
+Q_wt_min = -Q_wt_max;
 %Qmax and Qmin change depending on windspeed/solar irradiance
 Qmax = [Q_wt_max ];
 Qmin = [Q_wt_min ];
@@ -54,7 +56,7 @@ Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 5;            %number of runs per case
 Optimisation.Neval = 30e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
-Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
+Optimisation.algorithm = 1; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print = 1;
 Optimisation.print_interval = 1000; %Prints interval

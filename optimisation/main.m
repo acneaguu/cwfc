@@ -42,7 +42,7 @@ Q_pv_min = -Q_pv_max;
 
 %Qmax and Qmin change depending on windspeed/solar irradiance
 Qmax = [Q_wt_max Q_pv_max];
-Qmin = [Q_wt_max Q_pv_min];
+Qmin = [Q_wt_min Q_pv_min];
 boundary_initialise(Qmin, Qmax);
 lb = Optimisation.lb;
 ub = Optimisation.ub;
@@ -51,7 +51,7 @@ ub = Optimisation.ub;
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 33;            %number of runs per case
+Optimisation.Nruns = 1;            %number of runs per case
 Optimisation.Neval = 5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -153,7 +153,7 @@ end
 %%compute the results of the different OF parameters and Qpcc using the
 %%final solution and store them in results
 [Results.Ploss(i+1), Results.tchanges(i+1), Results.rchanges(i+1),...
-    Results.Qaccuracy(i+1)] = compute_results(X,i+1);
+    Results.Qaccuracy(i+1)] = compute_results(X);
 
 %%initilise matrix with FitBest progress at each iteration
 if i == 1

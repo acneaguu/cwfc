@@ -5,12 +5,11 @@
 function [Ploss, Tchanges, Rchanges, Q_accuracy] = compute_results(Xopt)
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;     
     
+    %Round off before updating the case file because kk zionisten
+    Xopt = round_discrete_vars(Xopt,Optimisation.discrete,Optimisation.discrete_steps);
+    
     %Changes systemdata according to run optimal power flow
-    Systemdata.mpc.bus(24:end,4) = Xopt(18).';
-    Systemdata.mpc.branch(1,9) = Xopt(19); %change tf ratio 
-    Systemdata.mpc.branch(13,9) = Xopt(20);
-    Systemdata.mpc.bus(2,CONSTANTS.BS) = Xopt(21);%Changes inductor
-    Systemdata.mpc.bus(5,CONSTANTS.BS) = Xopt(22);%Changes capacitor
+    update_casefile(Xopt,1);
     
     %Runs system once more with optimised variables
     PFresults = runpf(Systemdata.mpc,mpopt);

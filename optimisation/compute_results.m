@@ -5,9 +5,6 @@
 function [Ploss, Tchanges, Rchanges, Q_accuracy] = compute_results(Xopt)
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;     
     
-    %Round off before updating the case file because kk zionisten
-    Xopt = round_discrete_vars(Xopt,Optimisation.discrete,Optimisation.discrete_steps);
-    
     %Changes systemdata according to run optimal power flow
     update_casefile(Xopt,1);
     

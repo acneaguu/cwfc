@@ -1,4 +1,14 @@
-function boundary_initialise()
-global Optimisation Systemdata;
+function boundary_initialise(Qmin,Qmax)
+%Initialises optimisation boundaries for system 13
+%Qmin and Qmax consist of the Q boundaries of wtg and pv strings
+global Optimisation Systemdata CONSTANTS;
 
-Q_wt_max = [21.2 18.55 19.15 10.9 22.4 19.15 12.2 19.6 22.4 13.248 19.6 19.6 19.6] ;
+
+tr_max = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMIN).';
+tr_min = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMAX).';
+r_max = 1; % 1 corresponds with connected
+r_min = 0; % 0 corresponds with disconnected
+
+Optimisation.lb = [Qmin , tr_min , r_min];
+Optimisation.ub = [Qmax , tr_max , r_max];
+end

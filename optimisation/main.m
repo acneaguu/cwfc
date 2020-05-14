@@ -25,6 +25,8 @@ Optimisation.Ntr = 2;                       %number of transformers with discret
 Optimisation.Nr = 1;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
+Optimisation.which_discrete = [18:20];%#ok<NBRAK> %indeces of the discrete variables
+Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %generate logic vectors for different var indeces
 initialise_systemdata(system_13);
 

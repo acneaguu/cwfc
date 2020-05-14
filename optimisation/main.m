@@ -11,7 +11,7 @@ rng default
 %%Optimisation problem specification and settings 
 %%setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint = -0.33; %in p.u. of baseMVA
+Qref.setpoint =     0; %in p.u. of baseMVA
 Qref.tolerance = 0.15;  %tolerance at Q = 0 MVar
 qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 

@@ -19,8 +19,8 @@ qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 %%Optimisation containts the optimisation problem parameters
 global Optimisation ff_par;
 %%Description of variables to optimise
-Optimisation.Nturbines = 22;                %number of turbine strings
-Optimisation.Npv = 0;                       %number of pv generator strings
+Optimisation.Nturbines = 13;                %number of turbine strings
+Optimisation.Npv = 4;                       %number of pv generator strings
 Optimisation.Ntr = 0;                       %number of transformers with discrete tap positions
 Optimisation.Nr = 0;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...

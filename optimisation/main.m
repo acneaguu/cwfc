@@ -17,7 +17,7 @@ qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 
 
 %%Optimisation containts the optimisation problem parameters
-global Optimisation ff_par;
+global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
 Optimisation.Nturbines = 13;                %number of turbine strings
 Optimisation.Npv = 4;                       %number of pv generator strings
@@ -32,8 +32,15 @@ initialise_systemdata(system_13);
 
 %Ones describe the bounds of optimisation variables
 %lb = -30% of Pn (5MW), ub = 40% of Pn
-lb = [-2.5*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -20 0];
-ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
+% lb = [-2.5*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -20 0];
+% ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
+
+Q_wt_max = [21.2 18.55 19.15 10.9 22.4 19.15 12.2 19.6 22.4 13.248 19.6 19.6 19.6] ;
+Q_wt_min = -Q_wt_max;
+
+boundary_initialise(Q_wt_min, Q_wt_max);
+lb = Optimisation.lb;
+ub = Optimisation.ub;
 
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 

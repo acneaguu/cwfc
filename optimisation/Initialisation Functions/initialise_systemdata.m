@@ -11,7 +11,7 @@ Systemdata.mpc = topology;
 % if option == 1      %system 41
 %     Systemdata.mpc.bus(24:end,4) = rand(18,1);%random MVAr
 %     Systemdata.which_topology = 1;
-% elseif option == 2  %system 13
+% elseif option == 2  %system 13 with only WTG
 %     Systemdata.which_topology = 2;
 %     %%blablabla
 % end

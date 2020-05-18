@@ -32,6 +32,7 @@ R(:,1) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMAX);
 R(:,2) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMIN);
 for i = 1:Optimisation.Ntr
     Systemdata.trlookup(i,:) = linspace(R(i,1),R(i,2),17);
+    Systemdata.trstep(i) = abs(Systemdata.trlookup(i,1)-Systemdata.trlookup(i,2));
 end
 
 %%Logic vectors with 1 on reactor positions in bus and branch matrices

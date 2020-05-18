@@ -29,7 +29,7 @@ Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
 Optimisation.which_discrete = [14:16];%#ok<NBRAK> %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %generate logic vectors for different var indeces
-initialise_systemdata(system_13);
+initialise_systemdata(system_13_v2);
 
 %Ones describe the bounds of optimisation variables
 %lb = -30% of Pn (5MW), ub = 40% of Pn
@@ -155,7 +155,7 @@ end
 
 %%compute the results of the different OF parameters and Qpcc using the
 %%final solution and store them in results
-[Results.Ploss(i+1), Results.tchanges(i+1), Results.rchanges(i+1),...
+[Results.Ploss(i+1), Results.tchanges(i+1), Results.Reactors_on(i+1),...
     Results.Qaccuracy(i+1)] = compute_results(Results.Xbest(i+1,:));
 
 %%initilise matrix with FitBest progress at each iteration

@@ -15,7 +15,7 @@ if mode == 1        %updates the controllable variables
     Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.TAP) = Xin(Optimisation.tr_pos);
     %%Updates reactor status: bustype and branch status
     Systemdata.mpc.bus(Systemdata.shunts,CONSTANTS.BUS_TYPE) = ...
-        Xin(Optimisation.r_pos)*3+1; 
+        4-3*Xin(Optimisation.r_pos); 
 %     Systemdata.mpc.branch(Systemdata.shuntbranch,CONSTANTS.BR_STATUS) = ...
 %         Xin(Optimisation.r_pos);
 elseif mode == 2    %updates the active power

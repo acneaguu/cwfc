@@ -30,7 +30,7 @@ for np = 1:NXin
     FCount = FCount+1;
     %% run powerflow
     %%round discrete Xin(i)
-    Xout(np,:) = round_discrete_vars(Xin(np,:),Optimisation.discrete,Optimisation.discrete_steps);
+    Xout(np,:) = round_discrete_vars(Xin(np,:));
     
     %Change topology according to solutions
     update_casefile(Xout(np,:),1);

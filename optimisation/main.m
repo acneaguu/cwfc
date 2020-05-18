@@ -142,8 +142,7 @@ switch Optimisation.algorithm
 end
 
 %%store the best solution and fitness of this run
-Results.Xbest(i+1,:) = round_discrete_vars(X,Optimisation.discrete,...
-    Optimisation.discrete_steps);
+Results.Xbest(i+1,:) = round_discrete_vars(X);
 switch Optimisation.algorithm
     case {1,2}
         Results.Fbest(i+1) = Keeptrack.FitBest(end);

@@ -28,12 +28,18 @@ Systemdata.pvg_pos = logical([zeros(Optimisation.Nturbines+1,1); ...
     ones(Optimisation.Npv,1)]);
 %Logic vector with 1 on transformer positions in matrix                                            
 Systemdata.trans = Systemdata.mpc.branch(:,CONSTANTS.ANGMAX) ~= 0;
+R(:,1) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMAX);
+R(:,2) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMIN);
+for i = 1:Optimisation.Ntr
+    Systemdata.trlookup(i,:) = linspace(R(i,1),R(i,2),17);
+end
 
 %%Logic vectors with 1 on reactor positions in bus and branch matrices
 Systemdata.shunts = Systemdata.mpc.bus(:,CONSTANTS.BS)~= 0;
 Systemdata.shuntbranch = (Systemdata.mpc.branch(:,CONSTANTS.T_BUS)...
 == find(Systemdata.shunts)|Systemdata.mpc.branch(:,CONSTANTS.F_BUS)...
 == find(Systemdata.shunts))~=0;
+
 
 
 end

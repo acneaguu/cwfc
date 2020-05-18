@@ -53,7 +53,7 @@ ub = Optimisation.ub;
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 5;            %number of runs per case
+Optimisation.Nruns = 1;            %number of runs per case
 Optimisation.Neval = 3.5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -142,8 +142,7 @@ switch Optimisation.algorithm
 end
 
 %%store the best solution and fitness of this run
-Results.Xbest(i+1,:) = round_discrete_vars(X,Optimisation.discrete,...
-    Optimisation.discrete_steps);
+Results.Xbest(i+1,:) = round_discrete_vars(X);
 switch Optimisation.algorithm
     case {1,2}
         Results.Fbest(i+1) = Keeptrack.FitBest(end);

@@ -15,8 +15,11 @@ global CONSTANTS PFresults Optimisation Results;
     Ploss_tot = Ploss_branch + Ploss_shunt;
     %sum(bus(nzsh, VM) .^ 2 .* bus(nzsh, BS))  %%shunt injection reactive
     %% Tap switches
-    tap_changes = sum(abs(Xin(Optimisation.tr_pos)-Results.Xbest(Optimisation.t-1,Optimisation.tr_pos)));
+    %tap changes in ratios
+    tap_changes_ratio = abs(Xin(Optimisation.tr_pos)-Results.Xbest(Optimisation.t-1,Optimisation.tr_pos)); 
     
+    %convert the tap changes from rations to tap positions
+    tap_changes = sum(tap_changes_ratio./Optimisation.discrete_steps(Optimisation.tr_pos)); 
     %% Reactor
     reactor_changes = Xin(Optimisation.r_pos);
     %sum(abs(Xin(Optimisation.r_pos) - Results.Xbest(Optimisation.t-1,Optimisation.r_pos))); %relative reactor changes

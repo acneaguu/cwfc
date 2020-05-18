@@ -18,7 +18,8 @@ global CONSTANTS PFresults Optimisation Results;
     tap_changes = sum(abs(Xin(Optimisation.tr_pos)-Results.Xbest(Optimisation.t-1,Optimisation.tr_pos)));
     
     %% Reactor
-    reactor_changes = sum(abs(Xin(Optimisation.r_pos) - Results.Xbest(Optimisation.t-1,Optimisation.r_pos)));
+    reactor_changes = Xin(Optimisation.r_pos);
+    %sum(abs(Xin(Optimisation.r_pos) - Results.Xbest(Optimisation.t-1,Optimisation.r_pos))); %relative reactor changes
     
     %% Calculate OF
     OF = Optimisation.w1*Ploss_tot+Optimisation.w2*tap_changes+Optimisation.w3*reactor_changes;

@@ -22,7 +22,7 @@ global Optimisation ff_par Systemdata;
 Optimisation.Nturbines = 13;                %number of turbine strings
 Optimisation.Npv = 0;                       %number of pv generator strings
 Optimisation.Ntr = 2;                       %number of transformers with discrete tap positions
-Optimisation.Ntaps = [17;7];               %number of tap positions per transformer (must have dimension of Ntr)
+Optimisation.Ntaps = [17;17];               %number of tap positions per transformer (must have dimension of Ntr)
 Optimisation.Nr = 1;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables

@@ -10,6 +10,6 @@ Optimisation.p3 = 1;            %Penalty for power violation
 
 %Weights of the OF
 Optimisation.w1 = 1;            %Weight of Ploss
-Optimisation.w2 = 0;            %Weight of the transformer tap switches cost
-Optimisation.w3 = 0;            %Weight of the reactor cost
+Optimisation.w2 = 2;            %Weight of the transformer tap switches cost
+Optimisation.w3 = 10;            %Weight of the reactor cost
 end

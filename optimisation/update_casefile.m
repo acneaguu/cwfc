@@ -11,11 +11,13 @@ if mode == 1        %updates the controllable variables
     
     Systemdata.mpc.gen(Systemdata.pvg_pos,CONSTANTS.QG:CONSTANTS.QMIN) = ....
         repmat(transpose(Xin(Optimisation.pvg_pos)),1,3);
-    
+    %%Updates transformer tap positions
     Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.TAP) = Xin(Optimisation.tr_pos);
-    
+    %%Updates reactor status: bustype and branch status
     Systemdata.mpc.bus(Systemdata.shunts,CONSTANTS.BUS_TYPE) = ...
         Xin(Optimisation.r_pos)*3+1; 
+    Systemdata.mpc.branch(Systemdata.shuntbranch,CONSTANTS.BR_STATUS) = ...
+        Xin(Optimisation.r_pos);
 elseif mode == 2    %updates the active power
     Systemdata.mpc.gen(index_wtg,[2 9:10]) = repmat(transpose(Xin),1,3);
 % elseif mode == 3    %legacy for system 41

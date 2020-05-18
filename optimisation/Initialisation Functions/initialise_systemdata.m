@@ -18,23 +18,22 @@ Systemdata.mpc = topology;
 Systemdata.Nbranch = size(Systemdata.mpc.branch,1);
 Systemdata.Nbus = size(Systemdata.mpc.bus,1);
 Systemdata.Nstring = size(Systemdata.mpc.gen,1);
+
+%logic vector with 1 on wtg positions in gen matrix
 Systemdata.wtg_pos = logical([0; ones(Optimisation.Nturbines,1); ...
     zeros(Optimisation.Npv,1)]); 
-                                            %logic vector with 1 on wtg
-                                            %positions in gen matrix
+                                            
+%logic vector with 1 on pvg positions in gen matrix
 Systemdata.pvg_pos = logical([zeros(Optimisation.Nturbines+1,1); ...
     ones(Optimisation.Npv,1)]);
-                                            %logic vector with 1 on pvg
-                                            %positions in gen matrix
+%Logic vector with 1 on transformer positions in matrix                                            
 Systemdata.trans = Systemdata.mpc.branch(:,CONSTANTS.ANGMAX) ~= 0;
-Systemdata.shunts = Systemdata.mpc.bus(:,CONSTANTS.BS)~= 0;
 
-%ff alle reactances op 1 zetten om te kijken wat de losses nu zijn
-% x = rand(length(Systemdata.mpc.branch(5:end,1)),1);
-% for i = 1:length(x)
-%     if x(i) > 0.5
-%         x(i) =1;
-%     end
-% end
-% Systemdata.mpc.branch(5:end,CONSTANTS.BR_X) = x;
+%%Logic vectors with 1 on reactor positions in bus and branch matrices
+Systemdata.shunts = Systemdata.mpc.bus(:,CONSTANTS.BS)~= 0;
+Systemdata.shuntbranch = (Systemdata.mpc.branch(:,CONSTANTS.T_BUS)...
+== find(Systemdata.shunts)|Systemdata.mpc.branch(:,CONSTANTS.F_BUS)...
+== find(Systemdata.shunts))~=0;
+
+
 end

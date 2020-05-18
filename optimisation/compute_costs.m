@@ -2,7 +2,7 @@
 %%solution Xin at t considering also past positions of the transformer taps
 %%and the reactor connection.
 function OF = compute_costs(Xin)
-global CONSTANTS PFresults Optimisation Results;
+global CONSTANTS PFresults Systemdata Optimisation Results;
     %% Ploss
     %%branch losses
     [losses] = get_losses(PFresults);
@@ -19,9 +19,9 @@ global CONSTANTS PFresults Optimisation Results;
     tap_changes_ratio = abs(Xin(Optimisation.tr_pos)-Results.Xbest(Optimisation.t-1,Optimisation.tr_pos)); 
     
     %convert the tap changes from rations to tap positions
-    tap_changes = sum(tap_changes_ratio./Optimisation.discrete_steps(Optimisation.tr_pos)); 
+    tap_changes = sum(tap_changes_ratio./Systemdata.trstep); 
     %% Reactor
-    reactor_changes = Xin(Optimisation.r_pos);
+    reactor_changes = sum(Xin(Optimisation.r_pos));
     %sum(abs(Xin(Optimisation.r_pos) - Results.Xbest(Optimisation.t-1,Optimisation.r_pos))); %relative reactor changes
     
     %% Calculate OF

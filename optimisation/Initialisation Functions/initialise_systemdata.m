@@ -30,8 +30,9 @@ Systemdata.pvg_pos = logical([zeros(Optimisation.Nturbines+1,1); ...
 Systemdata.trans = Systemdata.mpc.branch(:,CONSTANTS.ANGMAX) ~= 0;
 R(:,1) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMAX);
 R(:,2) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMIN);
+Systemdata.trlookup = NaN * ones(Optimisation.Ntr,max(Optimisation.Ntaps));
 for i = 1:Optimisation.Ntr
-    Systemdata.trlookup(i,:) = linspace(R(i,1),R(i,2),17);
+    Systemdata.trlookup(i,1:Optimisation.Ntaps(i,1)) = linspace(R(i,1),R(i,2),Optimisation.Ntaps(i,1));
     Systemdata.trstep(i) = abs(Systemdata.trlookup(i,1)-Systemdata.trlookup(i,2));
 end
 

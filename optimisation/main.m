@@ -22,11 +22,12 @@ global Optimisation ff_par Systemdata;
 Optimisation.Nturbines = 13;                %number of turbine strings
 Optimisation.Npv = 0;                       %number of pv generator strings
 Optimisation.Ntr = 2;                       %number of transformers with discrete tap positions
+Optimisation.Ntaps = [17;7];               %number of tap positions per transformer (must have dimension of Ntr)
 Optimisation.Nr = 1;                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
 Optimisation.which_discrete = [14:16];%#ok<NBRAK> %indeces of the discrete variables
-Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
+% Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %generate logic vectors for different var indeces
 initialise_systemdata(system_13);
 

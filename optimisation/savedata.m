@@ -18,14 +18,19 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
     elseif Optimisation.algorithm == 3
         algstr = 'CDEEPSO';
     elseif Optimisation.algorithm == 4
-        algstr = 'MVMO-SHM';
+        global parameter
+        configmvmo = sprintf('fs:[%3.1d & %3.1d];Nmut:[%3.1d & %3.1d]',...
+            parameter.fs_factor_start,parameter.fs_factor_end,...
+            parameter.n_random_ini,parameter.n_random_last);
+        algstr = strcat('MVMO-SHM',configmvmo);
     end
     if isempty(name)
         name = [];
     else
         name = strcat(name,"_");
     end
-    rundata = sprintf('Nruns =%3.1d Nvars =%3.1d',Optimisation.Nruns,Optimisation.Nvars);
+    rundata = sprintf('Nruns =%3.1d Nvars =%3.1d Nswarm =%3.1d',...
+        Optimisation.Nruns,Optimisation.Nvars,Optimisation.Populationsize);
     namestr = strcat(name,optstr," ",algstr,rundata,"_",datestr(now,'dd-MM-yyyy HH-mm-ss'));
     save(namestr)
 end

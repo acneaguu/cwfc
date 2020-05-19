@@ -34,20 +34,18 @@ initialise_systemdata(system_13_v2);
 [Qmin, Qmax] = generate_case(10); %Input: windspeed
 [lb, ub]= boundary_initialise(Qmin, Qmax);
 
-
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 1;            %number of runs per case
-Optimisation.Neval = 3.5e3;           %max allowed function evaluations
+Optimisation.Neval = 5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
 Optimisation.print_interval = 1000; %Interval of printed steps
 Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
-
 
 %%settings to plot and store the results of the optimisation
 plot = 0;
@@ -104,77 +102,83 @@ end
 %% run optimisation
 global Keeptrack FCount;    %some global vars to keep track of the calls of 
                             %the fitness evaluation funtion 
-                            
-for i = 1:Optimisation.Nruns
-% if i == 2 %for i = 2 you dont optimise for minimal power losses
-%     Optimisation.w1 =0 ;
-% end
-tic;
-fprintf('************* Run %d *************\n', i);
+fsmin = [0.2 0.35 0.5 1 2];
+fsmax = [1 2 5 10];
+ndimmin = [1 0.9 0.8];
+ndimmax = [1 0.5 0.3 0.1];
+for j = 1:Optimisation.Ncases
+    %%update the casefile
+    %%update boundaries lb/ub
+    for i = 1:Optimisation.Nruns
+    % if i == 2 %for i = 2 you dont optimise for minimal power losses
+    %     Optimisation.w1 =0 ;
+    % end
+    tic;
+    fprintf('************* Run %d *************\n', i);
 
-%%reinitialise fitness evaluation counter
-FCount = 0;
+    %%reinitialise fitness evaluation counter
+    FCount = 0;
 
-%%case of the different algorithms
-switch Optimisation.algorithm
-    case 1
-        X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
-    case 2
-        X = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
-    case 3
-        ff_par.fitEval = 0;
-        ff_par.bestFitEval = 0;
-        [gbestfit, X] = CDEEPSO_algorithm(fun,lb,ub);
-    case 4
-        [gbestfit, X] = mvmo_ceno(fun,lb,ub);
+    %%case of the different algorithms
+    switch Optimisation.algorithm
+        case 1
+            X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
+        case 2
+            X = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
+        case 3
+            ff_par.fitEval = 0;
+            ff_par.bestFitEval = 0;
+            [gbestfit, X] = CDEEPSO_algorithm(fun,lb,ub);
+        case 4
+            [gbestfit, X] = mvmo_ceno(fun,lb,ub);
+    end
+
+    %%store the best solution and fitness of this run
+    Results(j).Xbest(i+1,:) = round_discrete_vars(X);
+    switch Optimisation.algorithm
+        case {1,2}
+            Results(j).Fbest(i+1) = Keeptrack.FitBest(end);
+        case {3,4}
+            Results(j).Fbest(i+1) = gbestfit;
+    end
+
+
+
+    %%compute the Results(j) of the different OF parameters and Qpcc using the
+    %%final solution and store them in results
+    [Results(j).Ploss(i+1), Results(j).tchanges(i+1), Results(j).Reactors_on(i+1),...
+        Results(j).Qaccuracy(i+1)] = compute_results(Results(j).Xbest(i+1,:));
+
+    %%initilise matrix with FitBest progress at each iteration
+    if i == 1
+        Results(j).Fit_progress = NaN * zeros(Optimisation.Nruns+1,FCount);
+        Results(j).Violation_composition_progress = NaN * zeros(FCount,3,Optimisation.Nruns+1);
+    elseif FCount > size(Results(j).Fit_progress,2)
+        dis = FCount-size(Results(j).Fit_progress,2);
+        Results(j).Fit_progress(:,end+1:FCount) = repmat(Results(j).Fit_progress(:,end),1,dis);
+        Results(j).Violation_composition_progress(end+1:FCount,:,:) = ...
+             repmat(Results(j).Violation_composition_progress(end,:,:),dis,1,1);
+    end
+    %%store the progress of FitBest of this iteration
+    Results(j).Fit_progress(i+1,:) = Keeptrack.FitBest;
+    Results(j).Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
+    Results(j).runtime(i,1) = toc;
+    fprintf('Run %2d: %2f seconds \n',i,Results(j).runtime(i,1));
+    %%plot if desired
+    if plot == 1
+        animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
+    end
+
+    end
+
+    MaxPloss = Systemdata.mpc.baseMVA;
+    Results(j).Ploss_best = min(Results(j).Ploss);
+    Results(j).Ploss_worst = max(Results(j).Ploss(Results(j).Ploss < MaxPloss));
+    Results(j).Ploss_mean = mean(Results(j).Ploss(Results(j).Ploss < MaxPloss));
+    Results(j).Times_converged = sum(Results(j).Ploss<MaxPloss);
+    Results(j).avg_runtime = mean(Results(j).Ploss(:,1));
+    %%save the result if desired
+    if store_results == 1
+        savedata
+    end
 end
-
-%%store the best solution and fitness of this run
-Results.Xbest(i+1,:) = round_discrete_vars(X);
-switch Optimisation.algorithm
-    case {1,2}
-        Results.Fbest(i+1) = Keeptrack.FitBest(end);
-    case {3,4}
-        Results.Fbest(i+1) = gbestfit;
-end
-
-   
-
-%%compute the results of the different OF parameters and Qpcc using the
-%%final solution and store them in results
-[Results.Ploss(i+1), Results.tchanges(i+1), Results.Reactors_on(i+1),...
-    Results.Qaccuracy(i+1)] = compute_results(Results.Xbest(i+1,:));
-
-%%initilise matrix with FitBest progress at each iteration
-if i == 1
-    Results.Fit_progress = NaN * zeros(Optimisation.Nruns+1,FCount);
-    Results.Violation_composition_progress = NaN * zeros(FCount,3,Optimisation.Nruns+1);
-elseif FCount > size(Results.Fit_progress,2)
-    dis = FCount-size(Results.Fit_progress,2);
-    Results.Fit_progress(:,end+1:FCount) = repmat(Results.Fit_progress(:,end),1,dis);
-    Results.Violation_composition_progress(end+1:FCount,:,:) = ...
-         repmat(Results.Violation_composition_progress(end,:,:),dis,1,1);
-end
-%%store the progress of FitBest of this iteration
-Results.Fit_progress(i+1,:) = Keeptrack.FitBest;
-Results.Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
-Results.runtime(i,1) = toc;
-fprintf('Run %2d: %2f seconds \n',i,Results.runtime(i,1));
-%%plot if desired
-if plot == 1
-    animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
-end
-
-end
-
-MaxPloss = Systemdata.mpc.baseMVA;
-Results.Ploss_best = min(Results.Ploss);
-Results.Ploss_worst = max(Results.Ploss(Results.Ploss < MaxPloss));
-Results.Ploss_mean = mean(Results.Ploss(Results.Ploss < MaxPloss));
-Results.Times_converged = sum(Results.Ploss<MaxPloss);
-Results.avg_runtime = mean(Results.Ploss(:,1));
-%%save the result if desired
-if store_results == 1
-    savedata
-end
-

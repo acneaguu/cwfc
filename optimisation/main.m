@@ -31,8 +31,6 @@ Optimisation.which_discrete = [14:16];      %indeces of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
 initialise_systemdata(system_13_v2);
 
-
-
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
@@ -50,7 +48,6 @@ Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
 plot = 0;
 store_results = 0;
 
-
 %Results struct consits of the results of each optimal powerflow
 %%variables containing the best solutions at all evaluated optimisation
 %%runs (Fbest), a matrix containing the best solution at each optimisation
@@ -62,14 +59,7 @@ global Results;
 Optimisation.t = 1;
 initialise_results_struct();
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%variable indicated which case is considered. For now, it is case 2 i.e.
-%%the case after the initalisation case. This value should change within a
-%%loop
-
 %%Fitness evaluation function
-Optimisation.t = 2;
 switch Optimisation.algorithm
     case {1,2,3}
     fun = @(X)fitness_eval(X);
@@ -185,7 +175,7 @@ for j = 3%2:Optimisation.Ncases+1
     if store_results == 1
         savedata
     end
-    best_index = find(min(Results(j).Fbest));
+    best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);
     Results(j).best_run_fitness = min(Results(j).Fbest);
     Results(j).best_run_solution = Results(j).Xbest(best_index,:);
 end

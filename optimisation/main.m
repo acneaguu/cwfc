@@ -44,7 +44,7 @@ Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
 Optimisation.print_interval = 1000; %Interval of printed steps
-Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
+Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
 plot = 0;
@@ -106,7 +106,7 @@ fsmax = [1 2 5 10];
 ndimmin = [1 0.9 0.8];
 ndimmax = [1 0.5 0.3 0.1];
 v = [5 10 15];
-for j = 2:Optimisation.Ncases+1
+for j = 3%2:Optimisation.Ncases+1
     %%update the casefile
     %%update boundaries lb/ub
     Optimisation.t = j;

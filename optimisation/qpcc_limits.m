@@ -4,7 +4,7 @@
 %%computed by taking the intersect of a shape (corresponding to the grid
 %%code) and the active power output. 
 function qpcc_limits()
-global Qref;
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results FCount; 
 %%grid code for rectangle
 Qmin = -0.4;
 Qmax = 0.33;

@@ -1,7 +1,7 @@
 %%This function creates the Result struct and initialises the variables
 %%with NaNs.
 function initialise_results_struct
-global Results Optimisation
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
 
 Results.Ploss = NaN * zeros(Optimisation.Nruns+1,1);
 Results.tchanges = NaN * zeros(Optimisation.Nruns+1,1);

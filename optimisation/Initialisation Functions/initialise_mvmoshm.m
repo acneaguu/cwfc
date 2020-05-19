@@ -9,7 +9,7 @@
 %%MVMO-SHM algorithm
 function initialise_mvmoshm()
 global ps proc parameter %%vars of MVMO-SHM
-global Optimisation%%Vars for main
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
 
 
 ps.D=Optimisation.Nvars; %Dimension of optimization problem (in this example 2 optimization variables)     

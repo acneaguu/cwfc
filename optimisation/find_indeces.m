@@ -2,7 +2,7 @@
 %with a 1 at the rows which contain optimisation variables, i.e
 %transformers and shunts
 function g = find_indeces()
-global Optimisation Systemdata CONSTANTS;
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
 
 g.strings = zeros(Systemdata.Nstrings,1);
 g.trans = zeros(Systemdata.Nbranch,1);

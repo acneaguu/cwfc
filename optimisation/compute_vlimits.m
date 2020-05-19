@@ -3,6 +3,7 @@
 %%code is used. If the reactive power is outside the specified range, the
 %%voltage gets the value specified at the bounds (Qpcc = +/- 0.99)
 function vlimits = compute_vlimits(Qpcc)
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
 %%check bounds
 if Qpcc > 1
     Qpcc = 0.99;

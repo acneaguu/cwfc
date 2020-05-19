@@ -42,18 +42,17 @@ function [P,Q] = compute_pq_wtg(windspeed)
     for i=1:13
         for j=1:nsamples  
             if (P(j,i) < (P_reg_in(i)*P_wt_max(i)))
-                  Q(j,i) = rc_string_in(i)*P(j,i);
-                    if (Q(j,i) >= Q_wt_max(i))
-                        Q(j,i) = Q_wt_max(i);
-                    end 
+                Q(j,i) = rc_string_in(i)*P(j,i);
+                if (Q(j,i) >= Q_wt_max(i))
+                    Q(j,i) = Q_wt_max(i);
+                end 
             elseif ((P(j,i) >= (P_reg_in(i)*P_wt_max(i))) && (P(j,i) <= (P_reg_end(i)*P_wt_max(i))))
-                   Q(j,i) = Q_wt_max(i);
-
+                Q(j,i) = Q_wt_max(i);
             elseif ((P(j,i) > (P_reg_end(i)*P_wt_max(i))))
-                  Q(j,i) = Q_wt_max(i) + rc_string_end(i).*(P(j,i)-P_reg_end(i)*P_wt_max(i));
-                    if (Q(j,i) < 0)
-                        Q(j,i) = 0;
-                    end 
+                Q(j,i) = Q_wt_max(i) + rc_string_end(i).*(P(j,i)-P_reg_end(i)*P_wt_max(i));
+                if (Q(j,i) < 0)
+                    Q(j,i) = 0;
+                end 
             end 
         end
     end

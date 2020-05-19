@@ -25,7 +25,7 @@ parameter.ratio_gute_max=0.3;               %Initial portion of good particles
 parameter.ratio_gute_min=0.3;               %Final portion of good particles
 parameter.local_prob= 0;                    %ACHTUNG: Probability value between 0 and 1. Set to 0 to deactivate local search
 parameter.n_random_ini =round(ps.D/1.0);    %initial number of variables selected for mutation ;  
-parameter.n_random_last=round(0.1*ps.D/1.0 );  %final number of variables selected for mutation 
+parameter.n_random_last=round(0.6*ps.D/1.0 );  %final number of variables selected for mutation 
 parameter.ratio_local = 0.09;               %percentage of total runs without local search possibility
 
 end

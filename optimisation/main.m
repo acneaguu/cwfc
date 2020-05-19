@@ -175,7 +175,7 @@ for j = 2:Optimisation.Ncases+1
     if store_results == 1
         savedata
     end
-    best_index = find(min(Results(j).Fbest));
+    best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);
     Results(j).best_run_fitness = min(Results(j).Fbest);
     Results(j).best_run_solution = Results(j).Xbest(best_index,:);
 end

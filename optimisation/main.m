@@ -29,7 +29,7 @@ Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
 Optimisation.which_discrete = [14:16];%#ok<NBRAK> %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %generate logic vectors for different var indeces
-initialise_systemdata(system_13_v2);
+initialise_systemdata(system_13);
 
 %Ones describe the bounds of optimisation variables
 %lb = -30% of Pn (5MW), ub = 40% of Pn
@@ -59,7 +59,8 @@ Optimisation.Neval = 3.5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
-Optimisation.print = 1;
+Optimisation.print_progress = 1;
+Optimisation.print_pfresults = 0;
 Optimisation.print_interval = 1000; %Prints interval
 
 %%settings to plot and store the results of the optimisation

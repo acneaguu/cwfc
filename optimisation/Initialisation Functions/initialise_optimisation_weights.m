@@ -1,7 +1,7 @@
 %%This function initialises the weights for the different constraint
 %%violation factors and the objectives of the objective function.
 function initialise_optimisation_weights()
-global Optimisation
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
 
 %Weights of constraint violation
 Optimisation.p1 = 1;            %Penalty for voltage violation

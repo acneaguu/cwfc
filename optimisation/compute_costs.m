@@ -2,7 +2,7 @@
 %%solution Xin at t considering also past positions of the transformer taps
 %%and the reactor connection.
 function OF = compute_costs(Xin)
-global CONSTANTS PFresults Systemdata Optimisation Results;
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
     %% Ploss
     %%branch losses
     [losses] = get_losses(PFresults);

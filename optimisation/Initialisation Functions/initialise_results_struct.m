@@ -1,7 +1,8 @@
 %%This function creates the Result struct and initialises the variables
 %%with NaNs.
 function initialise_results_struct
-global Results Optimisation
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
+
 %%total runs is nruns + 1 (init)
 total_runs = Optimisation.Nruns +1;  
 

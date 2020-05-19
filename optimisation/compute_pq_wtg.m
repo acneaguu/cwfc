@@ -1,4 +1,5 @@
 function [P,Q] = compute_pq_wtg(windspeed)
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
     %%wtg data
     v_c_in = 3 ; %general cut in speed in m/s
     v_r = 14 ; %general rated speed in m/s, fixed for step 2a

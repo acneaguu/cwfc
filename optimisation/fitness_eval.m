@@ -22,7 +22,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [F,OF,g,Xout] = fitness_eval(Xin)
-global CONSTANTS mpopt Systemdata PFresults Optimisation Keeptrack FCount;
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results FCount; 
 Xout = NaN * ones(size(Xin));
 F = NaN * ones(size(Xin,1),1);
 NXin = size(Xin,1);

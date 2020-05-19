@@ -3,7 +3,7 @@
 %%positions. Moreover, it makes two vectors indicating which variables are
 %%continuous and which variables are discontinuous
 function logic_optvars()
-global Optimisation
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
 Optimisation.wtg_pos = logical([ones(1,Optimisation.Nturbines) ...
     zeros(1,(Optimisation.Npv+Optimisation.Ntr+Optimisation.Nr))]); 
                                             %logic vector with 1 on wtg

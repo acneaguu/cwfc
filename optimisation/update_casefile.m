@@ -16,8 +16,8 @@ if mode == 1        %updates the controllable variables
     %%Updates reactor status: bustype and branch status
     Systemdata.mpc.bus(Systemdata.shunts,CONSTANTS.BUS_TYPE) = ...
         4-3*Xin(Optimisation.r_pos); 
-%     Systemdata.mpc.branch(Systemdata.shuntbranch,CONSTANTS.BR_STATUS) = ...
-%         Xin(Optimisation.r_pos);
+    Systemdata.mpc.branch(Systemdata.shuntbranch,CONSTANTS.BR_STATUS) = ...
+         Xin(Optimisation.r_pos);
 elseif mode == 2    %updates the active power
     Systemdata.mpc.gen(index_wtg,[2 9:10]) = repmat(transpose(Xin),1,3);
 % elseif mode == 3    %legacy for system 41

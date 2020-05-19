@@ -4,7 +4,7 @@
 %%2 for system 13 i.e. WPZ topology
 function initialise_systemdata(topology)
 %%surpress MATPOWER outputs
-global mpopt Systemdata CONSTANTS Optimisation
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
 mpopt = mpoption('verbose',0,'out.all',0);
 %%Structure containing power system and optimization related information
 Systemdata.mpc = topology;

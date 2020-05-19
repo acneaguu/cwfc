@@ -4,7 +4,8 @@
 %%variables_date + time
 function savedata
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;
-    name = input('Enter custom prefix:\n','s');
+    %name = input('Enter custom prefix:\n','s');
+    name = 'system_13_paramsweep';
     if or(or(Optimisation.w1,Optimisation.w2),Optimisation.w3)
         optstr = 'With Opt ';
     else
@@ -19,7 +20,7 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
         algstr = 'CDEEPSO';
     elseif Optimisation.algorithm == 4
         global parameter
-        configmvmo = sprintf('fs:[%3.1d & %3.1d];Nmut:[%3.1d & %3.1d]',...
+        configmvmo = sprintf('fs=%3.1d and %3.1d_Nmut=%3.1d and %3.1d',...
             parameter.fs_factor_start,parameter.fs_factor_end,...
             parameter.n_random_ini,parameter.n_random_last);
         algstr = strcat('MVMO-SHM',configmvmo);

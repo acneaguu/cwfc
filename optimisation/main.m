@@ -28,27 +28,11 @@ Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
 Optimisation.which_discrete = [14:16];      %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
-logic_optvars();                            %generate logic vectors for different var indeces
+logic_optvars();                            %Logic vectors for optimisation vector
 initialise_systemdata(system_13_v2);
 
-%Ones describe the bounds of optimisation variables
-%lb = -30% of Pn (5MW), ub = 40% of Pn
-% lb = [-2.5*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -20 0];
-% ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
-
-Q_wt_max = [21.2 18.55 19.15 10.9 22.4 19.15 12.2 19.6 22.4 13.248 19.6 19.6 19.6] ;
-Q_wt_min = -Q_wt_max;
-Q_pv_max = [10.1 10.1 10.1 10.1];
-Q_pv_min = -Q_pv_max;
-
-%Q_wt_max = 2.5*ones(1,Optimisation.Nturbines);
-%Q_wt_min = -Q_wt_max;
-%Qmax and Qmin change depending on windspeed/solar irradiance
-Qmax = [Q_wt_max ];
-Qmin = [Q_wt_min ];
-boundary_initialise(Qmin, Qmax);
-lb = Optimisation.lb;
-ub = Optimisation.ub;
+[Qmin, Qmax] = generate_case(10); %Input: windspeed
+[lb, ub]= boundary_initialise(Qmin, Qmax);
 
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
@@ -59,9 +43,9 @@ Optimisation.Neval = 5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
-Optimisation.print_progress = 1;
-Optimisation.print_pfresults = 1;
-Optimisation.print_interval = 1000; %Prints interval
+Optimisation.print_progress = 1;    %Plots runs in command window
+Optimisation.print_interval = 1000; %Interval 
+Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
 plot = 0;

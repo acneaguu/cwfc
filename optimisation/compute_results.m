@@ -14,11 +14,13 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     %Computes resulting losses for optimal solution
     [losses] = get_losses(PFresults);
     Ploss_branch = sum(real(losses));
-    Ploss_shunt = sum(PFresults.bus(:,CONSTANTS.VM) .^ 2 .* PFresults.bus(:,CONSTANTS.GS)); 
+    Ploss_shunt = sum(PFresults.bus(:,CONSTANTS.VM) .^ 2 .* ...
+        PFresults.bus(:,CONSTANTS.GS)); 
     Ploss = Ploss_branch + Ploss_shunt;
     
     %Computes resulting tap changes
-    tap_changes_ratio = abs(Xopt(Optimisation.tr_pos)-Results.Xbest(Optimisation.t-1,Optimisation.tr_pos)); 
+    tap_changes_ratio = abs(Xopt(Optimisation.tr_pos)-...
+        Results(Optimisation.t-1).best_run_solution(Optimisation.tr_pos));
     Tchanges = sum(tap_changes_ratio./Systemdata.trstep); 
     
     %Computes resulting reactor changes

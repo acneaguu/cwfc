@@ -16,7 +16,7 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     %sum(bus(nzsh, VM) .^ 2 .* bus(nzsh, BS))  %%shunt injection reactive
     %% Tap switches
     %tap changes in ratios
-    tap_changes_ratio = abs(Xin(Optimisation.tr_pos)-Results.Xbest(Optimisation.t-1,Optimisation.tr_pos)); 
+    tap_changes_ratio = abs(Xin(Optimisation.tr_pos)-Results(Optimisation.t-1).best_run_solution(Optimisation.tr_pos));
     
     %convert the tap changes from rations to tap positions
     tap_changes = sum(tap_changes_ratio./Systemdata.trstep); 

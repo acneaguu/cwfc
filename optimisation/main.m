@@ -31,14 +31,13 @@ Optimisation.which_discrete = [14:16];      %indeces of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
 initialise_systemdata(system_13_v2);
 
-[Qmin, Qmax] = generate_case(10); %Input: windspeed
-[lb, ub]= boundary_initialise(Qmin, Qmax);
+
 
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 1;            %number of runs per case
+Optimisation.Ncases = 3;            %number of evaluated time instances
+Optimisation.Nruns = 2;            %number of runs per case
 Optimisation.Neval = 5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -60,8 +59,8 @@ store_results = 0;
 %%paramers at each run (Ploss, tchanges and rchanges)
 
 global Results;
-initialise_results_struct%%initialise the Results struct with NaNs
-
+Optimisation.t = 1;
+initialise_results_struct();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -106,15 +105,20 @@ fsmin = [0.2 0.35 0.5 1 2];
 fsmax = [1 2 5 10];
 ndimmin = [1 0.9 0.8];
 ndimmax = [1 0.5 0.3 0.1];
-for j = 1:Optimisation.Ncases
+v = [5 10 15];
+for j = 2:Optimisation.Ncases+1
     %%update the casefile
     %%update boundaries lb/ub
+    Optimisation.t = j;
+    initialise_results_struct(); %%initialise the Results struct with NaNs
+    [Qmin, Qmax] = generate_case(v(j-1)); %Input: windspeed
+    [lb, ub]= boundary_initialise(Qmin, Qmax);
     for i = 1:Optimisation.Nruns
     % if i == 2 %for i = 2 you dont optimise for minimal power losses
     %     Optimisation.w1 =0 ;
     % end
     tic;
-    fprintf('************* Run %d *************\n', i);
+    fprintf('************* Case %d, Run %d *************\n',j-1, i);
 
     %%reinitialise fitness evaluation counter
     FCount = 0;
@@ -163,7 +167,7 @@ for j = 1:Optimisation.Ncases
     Results(j).Fit_progress(i+1,:) = Keeptrack.FitBest;
     Results(j).Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
     Results(j).runtime(i,1) = toc;
-    fprintf('Run %2d: %2f seconds \n',i,Results(j).runtime(i,1));
+    fprintf('Case %2d, Run %2d: %2f seconds \n',j-1,i,Results(j).runtime(i,1));
     %%plot if desired
     if plot == 1
         animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
@@ -181,4 +185,7 @@ for j = 1:Optimisation.Ncases
     if store_results == 1
         savedata
     end
+    best_index = find(min(Results(j).Fbest));
+    Results(j).best_run_fitness = min(Results(j).Fbest);
+    Results(j).best_run_solution = Results(j).Xbest(best_index,:);
 end

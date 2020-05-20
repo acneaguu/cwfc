@@ -83,7 +83,7 @@ mpc.gen = [
 %%the p.u calculations are checked several times; lecture and the data of
 %%ABB are used in order to find the right p.u values for the transformer.
 
-% fbus  tbus	   r	              x	                        b	        rateA        rateB     rateC             ratio   angle   status	 ratiomax	ratiomin
+% fbus  tbus	   r	              x	                        b	        rateA        rateB     rateC            ratio   angle   status	 ratiomax	ratiomin
 mpc.branch = [
     %Main bus to transformer
     1   2       0.00363037037       0.01066             0.4135121331         428.4       428.4       428.4              0       0        1       0        0;

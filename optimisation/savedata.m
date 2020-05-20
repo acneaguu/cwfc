@@ -20,7 +20,7 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
         algstr = 'CDEEPSO';
     elseif Optimisation.algorithm == 4
         global parameter
-        configmvmo = sprintf('fs=%3.1d and %3.1d_Nmut=%3.1d and %3.1d',...
+        configmvmo = sprintf('fs=%4.1d and %4.1d_Nmut=%4.1d and %4.1d',...
             parameter.fs_factor_start,parameter.fs_factor_end,...
             parameter.n_random_ini,parameter.n_random_last);
         algstr = strcat('MVMO-SHM',configmvmo);
@@ -32,6 +32,6 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack 
     end
     rundata = sprintf('Nruns =%3.1d Nvars =%3.1d Nswarm =%3.1d',...
         Optimisation.Nruns,Optimisation.Nvars,Optimisation.Populationsize);
-    namestr = strcat(name,optstr," ",algstr,rundata,"_",datestr(now,'dd-MM-yyyy HH-mm-ss'));
+    namestr = strcat(name,optstr," ",algstr,rundata,"_",datestr(now,'dd-MM-yyyy HH-mm-ss'),'loc');
     save(namestr)
 end

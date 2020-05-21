@@ -14,7 +14,7 @@ mpc.version = '2';
 
 %%-----  Power Flow Data  -----%%
 %% system MVA base
-mpc.baseMVA = 100;
+mpc.baseMVA = 350;
 
 %% bus data 
 % bus_i	   type	    Pd	   Qd	    Gs	    Bs	   area	   Vm	   Va	   baseKV  zone	   Vmax	    Vmin
@@ -121,3 +121,6 @@ mpc.branch = [
     12  28      0.00006701224365	0.0001901698806     0.0002307725628      68.04       68.04       68.04          0        0       1        0        0;     
     17  28      0.00006701224365	0.0001901698806     0.0002307725628      68.04       68.04       68.04          0        0       1        0        0; 
  ];
+
+mpc.branch(:,3:5) = mpc.branch(:,3:5) * (1/3.5);
+end

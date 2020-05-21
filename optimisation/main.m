@@ -29,24 +29,25 @@ Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
 Optimisation.which_discrete = [14:16];      %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
-initialise_systemdata(system_13_v2);
+initialise_systemdata(system_13_correctbase);
+%initialise_systemdata(system_13_v2);
 
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 3;            %number of evaluated time instances
+Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 1;            %number of runs per case
-Optimisation.Neval = 5e3;           %max allowed function evaluations
+Optimisation.Neval = 3.5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
 Optimisation.print_interval = 1000; %Interval of printed steps
-Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
+Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
 plot = 0;
-store_results = 1;
+store_results = 0;
 
 %Results struct consits of the results of each optimal powerflow
 %%variables containing the best solutions at all evaluated optimisation
@@ -95,17 +96,17 @@ fsmin = [0.2 0.35 0.5 1];
 fsmax = [2 5 10];
 ndimmin = [1 0.9 0.8];
 ndimmax = [1 0.5 0.3 0.1];
-v = [5 10 15];
+v = [15];
 
-global parameter
-for k = 1:length(fsmin)
-parameter.fs_factor_start = fsmin(k);
-for kk = 1:length(fsmax)
-parameter.fs_factor_end = fsmax(kk);
-for kkk = 1:length(ndimmin)
-parameter.n_random_ini = ndimmin(kkk);
-for kkkk = 1:length(ndimmax)
-parameter.n_random_last = ndimmax(kkkk);
+% global parameter
+% for k = 1:length(fsmin)
+% parameter.fs_factor_start = fsmin(k);
+% for kk = 1:length(fsmax)
+% parameter.fs_factor_end = fsmax(kk);
+% for kkk = 1:length(ndimmin)
+% parameter.n_random_ini = ndimmin(kkk);
+% for kkkk = 1:length(ndimmax)
+% parameter.n_random_last = ndimmax(kkkk);
     for j = 2:Optimisation.Ncases+1
         %%update the casefile
         %%update boundaries lb/ub
@@ -190,7 +191,7 @@ parameter.n_random_last = ndimmax(kkkk);
     if store_results == 1
         savedata
     end
-end
-end
-end
-end
+% end
+% end
+% end
+% end

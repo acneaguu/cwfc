@@ -24,6 +24,10 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     reactor_changes = sum(Xin(Optimisation.r_pos));
     %sum(abs(Xin(Optimisation.r_pos) - Results.Xbest(Optimisation.t-1,Optimisation.r_pos))); %relative reactor changes
     
+    %% extremeness of the setpoints
+    extremeness_setpoints = sum(abs(Xin(Optimisation.wtg_pos | Optimisation.pvg_pos)));
+    
     %% Calculate OF
-    OF = Optimisation.w1*Ploss_tot+Optimisation.w2*tap_changes+Optimisation.w3*reactor_changes;
+    OF = Optimisation.w1*Ploss_tot+Optimisation.w2*tap_changes+...
+        Optimisation.w3*reactor_changes + Optimisation.w4*extremeness_setpoints;
 end

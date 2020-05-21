@@ -122,5 +122,5 @@ mpc.branch = [
     17  28      0.00006701224365	0.0001901698806     0.0002307725628      68.04       68.04       68.04          0        0       1        0        0; 
  ];
 
-mpc.branch(:,3:5) = mpc.branch(:,3:5) * (1/3.5);
+mpc.branch(:,3:5) = xlsread('branch_calculations350.xlsx','K8:M38');
 end

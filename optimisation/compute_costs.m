@@ -19,7 +19,7 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     tap_changes_ratio = abs(Xin(Optimisation.tr_pos)-Results(Optimisation.t-1).best_run_solution(Optimisation.tr_pos));
     
     %convert the tap changes from rations to tap positions
-    tap_changes = sum((tap_changes_ratio./Systemdata.trstep)/Optimisation.Ntaps')/Optimisation.Ntr; 
+    tap_changes = sum((tap_changes_ratio./Systemdata.trstep)/(Optimisation.Ntaps-1)')/Optimisation.Ntr; 
     %% Reactor
     %reactor_changes = sum(Xin(Optimisation.r_pos));
     reactor_changes = sum(abs(Xin(Optimisation.r_pos) - ...

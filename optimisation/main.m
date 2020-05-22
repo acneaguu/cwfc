@@ -12,7 +12,7 @@ rng default
 %%setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint =     0; %in p.u. of baseMVA
-Qref.tolerance = 0.15;  %tolerance at Q = 0 MVar
+Qref.tolerance = 0.15; %tolerance at Q = 0 MVar
 qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 
 
@@ -46,7 +46,7 @@ Optimisation.print_interval = 1000; %Interval of printed steps
 Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
-plot = 0;
+plot = 1;
 store_results = 0;
 
 %Results struct consits of the results of each optimal powerflow
@@ -176,17 +176,21 @@ v = [5 10 15];
         end
 
         end
-
+        
+        %calculate best/worst/mean of Ploss
         MaxPloss = Systemdata.mpc.baseMVA;
         Results(j).Ploss_best = min(Results(j).Ploss);
         Results(j).Ploss_worst = max(Results(j).Ploss(Results(j).Ploss < MaxPloss));
         Results(j).Ploss_mean = mean(Results(j).Ploss(Results(j).Ploss < MaxPloss));
         Results(j).Times_converged = sum(Results(j).Ploss<MaxPloss);
-        Results(j).avg_runtime = mean(Results(j).Ploss(:,1));
         
+        %save the best fitness and solution 
         best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);
         Results(j).best_run_fitness = min(Results(j).Fbest);
         Results(j).best_run_solution = Results(j).Xbest(best_index,:);
+        
+        %compute the average runtime
+        Results(j).avg_runtime = mean(Results(j).runtime(:,1));
     end
     %%save the result if desired
     if store_results == 1

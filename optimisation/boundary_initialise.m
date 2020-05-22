@@ -11,4 +11,6 @@ r_min = 0; % 0 corresponds with disconnected
 
 lb = [Qmin , tr_min , r_min];
 ub = [Qmax , tr_max , r_max];
+Systemdata.lb = lb;
+Systemdata.ub = ub;
 end

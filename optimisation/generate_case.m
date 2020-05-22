@@ -9,5 +9,4 @@ Q_wt_max = Q_wtg;
 Q_wt_min = -Q_wt_max;
 %Updates the active power outputs of the wtg strings
 Systemdata.mpc.gen(Systemdata.wtg_pos,CONSTANTS.PG) = P_wtg;
-
 end

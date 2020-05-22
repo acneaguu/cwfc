@@ -35,8 +35,8 @@ initialise_systemdata(system_13_correctbase);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 1;            %number of runs per case
+Optimisation.Ncases = 3;            %number of evaluated time instances
+Optimisation.Nruns = 2;            %number of runs per case
 Optimisation.Neval = 3.5e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -96,7 +96,7 @@ fsmin = [0.2 0.35 0.5 1];
 fsmax = [2 5 10];
 ndimmin = [1 0.9 0.8];
 ndimmax = [1 0.5 0.3 0.1];
-v = [15];
+v = [5 10 15];
 
 % global parameter
 % for k = 1:length(fsmin)
@@ -152,7 +152,8 @@ v = [15];
         %%compute the Results(j) of the different OF parameters and Qpcc using the
         %%final solution and store them in results
         [Results(j).Ploss(i+1), Results(j).tchanges(i+1), Results(j).Reactors_on(i+1),...
-            Results(j).Qaccuracy(i+1)] = compute_results(Results(j).Xbest(i+1,:));
+            Results(j).extremeness_setpoints(i+1), Results(j).Qaccuracy(i+1)]...
+            = compute_results(Results(j).Xbest(i+1,:));
 
         %%initilise matrix with FitBest progress at each iteration
         if i == 1

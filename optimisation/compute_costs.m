@@ -22,7 +22,8 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     tap_changes = sum((tap_changes_ratio./Systemdata.trstep)/Optimisation.Ntaps')/Optimisation.Ntr; 
     %% Reactor
     %reactor_changes = sum(Xin(Optimisation.r_pos));
-    reactor_changes = sum(abs(Xin(Optimisation.r_pos) - Results(Optimisation.t-1).best_run_solution(Optimisation.r_pos))); %relative reactor changes
+    reactor_changes = sum(abs(Xin(Optimisation.r_pos) - ...
+        Results(Optimisation.t-1).best_run_solution(Optimisation.r_pos))); %relative reactor changes
     
     %% extremeness of the setpoints
     extremeness_setpoints = sum(abs(Xin(Optimisation.wtg_pos | Optimisation.pvg_pos))...

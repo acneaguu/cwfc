@@ -16,7 +16,7 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     Ploss_branch = sum(real(losses));
     Ploss_shunt = sum(PFresults.bus(:,CONSTANTS.VM) .^ 2 .* ...
         PFresults.bus(:,CONSTANTS.GS)); 
-    Ploss = (Ploss_branch + Ploss_shunt)./Systemdata.mpc.baseMVA;
+    Ploss = (Ploss_branch + Ploss_shunt);
     
     %Computes resulting tap changes
     tap_changes_ratio = abs(Xopt(Optimisation.tr_pos)-...

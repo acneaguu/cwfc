@@ -36,7 +36,7 @@ Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
 Optimisation.print_interval = 1000; %Interval of printed steps
-Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
+Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
 plot = 1;
@@ -157,9 +157,9 @@ cases(:,2) = [repmat(Qref.setpoint,4,1)];
 
         %%compute the Results(j) of the different OF parameters and Qpcc using the
         %%final solution and store them in results
-        [Results(j).Ploss(i+1), Results(j).tchanges(i+1), Results(j).Reactors_on(i+1),...
-            Results(j).extremeness_setpoints(i+1), Results(j).Qaccuracy(i+1)]...
-            = compute_results(Results(j).Xbest(i+1,:));
+        [Results(j).Ploss(i+1), Results(j).tchanges(i+1), Results(j).Reactors_on(i+1)...
+            ,Results(j).extremeness_setpoints(i+1), Results(j).Qaccuracy(i+1)]...
+            = compute_results(Results(j).Xbest(i+1,:),cases(j-1,2));
 
         %%initilise matrix with FitBest progress at each iteration
         if i == 1

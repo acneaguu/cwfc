@@ -91,7 +91,7 @@ global Keeptrack FCount;    %some global vars to keep track of the calls of
 %%setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
-Qref.tolerance = 0.1; %tolerance at Q = 0 MVar
+Qref.tolerance = 1/14; %tolerance at Q = 0 MVar
         %compute the allowed range of Qpcc w.r.t. the setpoints
 
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
@@ -114,7 +114,7 @@ cases(:,2) =repmat(Qref.setpoint,2,1);
 % parameter.n_random_ini = ndimmin(kkk);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
-    for j = 2:3%Optimisation.Ncases+1
+    for j = 2:Optimisation.Ncases+1
         %%update the casefile
         %%update boundaries lb/ub
         Optimisation.t = j;

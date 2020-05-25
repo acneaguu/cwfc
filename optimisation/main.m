@@ -8,14 +8,7 @@ rng default
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%Optimisation problem specification and settings 
-%%setpoint at PCC given by TSO
-global Qref;    
-Qref.setpoint =     0; %in p.u. of baseMVA
-Qref.tolerance = 0.15; %tolerance at Q = 0 MVar
-qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
-
-
+%%%Optimisation problem specification and settings 
 %%Optimisation containts the optimisation problem parameters
 global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
@@ -97,6 +90,12 @@ fsmax = [2 5 10];
 ndimmin = [1 0.9 0.8];
 ndimmax = [1 0.5 0.3 0.1];
 v = [5 10 15];
+
+%%setpoint at PCC given by TSO
+global Qref;    
+Qref.setpoint =     0; %in p.u. of baseMVA
+Qref.tolerance = 0.1; %tolerance at Q = 0 MVar
+qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
 
 % global parameter
 % for k = 1:length(fsmin)

@@ -10,6 +10,6 @@ Qmin = -0.4;
 Qmax = 0.33;
 
 %%compute the limits
-Qref.limits = [max([Qmin, Qref.setpoint-Qref.tolerance]), ...
-    min([Qmax,Qref.setpoint+Qref.tolerance])];
+Qref.limits = [max([Qmin, Qref.setpoint(Optimisation.t-1)-Qref.tolerance]), ...
+    min([Qmax,Qref.setpoint(Optimisation.t-1)+Qref.tolerance])];
 end

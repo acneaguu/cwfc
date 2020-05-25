@@ -96,7 +96,7 @@ Qref.tolerance = 1/14; %tolerance at Q = 0 MVar
 
 v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
 cases(:,1) = v;
-cases(:,2) = [repmat(Qref.setpoint,4,1)];
+cases(:,2) =repmat(Qref.setpoint,4,1);
 
 
 % fsmin = [0.2 0.35 0.5 1];

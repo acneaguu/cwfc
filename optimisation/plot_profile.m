@@ -19,7 +19,7 @@ title('Test profile optimisation unit')
 yyaxis left
 hold on
 plot(Ncase,P,'-b');
-plot(Ncase,Q,'-g');
+%plot(Ncase,Q,'-g');
 ylabel('P_{max} [p.u.]')
 yyaxis right
 stairs(Ncase,cases(:,2),'Color','red');

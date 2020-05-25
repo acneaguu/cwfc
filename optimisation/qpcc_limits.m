@@ -11,5 +11,5 @@ Qmax = 0.33;
 
 %%compute the limits
 Qref.limits = [max([Qmin, Qsetpoint-Qref.tolerance]), ...
-    min([Qmax,Qsetpoint)+Qref.tolerance])];
+    min([Qmax,Qsetpoint+Qref.tolerance])];
 end

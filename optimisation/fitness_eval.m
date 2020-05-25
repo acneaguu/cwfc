@@ -61,7 +61,7 @@ else
     composition = [2*Optimisation.p1*Systemdata.Nbus,Optimisation.p2,...
         2*Optimisation.p3*Systemdata.Nbranch];
     OF = 1e50;
-    F = OF; %Big penalty if powerflow runs are unsuccesful
+    F = 1e50; %Big penalty if powerflow runs are unsuccesful
 end
 
 %Keeptrack.Fitness keeps track of fitness of every particle

@@ -19,9 +19,9 @@ else
 
     %Ploss
     Results(Optimisation.t).Ploss = NaN * zeros(total_runs,1);
-    Results(Optimisation.t).Ploss_best = NaN * zeros(total_runs,1);
-    Results(Optimisation.t).Ploss_worst = NaN * zeros(total_runs,1);
-    Results(Optimisation.t).Ploss_mean = NaN * zeros(total_runs,1);
+    Results(Optimisation.t).Ploss_best = NaN;
+    Results(Optimisation.t).Ploss_worst = NaN;
+    Results(Optimisation.t).Ploss_mean = NaN;
 
     %transformer and reactor status
     Results(Optimisation.t).tchanges = NaN * zeros(total_runs,1);

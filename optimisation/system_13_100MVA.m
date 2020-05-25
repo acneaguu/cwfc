@@ -8,13 +8,13 @@
 %
 % See Matpower user's manual for details on the case file format.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function mpc = system_13
+function mpc = system_13_100MVA
 %% MATPOWER Case Format : Version 2
 mpc.version = '2';
 
 %%-----  Power Flow Data  -----%%
 %% system MVA base
-mpc.baseMVA = 350;
+mpc.baseMVA = 100;
 
 %% bus data 
 % bus_i	   type	    Pd	   Qd	    Gs	    Bs	   area	   Vm	   Va	   baseKV  zone	   Vmax	    Vmin
@@ -121,6 +121,3 @@ mpc.branch = [
     12  28      0.00005270422406	0.0003006495256     0.0002307725628      138.8931543       138.8931543       138.8931543          0        0       1        0        0;     
     17  28      0.00005270422406	0.0003006495256     0.0002307725628      138.8931543       138.8931543       138.8931543          0        0       1        0        0; 
     ];
-    mpc.branch(:,3:5) = xlsread('branch_calculations350.xlsx','K8:M38'); 
-    %last line to change to the correct values of Z corresponding to 350 MVA base
-end

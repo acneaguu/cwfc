@@ -22,8 +22,7 @@ Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
 Optimisation.which_discrete = [14:16];      %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
-initialise_systemdata(system_13_correctbase);
-%initialise_systemdata(system_13_v2);
+initialise_systemdata(system_13_350MVA);
 
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 

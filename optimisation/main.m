@@ -28,7 +28,7 @@ initialise_systemdata(system_13_correctbase);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 3;            %number of evaluated time instances
+Optimisation.Ncases = 10;            %number of evaluated time instances
 Optimisation.Nruns = 10;            %number of runs per case
 Optimisation.Neval = 10e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
@@ -90,11 +90,13 @@ global Keeptrack FCount;    %some global vars to keep track of the calls of
 
 %%setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint =  [-0.286 -0.143 0 0.143 0.286]; %in p.u. of baseMVA
+Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
 Qref.tolerance = 1/14; %tolerance at Q = 0 MVar
-qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
+        %compute the allowed range of Qpcc w.r.t. the setpoints
 
-v = [3.5 4.5 7 15];
+v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
+cases(:,1) = v;
+cases(:,2) = [repmat(Qref.setpoint,4,1)];
 
 
 % fsmin = [0.2 0.35 0.5 1];
@@ -114,8 +116,9 @@ v = [3.5 4.5 7 15];
         %%update the casefile
         %%update boundaries lb/ub
         Optimisation.t = j;
+        qpcc_limits(cases(j-1,2)); 
         initialise_results_struct(); %%initialise the Results struct with NaNs
-        [Qmin, Qmax] = generate_case(v(j-1)); %Input: windspeed
+        [Qmin, Qmax] = generate_case(cases(j-1,1)); %Input: windspeed
         [lb, ub]= boundary_initialise(Qmin, Qmax);
         for i = 1:Optimisation.Nruns
         % if i == 2 %for i = 2 you dont optimise for minimal power losses

@@ -3,13 +3,13 @@
 %%gridcode of Qpcc is rectangular. Otherwise, Qmin and Qmax need to be
 %%computed by taking the intersect of a shape (corresponding to the grid
 %%code) and the active power output. 
-function qpcc_limits()
+function qpcc_limits(Qsetpoint)
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results FCount; 
 %%grid code for rectangle
 Qmin = -0.4;
 Qmax = 0.33;
 
 %%compute the limits
-Qref.limits = [max([Qmin, Qref.setpoint(Optimisation.t-1)-Qref.tolerance]), ...
-    min([Qmax,Qref.setpoint(Optimisation.t-1)+Qref.tolerance])];
+Qref.limits = [max([Qmin, Qsetpoint-Qref.tolerance]), ...
+    min([Qmax,Qsetpoint)+Qref.tolerance])];
 end

@@ -94,7 +94,8 @@ Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
 Qref.tolerance = 1/14; %tolerance at Q = 0 MVar
         %compute the allowed range of Qpcc w.r.t. the setpoints
 
-v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
+%v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
+v = [7 7 7 7 7 15 15 15 15 15]';
 cases(:,1) = v;
 cases(:,2) =repmat(Qref.setpoint,4,1);
 
@@ -112,7 +113,7 @@ cases(:,2) =repmat(Qref.setpoint,4,1);
 % parameter.n_random_ini = ndimmin(kkk);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
-    for j = 2:Optimisation.Ncases+1
+    for j = 2:3%Optimisation.Ncases+1
         %%update the casefile
         %%update boundaries lb/ub
         Optimisation.t = j;

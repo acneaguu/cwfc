@@ -10,7 +10,7 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     %update slackbus voltage limits to the one corresponding to Qref
     slack = find(PFresults.bus(:,CONSTANTS.BUS_TYPE) == 3);
     index_slack = find(PFresults.gen(:,1) == slack);
-    Qpcc = PFresults.gen(index_slack,3)./PFresults.baseMVA;  
+    Qpcc = -1*PFresults.gen(index_slack,3)./PFresults.baseMVA;  
     vlimpcc = compute_vlimits(Qpcc);
     PFresults.bus(slack,CONSTANTS.VMAX:CONSTANTS.VMIN) = vlimpcc;
     

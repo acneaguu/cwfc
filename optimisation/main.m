@@ -114,7 +114,7 @@ cases(:,2) =repmat(Qref.setpoint,2,1);
 % parameter.n_random_ini = ndimmin(kkk);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
-    for j = 2:3%Optimisation.Ncases+1
+    for j = 2:Optimisation.Ncases+1
         %%update the casefile
         %%update boundaries lb/ub
         Optimisation.t = j;

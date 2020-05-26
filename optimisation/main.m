@@ -27,15 +27,15 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 10;            %number of evaluated time instances
-Optimisation.Nruns = 1;            %number of runs per case
+Optimisation.Ncases = 1;            %number of evaluated time instances
+Optimisation.Nruns = 5;            %number of runs per case
 Optimisation.Neval = 10e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
 Optimisation.print_interval = 1000; %Interval of printed steps
-Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
+Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
 plot = 1;
@@ -93,7 +93,7 @@ Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
 Qref.tolerance = 0.1; %tolerance at Q = 0 MVar
         %compute the allowed range of Qpcc w.r.t. the setpoints
 
-v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
+v = [7 3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
 cases(:,1) = v;
@@ -120,6 +120,8 @@ Ncase = 1:length(v);
         qpcc_limits(cases(j-1,2)); 
         initialise_results_struct(); %%initialise the Results struct with NaNs
         [Qmin, Qmax] = generate_case(cases(j-1,1)); %Input: windspeed
+%         Qmax = 0.001*Qmax;
+%         Qmin = 10*Qmin;
         [lb, ub]= boundary_initialise(Qmin, Qmax);
         for i = 1:Optimisation.Nruns
         % if i == 2 %for i = 2 you dont optimise for minimal power losses

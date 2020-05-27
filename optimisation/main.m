@@ -27,9 +27,9 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 20;            %number of evaluated time instances
+Optimisation.Ncases = 5;            %number of evaluated time instances
 Optimisation.Nruns = 5;            %number of runs per case
-Optimisation.Neval = 1000;           %max allowed function evaluations
+Optimisation.Neval = 10e3;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 

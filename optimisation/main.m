@@ -38,7 +38,7 @@ Optimisation.print_interval = 1000; %Interval of printed steps
 Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
-plot = 1;
+plot = 0;
 store_results = 0;
 
 %Results struct consits of the results of each optimal powerflow
@@ -89,7 +89,7 @@ global Keeptrack FCount;    %some global vars to keep track of the calls of
 
 %%setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
+Qref.setpoint =  [0; -0.286; -0.143; 0.143; 0.286]; %in p.u. of baseMVA
 Qref.tolerance = 0.1; %tolerance at Q = 0 MVar
         %compute the allowed range of Qpcc w.r.t. the setpoints
 

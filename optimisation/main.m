@@ -27,9 +27,9 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %number of evaluated time instances
+Optimisation.Ncases = 20;            %number of evaluated time instances
 Optimisation.Nruns = 5;            %number of runs per case
-Optimisation.Neval = 10e3;           %max allowed function evaluations
+Optimisation.Neval = 1000;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
@@ -89,11 +89,11 @@ global Keeptrack FCount;    %some global vars to keep track of the calls of
 
 %%setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint =  [0; -0.286; -0.143; 0.143; 0.286]; %in p.u. of baseMVA
+Qref.setpoint =  [-0.286; -0.143;0; 0.143; 0.286]; %in p.u. of baseMVA
 Qref.tolerance = 0.0339; %tolerance at Q = 0 MVar
         %compute the allowed range of Qpcc w.r.t. the setpoints
 
-v = [7 3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 15 15 15 15 15]';
+v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
 cases(:,1) = v;
@@ -123,6 +123,7 @@ Ncase = 1:length(v);
 %         Qmax = 0.001*Qmax;
 %         Qmin = 10*Qmin;
         [lb, ub]= boundary_initialise(Qmin, Qmax);
+        start_case = tic;
         for i = 1:Optimisation.Nruns
         % if i == 2 %for i = 2 you dont optimise for minimal power losses
         %     Optimisation.w1 =0 ;
@@ -174,6 +175,8 @@ Ncase = 1:length(v);
             Results(j).Violation_composition_progress(end+1:FCount,:,:) = ...
                  repmat(Results(j).Violation_composition_progress(end,:,:),dis,1,1);
         end
+        
+        %% RESULTS STRUCT USED FOR PERFORMANCE EVALUATION
         %%store the progress of FitBest of this iteration
         Results(j).Fit_progress(i+1,:) = Keeptrack.FitBest;
         Results(j).Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
@@ -191,15 +194,23 @@ Ncase = 1:length(v);
         Results(j).Ploss_best = min(Results(j).Ploss);
         Results(j).Ploss_worst = max(Results(j).Ploss(Results(j).Ploss < MaxPloss));
         Results(j).Ploss_mean = mean(Results(j).Ploss(Results(j).Ploss < MaxPloss));
-        Results(j).Times_converged = sum(Results(j).Fbest<=1);
         
         %save the best fitness and solution 
+        Results(j).Times_converged = sum(Results(j).Fbest<=1);
         best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);
         Results(j).best_run_fitness = min(Results(j).Fbest);
         Results(j).best_run_solution = Results(j).Xbest(best_index,:);
         
+        %calculates consistency performance
+        Results(j).avg_fitness = mean(Results(j).Fbest(2:end));
+        Results(j).std_fitness = std(Results(j).Fbest(2:end));
+        Results(j).std_solution = std(Results(j).Xbest(2:end,:));
+        
+        
         %compute the average runtime
         Results(j).avg_runtime = mean(Results(j).runtime(:,1));
+        Results(j).total_runtime = toc(start_case);
+        fprintf('Case %2d, Total Runtime: %2f seconds \n',j-1,Results(j).total_runtime);
     end
     %%save the result if desired
     if store_results == 1

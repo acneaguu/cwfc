@@ -90,7 +90,7 @@ global Keeptrack FCount;    %some global vars to keep track of the calls of
 %%setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint =  [0; -0.286; -0.143; 0.143; 0.286]; %in p.u. of baseMVA
-Qref.tolerance = 0.1; %tolerance at Q = 0 MVar
+Qref.tolerance = 0.0339; %tolerance at Q = 0 MVar
         %compute the allowed range of Qpcc w.r.t. the setpoints
 
 v = [7 3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 15 15 15 15 15]';

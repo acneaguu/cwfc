@@ -27,7 +27,7 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %number of evaluated time instances
+Optimisation.Ncases = 20;            %number of evaluated time instances
 Optimisation.Nruns = 5;            %number of runs per case
 Optimisation.Neval = 1000;           %max allowed function evaluations
 Optimisation.Populationsize = 200;   %size of the population
@@ -89,11 +89,11 @@ global Keeptrack FCount;    %some global vars to keep track of the calls of
 
 %%setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint =  [0; -0.286; -0.143; 0.143; 0.286]; %in p.u. of baseMVA
-Qref.tolerance = 0.1; %tolerance at Q = 0 MVar
+Qref.setpoint =  [-0.286; -0.143;0; 0.143; 0.286]; %in p.u. of baseMVA
+Qref.tolerance = 0.0339; %tolerance at Q = 0 MVar
         %compute the allowed range of Qpcc w.r.t. the setpoints
 
-v = [7 3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 15 15 15 15 15]';
+v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
 cases(:,1) = v;

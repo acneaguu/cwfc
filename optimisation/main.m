@@ -191,7 +191,7 @@ Ncase = 1:length(v);
         Results(j).Ploss_best = min(Results(j).Ploss);
         Results(j).Ploss_worst = max(Results(j).Ploss(Results(j).Ploss < MaxPloss));
         Results(j).Ploss_mean = mean(Results(j).Ploss(Results(j).Ploss < MaxPloss));
-        Results(j).Times_converged = sum(Results(j).Ploss<MaxPloss);
+        Results(j).Times_converged = sum(Results(j).Fbest<=1);
         
         %save the best fitness and solution 
         best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);

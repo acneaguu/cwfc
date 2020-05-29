@@ -9,8 +9,8 @@ total_runs = Optimisation.Nruns;
 if Optimisation.t ==1
     Results(Optimisation.t).best_run_solution = ...
         NaN * zeros(1,Optimisation.Nvars);
-    Results(Optimisation.t).best_run_solution(1,Optimisation.discrete) = ...
-        [1.1530 1.1530 1];
+    %Results(Optimisation.t).best_run_solution(1,Optimisation.discrete) = ...
+        %[1.1530 1.1530 1];
 else
     %%initialise the result structs
     %fitness and solution vector

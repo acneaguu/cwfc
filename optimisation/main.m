@@ -15,12 +15,12 @@ global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
 Optimisation.Nturbines = 13;                %number of turbine strings
 Optimisation.Npv = 0;                       %number of pv generator strings
-Optimisation.Ntr = 2;                       %number of transformers with discrete tap positions
-Optimisation.Ntaps = [17;17];               %number of tap positions per transformer (must have dimension of Ntr)
-Optimisation.Nr = 1;                        %number of discrete reactors
+Optimisation.Ntr = 0; %2;                   %number of transformers with discrete tap positions
+Optimisation.Ntaps = [];               %number of tap positions per transformer (must have dimension of Ntr)
+Optimisation.Nr = 0; %1                        %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
-Optimisation.which_discrete = [14:16];      %indeces of the discrete variables
+Optimisation.which_discrete = [];           %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
 initialise_systemdata(system_13_350MVA);    
@@ -30,8 +30,8 @@ initialise_optimisation_weights();  %sets the weights of the different
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 10;            %number of runs per case
-Optimisation.Neval = 2e3;           %max allowed function evaluations
-Optimisation.Populationsize = 1;   %size of the population
+Optimisation.Neval = 500*35;        %max allowed function evaluations
+Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
@@ -115,20 +115,21 @@ Ncase = 1:length(v);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
 global parameter proc
-Optimisation.Populationsize = [100 200];
+
+arch_size = [3;4;5];
+
 %     for j = 2:Optimisation.Ncases+1
       for j = 2:length(Optimisation.Populationsize)+1
         %%update the casefile
         %%update boundaries lb/ub
-        parameter.n_par=Optimisation.Populationsize(j-1);
-        proc.n_eval = parameter.n_par * 500;
+        parameter.n_tosave = arch_size(j-1);
         Optimisation.t = j;
         qpcc_limits(cases(1,2)); 
         initialise_results_struct(); %%initialise the Results struct with NaNs
         [Qmin, Qmax] = generate_case(cases(1,1)); %Input: windspeed
 %         Qmax = 0.001*Qmax;
 %         Qmin = 10*Qmin;
-        [lb, ub]= boundary_initialise(Qmin, Qmax);
+        [lb, ub]= boundary_initialise(Qmin, Qmax,0,0);
         start_case = tic;
         for i = 1:Optimisation.Nruns
         % if i == 2 %for i = 2 you dont optimise for minimal power losses

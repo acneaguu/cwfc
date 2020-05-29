@@ -36,7 +36,7 @@ Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
 Optimisation.print_interval = 500; %Interval of printed steps
-Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
+Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
 plot = 0;
@@ -114,17 +114,18 @@ Ncase = 1:length(v);
 % parameter.n_random_ini = ndimmin(kkk);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
-global parameter
+global parameter proc
 Optimisation.Populationsize = [1 5 10 20 50 100 200];
 %     for j = 2:Optimisation.Ncases+1
-      for j = 2:length(Optimisation.Populationsize)+1
+      for j = 2:5
         %%update the casefile
         %%update boundaries lb/ub
         parameter.n_par=Optimisation.Populationsize(j-1);
+        proc.n_eval = parameter.n_par * 500;
         Optimisation.t = j;
-        qpcc_limits(cases(j-1,2)); 
+        qpcc_limits(cases(1,2)); 
         initialise_results_struct(); %%initialise the Results struct with NaNs
-        [Qmin, Qmax] = generate_case(cases(j-1,1)); %Input: windspeed
+        [Qmin, Qmax] = generate_case(cases(1,1)); %Input: windspeed
 %         Qmax = 0.001*Qmax;
 %         Qmin = 10*Qmin;
         [lb, ub]= boundary_initialise(Qmin, Qmax);

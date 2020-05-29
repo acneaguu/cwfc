@@ -23,7 +23,7 @@ Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
 Optimisation.which_discrete = [14:16];      %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
-initialise_systemdata(system_13_350MVA);
+initialise_systemdata(system_13_350MVA);    
 
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
@@ -35,7 +35,7 @@ Optimisation.Populationsize = 1;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
-Optimisation.print_interval = 10e3; %Interval of printed steps
+Optimisation.print_interval = 500; %Interval of printed steps
 Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
@@ -115,9 +115,9 @@ Ncase = 1:length(v);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
 global parameter proc
-Optimisation.Populationsize = [200 50 1 5 10 20 100];
+Optimisation.Populationsize = [100 200];
 %     for j = 2:Optimisation.Ncases+1
-      for j = 2:2
+      for j = 2:length(Optimisation.Populationsize)+1
         %%update the casefile
         %%update boundaries lb/ub
         parameter.n_par=Optimisation.Populationsize(j-1);

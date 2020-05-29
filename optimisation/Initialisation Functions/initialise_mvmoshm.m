@@ -19,13 +19,13 @@ proc.n_eval = Optimisation.Neval;
 parameter.n_par=Optimisation.Populationsize;%Number of particles 
 
 parameter.n_tosave=4;                       %Archive size
-parameter.fs_factor_start=0.35;              %Initial fs-factor 
-parameter.fs_factor_end= 3;                 %Final fs-factor
+parameter.fs_factor_start=1;              %Initial fs-factor 
+parameter.fs_factor_end= 2;                 %Final fs-factor
 parameter.ratio_gute_max=0.3;               %Initial portion of good particles    
 parameter.ratio_gute_min=0.3;               %Final portion of good particles
 parameter.local_prob= 0;                    %ACHTUNG: Probability value between 0 and 1. Set to 0 to deactivate local search
-parameter.n_random_ini =round(0.8*ps.D/1.0);    %initial number of variables selected for mutation ;  
-parameter.n_random_last=round(0.3*ps.D/1.0);  %final number of variables selected for mutation 
+parameter.n_random_ini =round(ps.D/1.0);    %initial number of variables selected for mutation ;  
+parameter.n_random_last=round(ps.D/1.0);  %final number of variables selected for mutation 
 parameter.ratio_local = 0.09;               %percentage of total runs without local search possibility
 
 end

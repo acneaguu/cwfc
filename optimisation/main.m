@@ -29,13 +29,13 @@ initialise_systemdata(system_13_350MVA);
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 5;            %number of runs per case
-Optimisation.Neval = 10e3;           %max allowed function evaluations
-Optimisation.Populationsize = 200;   %size of the population
+Optimisation.Nruns = 10;            %number of runs per case
+Optimisation.Neval = 2e3;           %max allowed function evaluations
+Optimisation.Populationsize = 1;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
-Optimisation.print_interval = 1000; %Interval of printed steps
+Optimisation.print_interval = 500; %Interval of printed steps
 Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
@@ -114,14 +114,18 @@ Ncase = 1:length(v);
 % parameter.n_random_ini = ndimmin(kkk);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
-    for j = 2:Optimisation.Ncases+1
+global parameter
+Optimisation.Populationsize = [1 5 10 20 50 100 200];
+%     for j = 2:Optimisation.Ncases+1
+      for j = 2:length(parameter.n_par)+1
         %%update the casefile
         %%update boundaries lb/ub
+        parameter.n_par=Optimisation.Populationsize(j-1);
         Optimisation.t = j;
         qpcc_limits(cases(j-1,2)); 
         initialise_results_struct(); %%initialise the Results struct with NaNs
         [Qmin, Qmax] = generate_case(cases(j-1,1)); %Input: windspeed
-        Qmax = 0.001*Qmax;
+%         Qmax = 0.001*Qmax;
 %         Qmin = 10*Qmin;
         [lb, ub]= boundary_initialise(Qmin, Qmax);
         start_case = tic;

@@ -42,7 +42,7 @@ for np = 1:NXin
 if PFresults.success == 1
     %----------------------------------------------------------------------
     %CONSTRAINTS:
-    [g, total_violations,composition] = compute_violation_constraints();
+    [g, total_violations,composition] = compute_violation_constraints_v3();
     %----------------------------------------------------------------------
     %Objective function:
     OF = compute_costs(Xout(np,:));

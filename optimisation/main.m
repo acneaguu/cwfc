@@ -117,7 +117,7 @@ Ncase = 1:length(v);
 global parameter
 Optimisation.Populationsize = [1 5 10 20 50 100 200];
 %     for j = 2:Optimisation.Ncases+1
-      for j = 2:length(parameter.n_par)+1
+      for j = 2:length(Optimisation.Populationsize)+1
         %%update the casefile
         %%update boundaries lb/ub
         parameter.n_par=Optimisation.Populationsize(j-1);

@@ -115,7 +115,7 @@ Ncase = 1:length(v);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
 global parameter proc
-Optimisation.Populationsize = [100 200];
+Optimisation.Populationsize = [35];
 %     for j = 2:Optimisation.Ncases+1
       for j = 2:length(Optimisation.Populationsize)+1
         %%update the casefile

@@ -31,7 +31,7 @@ initialise_optimisation_weights();  %sets the weights of the different
 Optimisation.Ncases = 1;            %number of evaluated time instances
 Optimisation.Nruns = 10;            %number of runs per case
 Optimisation.Neval = 2e3;           %max allowed function evaluations
-Optimisation.Populationsize = 1;   %size of the population
+Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window

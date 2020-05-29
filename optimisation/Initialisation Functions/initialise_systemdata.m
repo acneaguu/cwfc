@@ -19,52 +19,41 @@ Systemdata.Nbranch = size(Systemdata.mpc.branch,1);
 Systemdata.Nbus = size(Systemdata.mpc.bus,1);
 Systemdata.Nstring = size(Systemdata.mpc.gen,1);
 
-if Optimisation.Nturbines~=0
 %logic vector with 1 on wtg positions in gen matrix
 Systemdata.wtg_pos = logical([0; ones(Optimisation.Nturbines,1); ...
     zeros(Optimisation.Npv,1)]); 
-else
-    Systemdata.wtg_pos = [];
-end 
-
-if Optimisation.Npv ~=0                                            
+                                           
 %logic vector with 1 on pvg positions in gen matrix
 Systemdata.pvg_pos = logical([zeros(Optimisation.Nturbines+1,1); ...
     ones(Optimisation.Npv,1)]);
 
-else 
-    Systemdata.pvg_pos = [];
-end
-
-
-
-
+%compute the transformer lookup table if the transformers are controlled
 if Optimisation.Ntr ~=0
-%Logic vector with 1 on transformer positions in matrix                                            
-Systemdata.trans = Systemdata.mpc.branch(:,CONSTANTS.ANGMAX) ~= 0;
-R(:,1) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMAX);
-R(:,2) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMIN);
-Systemdata.trlookup = NaN * ones(Optimisation.Ntr,max(Optimisation.Ntaps));
-
-
-for i = 1:Optimisation.Ntr
-    Systemdata.trlookup(i,1:Optimisation.Ntaps(i,1)) = linspace(R(i,1),R(i,2),Optimisation.Ntaps(i,1));
-    Systemdata.trstep(i) = abs(Systemdata.trlookup(i,1)-Systemdata.trlookup(i,2));
-end
+    %Logic vector with 1 on transformer positions in matrix                                            
+    Systemdata.trans = Systemdata.mpc.branch(:,CONSTANTS.ANGMAX) ~= 0;
+    R(:,1) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMAX);
+    R(:,2) = Systemdata.mpc.branch(Systemdata.trans,CONSTANTS.ANGMIN);
+    Systemdata.trlookup = NaN * ones(Optimisation.Ntr,max(Optimisation.Ntaps));
+    for i = 1:Optimisation.Ntr
+        Systemdata.trlookup(i,1:Optimisation.Ntaps(i,1)) = linspace(R(i,1),R(i,2),Optimisation.Ntaps(i,1));
+        Systemdata.trstep(i) = abs(Systemdata.trlookup(i,1)-Systemdata.trlookup(i,2));
+    end
 else
     Systemdata.trans = [];
+    Systemdata.trstep = [];
 end
 
+%compute the positions of the shunt reactors only if the shunts are
+%controlled
 if Optimisation.Nr ~=0
-%%Logic vectors with 1 on reactor positions in bus and branch matrices
-Systemdata.shunts = Systemdata.mpc.bus(:,CONSTANTS.BS)~= 0;
-Systemdata.shuntbranch = (Systemdata.mpc.branch(:,CONSTANTS.T_BUS)...
-== find(Systemdata.shunts)|Systemdata.mpc.branch(:,CONSTANTS.F_BUS)...
-== find(Systemdata.shunts))~=0;
+    %%Logic vectors with 1 on reactor positions in bus and branch matrices
+    Systemdata.shunts = Systemdata.mpc.bus(:,CONSTANTS.BS)~= 0;
+    Systemdata.shuntbranch = (Systemdata.mpc.branch(:,CONSTANTS.T_BUS)...
+    == find(Systemdata.shunts)|Systemdata.mpc.branch(:,CONSTANTS.F_BUS)...
+    == find(Systemdata.shunts))~=0;
 else
     Systemdata.shunts = [];
     Systemdata.shuntbranch=[];
 end
-
 
 end

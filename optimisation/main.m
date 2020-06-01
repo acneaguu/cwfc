@@ -17,7 +17,7 @@ Optimisation.Npv = 0;                       %number of pv generator strings
 Optimisation.Ntr = 0; %2;                   %number of transformers with discrete tap positions
 Optimisation.Ntaps = [];                    %number of tap positions per transformer 
                                             %(must have dimension of Ntr and separate by ;)
-Optimisation.Nr = 1; %1                     %number of discrete reactors
+Optimisation.Nr = 0; %1                     %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
 Optimisation.which_discrete = [];           %indeces of the discrete variables
@@ -29,7 +29,7 @@ initialise_systemdata(system_13_350MVA);
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 1;             %number of runs per case
+Optimisation.Nruns = 10;             %number of runs per case
 Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -117,15 +117,15 @@ Ncase = 1:length(v);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
 global parameter proc
-arch_size = [3;4;5];
+sizenini = [11; 10; 9; 8; 7;];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%run different cases
 %     for j = 2:Optimisation.Ncases+1
-      for j = 2:2         
-%         parameter.n_tosave = arch_size(j-1);  
-
+      for j = 2:6         
+        parameter.n_random_ini =sizenini(j-1);
+        
         %%set j for internal use
         Optimisation.t = j;
         

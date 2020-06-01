@@ -130,12 +130,12 @@ Ncase = 1:length(v);
         initialise_results_struct(); 
         
         %%compute the allowed range of Qpcc w.r.t. the setpoints
-        qpcc_limits(cases(1,2)); 
+        qpcc_limits(cases(j-1,2)); 
         
         
         %%compute the reactive power generation per string depending on the
         %%windspeed
-        [Qmin, Qmax] = generate_case(cases(1,1));
+        [Qmin, Qmax] = generate_case(cases(j-1,1));
 
         %%update boundaries lb/ub
         [lb, ub]= boundary_initialise(Qmin, Qmax,0,0);

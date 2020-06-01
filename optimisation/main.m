@@ -94,7 +94,7 @@ Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
 Qref.tolerance = 0.0339; %tolerance at Q = 0 MVar
         
 %%define the testcase
-v = [7 3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 15 15 15 15 15]';
+v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
 cases(:,1) = v;
@@ -116,7 +116,7 @@ Ncase = 1:length(v);
 % parameter.n_random_ini = ndimmin(kkk);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
-global parameter proc;
+% global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -128,8 +128,6 @@ global parameter proc;
         
         %%initialise the Results struct with NaNs for each case
         initialise_results_struct(); 
-        
-        %%update the casefile??
         
         %%compute the allowed range of Qpcc w.r.t. the setpoints
         qpcc_limits(cases(1,2)); 

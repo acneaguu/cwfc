@@ -19,9 +19,10 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     violation_vbus_min = Optimisation.p1*ones(Systemdata.Nbus,1) - (PFresults.bus(:,CONSTANTS.VM) >= PFresults.bus(:,CONSTANTS.VMIN));  %vmax
  
     %% Compute Qref violation
-    %%check if Q at PCC is near Qref within the range given by tolerance.
-    %%1 if Qpcc is outside the dynamic limits calculated using
-    %%qpcc_limits();
+    %%check whether  Qpcc is within the limits given by the setpoint +
+    %%gridcode requirements. If the setpoint is outside the limits, the
+    %%deviation of the setpoint is computed. This aids the algorithm to
+    %%discriminate between more and less infeasible solutions
     if Qpcc > Qref.limits(2)
        violation_Qpcc = Optimisation.p2*(Qpcc - Qref.limits(2));
     elseif Qpcc < Qref.limits(1)
@@ -44,7 +45,9 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     violation_sbranchTo = Optimisation.p3*ones(Systemdata.Nbranch,1) - (sbranchTo <= PFresults.branch(:,CONSTANTS.RATE_A));
 
     %% total violations
-    
+    %%computes the total violations. violation_vec has the violation
+    %%individually, composition groups the violations per type and
+    %%total_violations contains the sum of all violations
     violation_vec = [violation_vbus_max; violation_vbus_min; violation_Qpcc; violation_sbranchFrom; violation_sbranchTo];
     composition = [sum(violation_vbus_max+violation_vbus_min), violation_Qpcc, sum(violation_sbranchFrom+violation_sbranchTo)];
     total_violations = sum(violation_vec);

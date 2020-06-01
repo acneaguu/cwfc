@@ -6,7 +6,6 @@ define_constants_struct();
 %%For reproducibility (needed for PS algorithm)
 rng default  
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%Optimisation problem specification and settings 
@@ -15,12 +14,13 @@ global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
 Optimisation.Nturbines = 13;                %number of turbine strings
 Optimisation.Npv = 0;                       %number of pv generator strings
-Optimisation.Ntr = 2;                       %number of transformers with discrete tap positions
-Optimisation.Ntaps = [17;17];               %number of tap positions per transformer (must have dimension of Ntr)
-Optimisation.Nr = 1;                        %number of discrete reactors
+Optimisation.Ntr = 0; %2;                   %number of transformers with discrete tap positions
+Optimisation.Ntaps = [];                    %number of tap positions per transformer 
+                                            %(must have dimension of Ntr and separate by ;)
+Optimisation.Nr = 1; %1                     %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
-Optimisation.which_discrete = [14:16];      %indeces of the discrete variables
+Optimisation.which_discrete = [];           %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
 initialise_systemdata(system_13_350MVA);    
@@ -29,13 +29,13 @@ initialise_systemdata(system_13_350MVA);
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 10;            %number of runs per case
-Optimisation.Neval = 2e3;           %max allowed function evaluations
+Optimisation.Nruns = 1;             %number of runs per case
+Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population
-Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
+Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
-Optimisation.print_interval = 500; %Interval of printed steps
+Optimisation.print_interval = 500;  %Interval of printed steps
 Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
@@ -92,8 +92,8 @@ global Keeptrack FCount;    %some global vars to keep track of the calls of
 global Qref;    
 Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
 Qref.tolerance = 0.0339; %tolerance at Q = 0 MVar
-        %compute the allowed range of Qpcc w.r.t. the setpoints
-
+        
+%%define the testcase
 v = [7 3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
@@ -101,6 +101,8 @@ cases(:,1) = v;
 cases(:,2) =repmat(Qref.setpoint,4,1);
 Ncase = 1:length(v);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % fsmin = [0.2 0.35 0.5 1];
 % fsmax = [2 5 10];
 % ndimmin = [1 0.9 0.8];
@@ -115,25 +117,39 @@ Ncase = 1:length(v);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
 global parameter proc
-Optimisation.Populationsize = [35];
+arch_size = [3;4;5];
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%run different cases
 %     for j = 2:Optimisation.Ncases+1
-      for j = 2:length(Optimisation.Populationsize)+1
-        %%update the casefile
-        %%update boundaries lb/ub
-        parameter.n_par=Optimisation.Populationsize(j-1);
-        proc.n_eval = parameter.n_par * 500;
+      for j = 2:2         
+%         parameter.n_tosave = arch_size(j-1);  
+
+        %%set j for internal use
         Optimisation.t = j;
+        
+        %%initialise the Results struct with NaNs for each case
+        initialise_results_struct(); 
+        
+        %%update the casefile??
+        
+        %%compute the allowed range of Qpcc w.r.t. the setpoints
         qpcc_limits(cases(1,2)); 
-        initialise_results_struct(); %%initialise the Results struct with NaNs
-        [Qmin, Qmax] = generate_case(cases(1,1)); %Input: windspeed
-%         Qmax = 0.001*Qmax;
-%         Qmin = 10*Qmin;
-        [lb, ub]= boundary_initialise(Qmin, Qmax);
+        
+        
+        %%compute the reactive power generation per string depending on the
+        %%windspeed
+        [Qmin, Qmax] = generate_case(cases(1,1));
+
+        %%update boundaries lb/ub
+        [lb, ub]= boundary_initialise(Qmin, Qmax,0,0);
+        
+        %%case duration timer
         start_case = tic;
+        
+        %%run a case multiple times
         for i = 1:Optimisation.Nruns
-        % if i == 2 %for i = 2 you dont optimise for minimal power losses
-        %     Optimisation.w1 =0 ;
-        % end
         tic;
         fprintf('************* Case %d, Run %d *************\n',j-1, i);
 
@@ -163,8 +179,6 @@ Optimisation.Populationsize = [35];
                 Results(j).Fbest(i+1) = gbestfit;
         end
 
-
-
         %%compute the Results(j) of the different OF parameters and Qpcc using the
         %%final solution and store them in results
         [Results(j).Ploss(i+1), Results(j).tchanges(i+1), Results(j).Reactors_on(i+1)...
@@ -187,7 +201,10 @@ Optimisation.Populationsize = [35];
         Results(j).Fit_progress(i+1,:) = Keeptrack.FitBest;
         Results(j).Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
         Results(j).runtime(i,1) = toc;
+        
+        %%print the runtime of a run
         fprintf('Case %2d, Run %2d: %2f seconds \n',j-1,i,Results(j).runtime(i,1));
+        
         %%plot if desired
         if plot == 1
             animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
@@ -195,27 +212,28 @@ Optimisation.Populationsize = [35];
 
         end
         
-        %calculate best/worst/mean of Ploss
+        %%calculate best/worst/mean of Ploss
         MaxPloss = Systemdata.mpc.baseMVA;
         Results(j).Ploss_best = min(Results(j).Ploss);
         Results(j).Ploss_worst = max(Results(j).Ploss(Results(j).Ploss < MaxPloss));
         Results(j).Ploss_mean = mean(Results(j).Ploss(Results(j).Ploss < MaxPloss));
         
-        %save the best fitness and solution 
+        %%save the best fitness and solution 
         Results(j).Times_converged = sum(Results(j).Fbest<=1);
         best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);
         Results(j).best_run_fitness = min(Results(j).Fbest);
         Results(j).best_run_solution = Results(j).Xbest(best_index,:);
         
-        %calculates consistency performance
+        %%calculates consistency performance
         Results(j).avg_fitness = mean(Results(j).Fbest(2:end));
         Results(j).std_fitness = std(Results(j).Fbest(2:end));
         Results(j).std_solution = std(Results(j).Xbest(2:end,:));
-        
-        
-        %compute the average runtime
+          
+        %%compute the average runtime
         Results(j).avg_runtime = mean(Results(j).runtime(:,1));
         Results(j).total_runtime = toc(start_case);
+        
+        %%print the total case runtime
         fprintf('Case %2d, Total Runtime: %2f seconds \n',j-1,Results(j).total_runtime);
     end
     %%save the result if desired
@@ -226,5 +244,7 @@ Optimisation.Populationsize = [35];
 % end
 % end
 % end
+
+%%save and print the total execution time
 total_execution_time = toc(total_execution_time);
 fprintf('Total Execution time: %2f seconds \n',total_execution_time);

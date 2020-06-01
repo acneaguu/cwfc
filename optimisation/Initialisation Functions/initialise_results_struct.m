@@ -9,8 +9,18 @@ total_runs = Optimisation.Nruns;
 if Optimisation.t ==1
     Results(Optimisation.t).best_run_solution = ...
         NaN * zeros(1,Optimisation.Nvars);
-    Results(Optimisation.t).best_run_solution(1,Optimisation.discrete) = ...
-        [1.1530 1.1530 1];
+    
+    %initialise first tap positions for Ntransformers
+    if Optimisation.Ntr ~= 0
+        Results(Optimisation.t).best_run_solution(1,Optimisation.tr_pos) = ...
+        repmat(1.1530,1,Optimisation.Ntr);
+    end
+    
+    %initialise initial reactor status for Nreactors
+    if Optimisation.Nr ~= 0
+        Results(Optimisation.t).best_run_solution(1,Optimisation.r_pos) = ...
+        ones(1,Optimisation.Nr); 
+    end
 else
     %%initialise the result structs
     %fitness and solution vector

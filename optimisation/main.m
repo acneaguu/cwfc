@@ -116,15 +116,12 @@ Ncase = 1:length(v);
 % parameter.n_random_ini = ndimmin(kkk);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
-global parameter proc
-sizenini = [11; 10; 9; 8; 7;];
+global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%run different cases
-%     for j = 2:Optimisation.Ncases+1
-      for j = 2:6         
-        parameter.n_random_ini =sizenini(j-1);
+    for j = 2:Optimisation.Ncases+1
         
         %%set j for internal use
         Optimisation.t = j;

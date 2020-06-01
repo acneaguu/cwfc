@@ -94,7 +94,7 @@ Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
 Qref.tolerance = 0.0339; %tolerance at Q = 0 MVar
         
 %%define the testcase
-v = [7 3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 15 15 15 15 15]';
+v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
 cases(:,1) = v;
@@ -132,12 +132,12 @@ global parameter proc;
         %%update the casefile??
         
         %%compute the allowed range of Qpcc w.r.t. the setpoints
-        qpcc_limits(cases(1,2)); 
+        qpcc_limits(cases(j-1,2)); 
         
         
         %%compute the reactive power generation per string depending on the
         %%windspeed
-        [Qmin, Qmax] = generate_case(cases(1,1));
+        [Qmin, Qmax] = generate_case(cases(j-1,1));
 
         %%update boundaries lb/ub
         [lb, ub]= boundary_initialise(Qmin, Qmax,0,0);

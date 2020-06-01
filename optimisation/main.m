@@ -28,14 +28,14 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %number of evaluated time instances
+Optimisation.Ncases = 20;            %number of evaluated time instances
 Optimisation.Nruns = 10;             %number of runs per case
 Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
-Optimisation.print_interval = 500;  %Interval of printed steps
+Optimisation.print_interval = 2000;  %Interval of printed steps
 Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation

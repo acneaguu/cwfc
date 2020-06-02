@@ -16,9 +16,12 @@ for i = 1:length(v)
     [P,Q] = compute_pq_wtg(v(i));
     capability(i) = sum(-1*Q);
 end
-plot(v,capability-12+tot_inj);
+
 hold on;
-plot(v,-capability+tot_inj);
+plot(v,capability-12,'--b');
+plot(v,capability-12+tot_inj,'b');
+plot(v,-capability,'--r');
+plot(v,-capability+tot_inj,'r');
 yline(0);
 yline(-50);
 yline(-100);

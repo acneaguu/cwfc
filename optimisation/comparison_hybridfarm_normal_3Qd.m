@@ -7,7 +7,6 @@
 
 clear all;
 close all;
-clc;
 
 %% Step 1: Load data of the case
 mpc_substation_system13 = loadcase('system_13');
@@ -21,11 +20,10 @@ B_limit_4_7 = 185.19;
 B_limit_4_23 = 185.19;
 B_limit_6_12 = 185.19;
 B_limit_6_17 = 185.19;
-
-%Initialize active power generation
-mpc_substation_system13.bus(1,3) = 9.596; 
-mpc_substation_system13.gen(2:5,2) = 1.5;
-mpc_substation_system13.gen(6:18,2) = 0.0099246 .* mpc_substation_system13.gen(6:18,2);
+%initialize normal active power generation
+mpc_substation_system13.bus(1,3) = 200.5287; 
+mpc_substation_system13.gen(2:5,2) = 7.5;
+mpc_substation_system13.gen(6:18,2) = 0.47062 .* mpc_substation_system13.gen(6:18,2);
 
 %define all constants
 %WTG Farm
@@ -42,7 +40,7 @@ mpc_substation_system13.gen(6:18,2) = 0.0099246 .* mpc_substation_system13.gen(6
   
   %PV farm
   N_strings_pv = 4; %total strings
-  P_pv_max = [12.63168  12.63168  12.63168  12.63168];  %Max active power in MW generated per PV string 1-4 
+  P_pv_max = [12.63168  12.63168  12.63168  12.63168];  %Max active power in MW generated per PV string 1-4  
   Q_pv_max = (1/3)*P_pv_max; %Max reactive power in MVAr per PV string 1-4
   
   A_pv = 114441.8056; %Area in m2 of each PV system , a total of 4 PV
@@ -173,20 +171,29 @@ end
 
 for(j=1:N_strings)
 for(i=1:(N_daily_dispatch))
-    if(i <= (N_daily_dispatch/2))
-    Q_mean_wt1 (i,j) = -16;
-    elseif (i > (N_daily_dispatch/2))
-    Q_mean_wt2(i,j) = 0;
+    if(i <= (N_daily_dispatch/3))
+    Q_mean_wt1(i,j) = 16;
+    elseif ((i > (N_daily_dispatch/3)) && (i <=(2*N_daily_dispatch/3)))
+    for(i=1:(N_daily_dispatch/3))
+        Q_mean_wt2(i,j) = -16;  
+    end
+    elseif ((i > (2*N_daily_dispatch/3)) && (i <=(N_daily_dispatch)))
+    for(i=1:(N_daily_dispatch/3))
+        Q_mean_wt3(i,j) = 0;  
+    end
     end
 end
 end
 
 for(i=1:N_strings) %makes a 1x13
-  for(j=1:N_daily_dispatch) %makes a 96x1
+  for(j=1:(N_daily_dispatch/3)) %makes a 96x1
     samples_Q_wt(j,i)= normrnd(Q_mean_wt1(i), a*Q_std_wt(i), [1, 1]); %Creates random samples for Q in 96x13, some values violating the constraints
   end
-  for(j=(N_daily_dispatch/2):(N_daily_dispatch))
+  for(j=(N_daily_dispatch/3):(2*N_daily_dispatch/3))
        samples_Q_wt(j,i)= normrnd(Q_mean_wt2(i), a*Q_std_wt(i), [1, 1]); %Creates random samples for Q 
+  end
+  for(j=(2*N_daily_dispatch/3):(N_daily_dispatch))
+       samples_Q_wt(j,i)= normrnd(Q_mean_wt3(i), a*Q_std_wt(i), [1, 1]); %Creates random samples for Q 
   end
 end
  
@@ -230,10 +237,16 @@ Q_mean_pv = zeros(1, N_strings_pv);%matrix with mu for each string 1-1
 
 for(j=1:N_strings_pv)
 for(i=1:(N_daily_dispatch))
-    if(i <= (N_daily_dispatch/2))
-    Q_mean_pv1 (i,j) = -3.5;
-    elseif (i > (N_daily_dispatch/2))
-    Q_mean_pv2(i,j) = 0;
+    if(i <= (N_daily_dispatch/3))
+    Q_mean_pv1(i,j) = 3.5;
+    elseif ((i > (N_daily_dispatch/3)) && (i <=(2*N_daily_dispatch/3)))
+    for(i=1:(N_daily_dispatch/3))
+        Q_mean_pv2(i,j) = -3.5;  
+    end
+    elseif ((i > (2*N_daily_dispatch/3)) && (i <=(N_daily_dispatch)))
+    for(i=1:(N_daily_dispatch/3))
+        Q_mean_pv3(i,j) = 0;  
+    end
     end
 end
 end
@@ -243,12 +256,15 @@ for i=1:length(Q_mean_pv)
 end
 
 
-for(j=1:N_strings_pv) %makes a 1x4
-  for(i=1:(N_daily_dispatch/2)) %makes a 96x1
-    samples_Q_pv(i,j)= normrnd(Q_mean_pv1(j), a*Q_std_pv(j), [1, 1]); %Creates random samples for Q in 96x13, some values violating the constraint
+for(i=1:N_strings_pv) %makes a 1x13
+  for(j=1:(N_daily_dispatch/3)) %makes a 96x1
+    samples_Q_pv(j,i)= normrnd(Q_mean_pv1(i), a*Q_std_pv(i), [1, 1]); %Creates random samples for Q in 96x13, some values violating the constraints
   end
-  for(i=(N_daily_dispatch/2):(N_daily_dispatch))
-    samples_Q_pv(i,j)= normrnd(Q_mean_pv2(j), a*Q_std_pv(j), [1, 1]); %Creates random samples for Q
+  for(j=(N_daily_dispatch/3):(2*N_daily_dispatch/3))
+       samples_Q_pv(j,i)= normrnd(Q_mean_pv2(i), a*Q_std_pv(i), [1, 1]); %Creates random samples for Q 
+  end
+  for(j=(2*N_daily_dispatch/3):(N_daily_dispatch))
+       samples_Q_pv(j,i)= normrnd(Q_mean_pv3(i), a*Q_std_pv(i), [1, 1]); %Creates random samples for Q 
   end
 end
 
@@ -256,21 +272,21 @@ end
 
 samples_Q_tot = [samples_Q_pv samples_Q_wt];
 
-constraints_neg_tot = zeros(N_daily_dispatch,N_tot_strings);
-constraints_pos_tot = zeros(N_daily_dispatch,N_tot_strings);
+constraints_neg_pv = zeros(N_daily_dispatch,N_tot_strings);
+constraints_pos_pv = zeros(N_daily_dispatch,N_tot_strings);
    for(k=1: N_tot_strings)
-   constraints_neg_tot = samples_Q_tot(samples_Q_tot < -Q_total_max(k)); %Note values greater than positive max reactive 
-   constraints_pos_tot = samples_Q_tot(samples_Q_tot > Q_total_max(k));  %Note values greater than negative max reactive
+   constraints_neg_pv = samples_Q_tot(samples_Q_tot < -Q_total_max(k)); %Note values greater than positive max reactive 
+   constraints_pos_pv = samples_Q_tot(samples_Q_tot > Q_total_max(k));  %Note values greater than negative max reactive
      
-    idx_constraints_neg_tot(:,k) = (samples_Q_tot(:,k) < -Q_total_max(k)); %Note values greater than max reactive 
-    idx_constraints_pos_tot(:,k) = (samples_Q_tot(:,k) >  Q_total_max(k));
+    idx_constraints_neg_pv(:,k) = (samples_Q_tot(:,k) < -Q_total_max(k)); %Note values greater than max reactive 
+    idx_constraints_pos_pv(:,k) = (samples_Q_tot(:,k) >  Q_total_max(k));
       
    end 
 
 %% Step 3: Update case file and run Power Flow
 
 stop =0;
-
+mpopt = mpoption('verbose',0,'out.all',0);
 
 while(stop == 0)
    for(i=1:N_daily_dispatch) 
@@ -284,7 +300,7 @@ while(stop == 0)
         
         %run power flow for each dispatch
         tStart = cputime;
-        results_pf = runpf(mpc_substation_system13); %run power flow once Q is loaded per dispatch
+        results_pf = runpf(mpc_substation_system13,mpopt); %run power flow once Q is loaded per dispatch
         [results_loss results_inject] = get_losses(results_pf); %losses 
         
         %Make matrix to specify branch losses and reactive power injection
@@ -530,13 +546,13 @@ end
         
         %add zeros in order to plot
         
-%         P_loss_tot_v_low(numel(Q_tot)) = 0;
-%         Q_loss_tot_v_low(numel(Q_tot)) = 0;
-%         Q_inj_tot_v_low(numel(Q_tot)) = 0;
-%         
-%         P_loss_tot_v_high(numel(Q_tot)) = 0;
-%         Q_loss_tot_v_high(numel(Q_tot)) = 0;
-%         Q_inj_tot_v_high(numel(Q_tot)) = 0;
+        P_loss_tot_v_low(numel(Q_tot_constraints_v_low)) = 0;
+        Q_loss_tot_v_low(numel(Q_tot_constraints_v_low)) = 0;
+        Q_inj_tot_v_low(numel(Q_tot_constraints_v_low)) = 0;
+        
+        P_loss_tot_v_high(numel(Q_tot_constraints_v_high)) = 0;
+        Q_loss_tot_v_high(numel(Q_tot_constraints_v_high)) = 0;
+        Q_inj_tot_v_high(numel(Q_tot_constraints_v_high)) = 0;
         
         %Plot 3D plot Q demand, P loss and (minimum and maximum) average voltage
         figure(3)
@@ -545,7 +561,7 @@ end
         hold on;
         plot3(Q_tot_constraints_v_low, P_loss_tot_v_low,constraints_v_lowest,'o','Color', 'b', 'MarkerSize',5); %plot for v constraints low
         hold on;
-        %plot3(Q_tot_constraints_v_high, P_loss_tot_v_high, constraints_v_highest,'o','Color', 'k', 'MarkerSize',5); %plot for v constraints low
+        plot3(Q_tot_constraints_v_high, P_loss_tot_v_high, constraints_v_highest,'o','Color', 'k', 'MarkerSize',5); %plot for v constraints low
         hold on;
         
         grid on;
@@ -561,7 +577,7 @@ end
         hold on;
         plot3(Q_tot_constraints_v_low, Q_loss_tot_v_low, constraints_v_lowest,'o','Color', 'b', 'MarkerSize',5); %plot for v constraints low
         hold on;
-        %plot3(Q_tot_constraints_v_high, Q_loss_tot_v_high', constraints_v_highest,'o','Color', 'k', 'MarkerSize',5); %plot for v constraints low
+        plot3(Q_tot_constraints_v_high, Q_loss_tot_v_high', constraints_v_highest,'o','Color', 'k', 'MarkerSize',5); %plot for v constraints low
         hold on;
         
         grid on;
@@ -577,7 +593,7 @@ end
         hold on;
         plot3(Q_tot_constraints_v_low,Q_inj_tot_v_low, constraints_v_lowest,'o','Color', 'b', 'MarkerSize',5); %plot for v constraints low
         hold on;
-        %plot3(Q_tot_constraints_v_high, Q_inj_tot_v_high', constraints_v_highest,'o','Color', 'k', 'MarkerSize',5); %plot for v constraints low
+        plot3(Q_tot_constraints_v_high, Q_inj_tot_v_high', constraints_v_highest,'o','Color', 'k', 'MarkerSize',5); %plot for v constraints low
         hold on;
         
         grid on;

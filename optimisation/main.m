@@ -36,7 +36,7 @@ Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for M
 
 Optimisation.print_progress = 1;    %Plots runs in command window
 Optimisation.print_interval = 2000;  %Interval of printed steps
-Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
+Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
 plot = 0;
@@ -92,6 +92,7 @@ global Keeptrack FCount;    %some global vars to keep track of the calls of
 global Qref;    
 Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
 Qref.tolerance = 0.0339; %tolerance at Q = 0 MVar
+% Qref.tolerance = 0.005;
         
 %%define the testcase
 v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';

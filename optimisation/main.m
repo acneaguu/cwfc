@@ -28,8 +28,8 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 20;            %number of evaluated time instances
-Optimisation.Nruns = 1;             %number of runs per case
+Optimisation.Ncases = 25;            %number of evaluated time instances
+Optimisation.Nruns = 5;             %number of runs per case
 Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -91,16 +91,15 @@ global Keeptrack FCount;    %some global vars to keep track of the calls of
 %%setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
-Qref.tolerance = 0.0339; %tolerance at Q = 0 MVar
+Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 % Qref.tolerance = 0.005;
         
 %%define the testcase
-v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5 7 7 7 7 7 15 15 15 15 15]';
+v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
 cases(:,1) = v;
-cases(:,2) =repmat(Qref.setpoint,4,1);
-Ncase = 1:length(v);
+cases(:,2) =repmat(Qref.setpoint,5,1);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

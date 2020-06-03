@@ -35,14 +35,22 @@ legendstr{4} = 'Q_{max} with injections';
 %%plot the setpoints
 Q = [-100 -50 0 50 100];
 threshold = 12.5;
+
 for i = 1:length(Q)
-    name = sprintf('%d MVAr',Q(i));
-    yline(Q(i),'Color','#04cc82','LineWidth',1.5,'label',name)
-    yline(Q(i)+threshold,'--','Color','#013220','LineWidth',1.5)
-    yline(Q(i)-threshold,'--','Color','#013220','LineWidth',1.5')
+    if mod(i,2)
+        colorsetpoint = '#04cc82';
+        colortolerance = '#013220';
+    else
+        colorsetpoint = '#e59400';
+        colortolerance = '#b27300';
+    end
+    yline(Q(i),'Color',colorsetpoint,'LineWidth',1.5 )
+    yline(Q(i)+threshold,'--','Color',colortolerance,'LineWidth',1.5)
+    yline(Q(i)-threshold,'--','Color',colortolerance,'LineWidth',1.5')
     
     %save the name for the legend
     N = length(legendstr);
+    name = sprintf('%d MVAr',Q(i));
     legendstr{N+1} = strcat("Q_{setpoint} = " + '',name);
     legendstr{N+2} = 'Q_{setpoint} + 12.5 MVAr';
     legendstr{N+3} = 'Q_{setpoint} - 12.5 MVAr';

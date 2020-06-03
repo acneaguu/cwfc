@@ -11,7 +11,7 @@ Ploss_woopt = zeros(1,20);
 Ploss_withopt = zeros(1,20);
 for i = 1:20
     Ploss_woopt(i) = Data{1,1}.Results(i+1).Ploss_mean;
-    Ploss_withopt(i) = Data{1,4}.Results(i+1).Ploss_mean;
+    Ploss_withopt(i) = Data{1,2}.Results(i+1).Ploss_mean;
 end
 
 figure

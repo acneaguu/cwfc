@@ -85,9 +85,6 @@ end
 %% run optimisation
 global Keeptrack FCount;    %some global vars to keep track of the calls of 
                             %the fitness evaluation funtion 
-
-
-
 %%setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA

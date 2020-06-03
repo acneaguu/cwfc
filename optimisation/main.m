@@ -35,8 +35,8 @@ Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
-Optimisation.print_interval = 2000;  %Interval of printed steps
-Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
+Optimisation.print_interval = 1000;  %Interval of printed steps
+Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
 
 %%settings to plot and store the results of the optimisation
 plot = 0;

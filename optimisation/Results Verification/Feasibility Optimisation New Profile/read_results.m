@@ -40,14 +40,14 @@ set(fig,'defaultAxesColorOrder',[left_col;left_col]);
 hold on
 xlabel('Case')
 yyaxis left
-plot(whichcase,Ploss_noopt,'-o','Color','red')           %%no opt
-plot(whichcase,Ploss_withopt(:,1),'-o','Color',blue)   %%opt with Q
+plot(whichcase,Ploss_noopt,'-o','Color','red','MarkerSize',3)           %%no opt
+plot(whichcase,Ploss_withopt(:,1),'-o','Color',blue,'MarkerSize',3)   %%opt with Q
 ylabel('Loss [MW]')
 title('Active power losses: No Optimisation vs Optimisation','FontSize',20);
 reduction_losses(:,1) = 1e3.*(Ploss_noopt-Ploss_withopt(:,1));
 
 yyaxis right
-plot(whichcase,reduction_losses(:,1),'-o','Color',right_col);
+plot(whichcase,reduction_losses(:,1),'-o','Color',right_col,'MarkerSize',3);
 ylabel('Loss Reduction [kW]');
 legend('Without Optimisation','With Optimisation','Feasibility of Optimisation');
 
@@ -58,18 +58,17 @@ lgd = legend('Without Optimisation','With Optimisation','Feasibility of Optimisa
 lgd.FontSize = 15;
 lgd.Location = 'northwest';
 
-
-figure(2)
 reduction_losses(:,2) = 1e3*(Ploss_withopt(:,1)-Ploss_withopt(:,2)); % q and taps
 reduction_losses(:,3) = 1e3*(Ploss_withopt(:,1)-Ploss_withopt(:,3)); % q and reactor
 reduction_losses(:,4) = 1e3*(Ploss_withopt(:,1)-Ploss_withopt(:,4)); % everything
 
-subplot(121)
+figure(2)
+% subplot(121)
 hold on
-plot(whichcase,Ploss_withopt(:,1),'-o','Color',blue)        %%opt with Q
-plot(whichcase,Ploss_withopt(:,2),'--o','Color',darkblue)   %%opt with Q and taps
-plot(whichcase,Ploss_withopt(:,3),'-.o','Color',lightblue)  %%opt with Q and R
-plot(whichcase,Ploss_withopt(:,4),':o','Color',darkblue2)  %%opt with everything
+plot(whichcase,Ploss_withopt(:,1),'-o','Color',blue,'MarkerSize',3)        %%opt with Q
+plot(whichcase,Ploss_withopt(:,2),'--o','Color',darkblue,'MarkerSize',3)   %%opt with Q and taps
+plot(whichcase,Ploss_withopt(:,3),'-.o','Color',lightblue,'MarkerSize',3)  %%opt with Q and R
+plot(whichcase,Ploss_withopt(:,4),':o','Color',darkblue2,'LineWidth',1.25,'MarkerSize',3)  %%opt with everything
 xlabel('Case')
 ylabel('Loss [MW]')
 
@@ -79,17 +78,36 @@ lgd = legend('Losses with Q','Losses with Q and taps', 'Losses with Q and reacto
 lgd.FontSize = 15;
 lgd.Location = 'northwest';
 
-subplot(122)
+figure(3)
+% subplot(121)
 hold on
-%plot(cases,reduction_losses(:,1),'Color',blue)
-plot(whichcase,reduction_losses(:,2),'--o','Color',darkblue);      %reduction due to taps vs only q
-plot(whichcase,reduction_losses(:,3),'-.o','Color',lightblue);     %reduction due to reactor vs only q
-plot(whichcase,reduction_losses(:,4),':o','Color',darkblue2);     % reduction due to everything
+plot(whichcase,Ploss_withopt(:,1),'-o','Color',blue,'MarkerSize',3)        %%opt with Q
+plot(whichcase,Ploss_withopt(:,2),'--o','Color',darkblue,'MarkerSize',3)   %%opt with Q and taps
+plot(whichcase,Ploss_withopt(:,3),'-.o','Color',lightblue,'MarkerSize',3)  %%opt with Q and R
+plot(whichcase,Ploss_withopt(:,4),':o','Color',darkblue2,'LineWidth',1.25,'MarkerSize',3)  %%opt with everything
 xlabel('Case')
-ylabel('Reduction in losses [kW]')
+ylabel('Loss [MW]')
+xlim([20.5 25.1])
+ylim([4.9 5.8])
+
 ax = gca;
 ax.FontSize = axes_fontsize;
-lgd = legend('Reduction with Q and taps','Reduction with Q and reactor', 'Reduction with Q, taps and reactor'); 
+lgd = legend('Losses with Q','Losses with Q and taps', 'Losses with Q and reactor', 'Losses with Q, taps and reactor'); 
+lgd.FontSize = 15;
+lgd.Location = 'northwest';
+
+figure(4)
+% subplot(122)
+hold on
+%plot(cases,reduction_losses(:,1),'Color',blue)
+plot(whichcase,reduction_losses(:,2),'--o','Color',darkblue,'MarkerSize',3);      %reduction due to taps vs only q
+plot(whichcase,reduction_losses(:,3),'-.o','Color',lightblue,'MarkerSize',3);     %reduction due to reactor vs only q
+plot(whichcase,reduction_losses(:,4),':o','Color',darkblue2,'LineWidth',1.25,'MarkerSize',3);     % reduction due to everything
+xlabel('Case')
+ylabel('Improvement of reduction in losses [kW]')
+ax = gca;
+ax.FontSize = axes_fontsize;
+lgd = legend('Improvement with Q and taps','Improvement with Q and reactor', 'Improvement with Q, taps and reactor'); 
 lgd.FontSize = 15;
 lgd.Location = 'northwest';
         

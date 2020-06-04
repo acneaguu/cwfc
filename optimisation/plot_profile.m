@@ -23,7 +23,7 @@ Ncase = 1:length(cases(:,1));
 
 %%plot
 figure
-title('Test profile optimisation unit','FontSize',titlesize)
+title('Test Profile Optimisation Unit','FontSize',titlesize)
 hold on
 %left plot is P
 yyaxis left

@@ -28,8 +28,8 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 1;             %number of runs per case
+Optimisation.Ncases = 2;            %number of evaluated time instances
+Optimisation.Nruns = 2;             %number of runs per case
 Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -222,7 +222,7 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
         Results(j).std_solution = std(Results(j).Xbest(2:end,:));
         
         %%calculate cost per case
-        Results(j).total_cost_per_case = mean(Results(j).total_cost_per_run);
+        Results(j).total_cost_per_case = mean(Results(j).total_cost_per_run(2:end));
         %%compute the average runtime
         Results(j).avg_runtime = mean(Results(j).runtime(:,1));
         Results(j).total_runtime = toc(start_case);
@@ -236,7 +236,9 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
 % end
 
 %%total costs of optimisation
-total_cost = sum(Results(:).total_cost_per_case);
+for j = 2:Optimisation.Ncases+1
+    total_cost = sum(Results(j).total_cost_per_case);
+end
 
 %%save and print the total execution time
 total_execution_time = toc(total_execution_time);

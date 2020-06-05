@@ -28,7 +28,7 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %number of evaluated time instances
+Optimisation.Ncases = 4;            %number of evaluated time instances
 Optimisation.Nruns = 1;             %number of runs per case
 Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population
@@ -92,11 +92,11 @@ Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 % Qref.tolerance = 0.005;
         
 %%define the testcase
-v = [7 12 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 15 15 15 15 15]';
-%v = [7 7 7 7 7 15 15 15 15 15]';
+% v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
+v = [15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
 cases(:,1) = v;
-cases(:,2) =repmat(Qref.setpoint,5,1);
+cases(:,2) =repmat(Qref.setpoint,1,1);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -117,7 +117,7 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Optimisation.w3 = 0.1;                              %Weight of the extremeness of Qstrings
-w1 = 0:0.05:0.9;
+w1 = 0:0.05:(1-Optimisation.w3);
 
 %sweep over different weights
 for k = 1:length(w1)
@@ -127,7 +127,6 @@ sweeptime = tic;
 Optimisation.w1 = w1(k);                            %Weight of Ploss
 Optimisation.w2 = (1-Optimisation.w3)-w1(k);        %Weight of switching
                 
-
 %%run different cases
     for j = 2:Optimisation.Ncases+1
         

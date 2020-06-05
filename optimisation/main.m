@@ -92,9 +92,12 @@ Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 % Qref.tolerance = 0.005;
         
 %%define the testcase
+%v = [7 12 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 15 15 15 15 15]';
+%v = [7 7 7 7 7 15 15 15 15 15]';
 % v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
 v = [15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
+v = [15 15 15 15 15];
 cases(:,1) = v;
 cases(:,2) =repmat(Qref.setpoint,1,1);
 
@@ -116,9 +119,8 @@ cases(:,2) =repmat(Qref.setpoint,1,1);
 % global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Optimisation.w3 = 0.05;                              %Weight of the extremeness of Qstrings
-w1 = 0:0.05:(1-Optimisation.w3);
-
+Optimisation.w3 = 0.2;                              %Weight of the extremeness of Qstrings
+w1 = 0:0.05:0.8;
 %sweep over different weights
 for k = 1:length(w1)
 %timer for sweep

@@ -28,8 +28,8 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 25;            %number of evaluated time instances
-Optimisation.Nruns = 5;             %number of runs per case
+Optimisation.Ncases = 1;            %number of evaluated time instances
+Optimisation.Nruns = 1;             %number of runs per case
 Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -173,7 +173,7 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
 
         %%compute the Results(j) of the different OF parameters and Qpcc using the
         %%final solution and store them in results
-        [Results(j).Ploss(i+1), Results(j).tchanges(i+1), Results(j).Reactors_on(i+1)...
+        [Results(j).Ploss(i+1), Results(j).Tap_changes(i+1), Results(j).Reactors_changes(i+1)...
             ,Results(j).extremeness_setpoints(i+1), Results(j).Qaccuracy(i+1)]...
             = compute_results(Results(j).Xbest(i+1,:),cases(j-1,2));
 

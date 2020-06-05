@@ -34,8 +34,8 @@ else
     Results(Optimisation.t).Ploss_mean = NaN;
 
     %transformer and reactor status
-    Results(Optimisation.t).tchanges = NaN * zeros(total_runs,1);
-    Results(Optimisation.t).Reactors_on = NaN * zeros(total_runs,1);
+    Results(Optimisation.t).Tap_changes = NaN * zeros(total_runs,1);
+    Results(Optimisation.t).Reactors_changes = NaN * zeros(total_runs,1);
     Results(Optimisation.t).extremeness_setpoints = NaN * zeros(total_runs,1);
 
     %accuracy of Qpcc w.r.t Qref

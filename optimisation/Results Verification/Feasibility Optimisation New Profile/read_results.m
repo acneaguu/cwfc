@@ -58,6 +58,8 @@ lgd = legend('Without optimisation','With optimisation','Feasibility of optimisa
 lgd.FontSize = 15;
 lgd.Location = 'northwest';
 
+%%Calculates the improvement in savings w.r.t only optimising with Q's
+
 reduction_losses(:,2) = 1e3*(Ploss_withopt(:,1)-Ploss_withopt(:,2)); % q and taps
 reduction_losses(:,3) = 1e3*(Ploss_withopt(:,1)-Ploss_withopt(:,3)); % q and reactor
 reduction_losses(:,4) = 1e3*(Ploss_withopt(:,1)-Ploss_withopt(:,4)); % everything

@@ -63,7 +63,7 @@ titlesize = 20;
 
 xlabel('Windspeed [m/s]','FontSize',axes_fontsize);
 ylabel('Q [MVAr]','FontSize',axes_fontsize);
-title('Windfarm reactive power capability','FontSize',titlesize)
+title('Windfarm Reactive Power Capability','FontSize',titlesize)
 ax = gca;
 ax.FontSize = axes_fontsize;
 lgd = legend(legendstr);

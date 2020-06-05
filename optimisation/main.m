@@ -265,7 +265,7 @@ end
 
 %%save the result if desired
 if store_results == 1
-    savedata(Data)
+    savedata
 end
 
 %%save and print the total execution time

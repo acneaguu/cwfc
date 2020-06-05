@@ -129,7 +129,6 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
         %%compute the allowed range of Qpcc w.r.t. the setpoints
         qpcc_limits(cases(j-1,2)); 
         
-        
         %%compute the reactive power generation per string depending on the
         %%windspeed
         [Qmin, Qmax] = generate_case(cases(j-1,1));

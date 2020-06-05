@@ -13,7 +13,7 @@ if Optimisation.t ==1
     %initialise first tap positions for Ntransformers
     if Optimisation.Ntr ~= 0
         Results(Optimisation.t).best_run_solution(1,Optimisation.tr_pos) = ...
-        repmat(1.1530,1,Optimisation.Ntr);
+        repmat(1.01,1,Optimisation.Ntr); %1.01 corresponds with the standard tap position
     end
     
     %initialise initial reactor status for Nreactors

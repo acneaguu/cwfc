@@ -28,8 +28,8 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 2;            %number of evaluated time instances
-Optimisation.Nruns = 2;             %number of runs per case
+Optimisation.Ncases = 1;            %number of evaluated time instances
+Optimisation.Nruns = 1;             %number of runs per case
 Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -92,7 +92,7 @@ Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 % Qref.tolerance = 0.005;
         
 %%define the testcase
-v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
+v = [7 12 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
 %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
 cases(:,1) = v;
@@ -116,6 +116,17 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
 % global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Optimisation.w3 = 0.1;                              %Weight of the extremeness of Qstrings
+w1 = 0:0.05:0.9;
+
+%sweep over different weights
+for k = 1:length(w1)
+%timer for sweep
+sweeptime = tic;
+%update weights
+Optimisation.w1 = w1(k);                            %Weight of Ploss
+Optimisation.w2 = (1-Optimisation.w3)-w1(k);        %Weight of switching
+                
 
 %%run different cases
     for j = 2:Optimisation.Ncases+1
@@ -239,11 +250,23 @@ for j = 2:Optimisation.Ncases+1
     total_cost = sum(Results(j).total_cost_per_case);
 end
 
-%%save and print the total execution time
-total_execution_time = toc(total_execution_time);
-fprintf('Total Execution time: %2f seconds \n',total_execution_time);
+%%save different variables into a cell for comparison
+Data{k}.Results = Results;
+Data{k}.Optimisation = Optimisation;
+Data{k}.total_costs = total_cost;
+Data{k}.total_sweeptime = toc(sweeptime);
+
+%%print sweep done
+fprintf('*****************************************\n')
+fprintf('Sweep %2d done!! Total sweeptime: %2f seconds\n',k,Data{k}.total_sweeptime)
+fprintf('*****************************************\n')
+end
 
 %%save the result if desired
 if store_results == 1
     savedata
 end
+
+%%save and print the total execution time
+total_execution_time = toc(total_execution_time);
+fprintf('Total Execution time: %2f seconds \n',total_execution_time);

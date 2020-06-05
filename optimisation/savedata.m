@@ -2,7 +2,7 @@
 %%prefix which is saved before the rest of the file name. The format is as
 %%follows: userstring_With/No Opt_Algorithm name_Number of runs_Number of
 %%variables_date + time
-function savedata
+function savedata(Data)
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results Keeptrack FCount;
     %name = input('Enter custom prefix:\n','s');
     name = 'system_13_paramsweep';

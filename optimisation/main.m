@@ -173,8 +173,8 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
 
         %%compute the Results(j) of the different OF parameters and Qpcc using the
         %%final solution and store them in results
-        [Results(j).Ploss(i+1), Results(j).Tap_changes(i+1), Results(j).Reactors_changes(i+1)...
-            ,Results(j).extremeness_setpoints(i+1), Results(j).Qaccuracy(i+1)]...
+        [Results(j).Ploss(i+1), Results(j).tchanges(i+1), Results(j).Reactors_on(i+1)...
+            ,Results(j).extremeness_setpoints(i+1), Results(j).total_cost_per_run(i+1), Results(j).Qaccuracy(i+1)]...
             = compute_results(Results(j).Xbest(i+1,:),cases(j-1,2));
 
         %%initilise matrix with FitBest progress at each iteration
@@ -220,7 +220,9 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
         Results(j).avg_fitness = mean(Results(j).Fbest(2:end));
         Results(j).std_fitness = std(Results(j).Fbest(2:end));
         Results(j).std_solution = std(Results(j).Xbest(2:end,:));
-          
+        
+        %%calculate cost per case
+        Results(j).total_cost_per_case = mean(Results(j).total_cost_per_run);
         %%compute the average runtime
         Results(j).avg_runtime = mean(Results(j).runtime(:,1));
         Results(j).total_runtime = toc(start_case);
@@ -228,15 +230,19 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
         %%print the total case runtime
         fprintf('Case %2d, Total Runtime: %2f seconds \n',j-1,Results(j).total_runtime);
     end
-    %%save the result if desired
-    if store_results == 1
-        savedata
-    end
 % end
 % end
 % end
 % end
 
+%%total costs of optimisation
+total_cost = sum(Results(:).total_cost_per_case);
+
 %%save and print the total execution time
 total_execution_time = toc(total_execution_time);
 fprintf('Total Execution time: %2f seconds \n',total_execution_time);
+
+%%save the result if desired
+if store_results == 1
+    savedata
+end

@@ -37,6 +37,9 @@ else
     Results(Optimisation.t).Tap_changes = NaN * zeros(total_runs,1);
     Results(Optimisation.t).Reactors_changes = NaN * zeros(total_runs,1);
     Results(Optimisation.t).extremeness_setpoints = NaN * zeros(total_runs,1);
+    
+    %total cost of optimisation
+    Results(Optimisation.t).total_cost_per_run = NaN * zeros(total_runs,1);
 
     %accuracy of Qpcc w.r.t Qref
     Results(Optimisation.t).Qaccuracy = NaN * zeros(total_runs,1);

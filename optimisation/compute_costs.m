@@ -40,5 +40,5 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     extremeness_setpoints = extremeness_setpoints/(Optimisation.Nturbines+Optimisation.Npv);
     %% Calculate OF
     OF = Optimisation.w1*Ploss_tot+Optimisation.w2*(tap_changes+...
-        reactor_changes) + Optimisation.w3*extremeness_setpoints;
+        reactor_changes)/2 + Optimisation.w3*extremeness_setpoints;
 end

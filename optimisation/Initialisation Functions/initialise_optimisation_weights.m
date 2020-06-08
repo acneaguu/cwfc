@@ -10,12 +10,13 @@ Optimisation.p3 = 1;                %Penalty for power violation
 
 %Weights of the OF
 Optimisation.w1 = 1;                %Weight of Ploss
-Optimisation.w2 = 0;                %Weight of switching
-Optimisation.w3 = 0;                %Weight of the extremeness of Qstrings
+Optimisation.w2 = 0;                %Weight of transformer switches
+Optimisation.w3 = 0;                %Weight of reactor switching
+Optimisation.w4 = 0;                %Weight of the extremeness of Qstrings
 
 %Cost of objectives
 Optimisation.c1 = 80;               %cost in € of 1 MWh
-Optimisation.c2 = 2;                %cost of switching
+Optimisation.c2 = 2;                %cost of a tap switch
 Optimisation.timeinterval = 0.25;   %time interval per case; used for 
                                     %computation of the cost of power losses
 end

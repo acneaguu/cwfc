@@ -19,53 +19,61 @@ v = vmin:stepsize:vmax;
 for i = 1:length(v)
     [P,Q] = compute_pq_wtg(v(i));
     capability(i) = sum(-1*Q);
+    p_out(i)= sum(P);
 end
-
-%%plot the park capability with reactor and branch injections
-hold on;
-plot(v,capability-12,'--b');
-legendstr{1} = 'Q_{min} with reactor';
-plot(v,capability-12+tot_inj,'b');
-legendstr{2} = 'Q_{min} with reactor and branch injections';
-plot(v,-capability,'--r');
-legendstr{3} = 'Q_{max}';
-plot(v,-capability+tot_inj,'r');
-legendstr{4} = 'Q_{max} with injections';
-
-%%plot the setpoints
-Q = [-100 -50 0 50 100];
-threshold = 12.5;
-
-for i = 1:length(Q)
-    if mod(i,2)
-        colorsetpoint = '#04cc82';
-        colortolerance = '#013220';
-    else
-        colorsetpoint = '#e59400';
-        colortolerance = '#b27300';
-    end
-    yline(Q(i),'Color',colorsetpoint,'LineWidth',1.5 )
-    yline(Q(i)+threshold,'--','Color',colortolerance,'LineWidth',1.5)
-    yline(Q(i)-threshold,'--','Color',colortolerance,'LineWidth',1.5')
-    
-    %save the name for the legend
-    N = length(legendstr);
-    name = sprintf('%d MVAr',Q(i));
-    legendstr{N+1} = strcat("Q_{setpoint} = " + '',name);
-    legendstr{N+2} = 'Q_{setpoint} + 12.5 MVAr';
-    legendstr{N+3} = 'Q_{setpoint} - 12.5 MVAr';
-end
-
-
-%%add labels and legend to the figure
+%% plot active power capabiltiy 
 axes_fontsize = 15;
 titlesize = 20;
+plot(v,p_out);
+title('Windfarm Active Power Capability','FontSize',titlesize);
+ylabel('P [MW]','FontSize',axes_fontsize);
+xlabel('Windspeed[m/s]','FontSize',axes_fontsize)
 
-xlabel('Windspeed [m/s]','FontSize',axes_fontsize);
-ylabel('Q [MVAr]','FontSize',axes_fontsize);
-title('Windfarm Reactive Power Capability','FontSize',titlesize)
-ax = gca;
-ax.FontSize = axes_fontsize;
-lgd = legend(legendstr);
-lgd.NumColumns = 3;
-lgd.FontSize = 10;
+% %%plot the park capability with reactor and branch injections
+% hold on;
+% plot(v,capability-12,'--b');
+% legendstr{1} = 'Q_{min} with reactor';
+% plot(v,capability-12+tot_inj,'b');
+% legendstr{2} = 'Q_{min} with reactor and branch injections';
+% plot(v,-capability,'--r');
+% legendstr{3} = 'Q_{max}';
+% plot(v,-capability+tot_inj,'r');
+% legendstr{4} = 'Q_{max} with injections';
+% 
+% %%plot the setpoints
+% Q = [-100 -50 0 50 100];
+% threshold = 12.5;
+% 
+% for i = 1:length(Q)
+%     if mod(i,2)
+%         colorsetpoint = '#04cc82';
+%         colortolerance = '#013220';
+%     else
+%         colorsetpoint = '#e59400';
+%         colortolerance = '#b27300';
+%     end
+%     yline(Q(i),'Color',colorsetpoint,'LineWidth',1.5 )
+%     yline(Q(i)+threshold,'--','Color',colortolerance,'LineWidth',1.5)
+%     yline(Q(i)-threshold,'--','Color',colortolerance,'LineWidth',1.5')
+%     
+%     %save the name for the legend
+%     N = length(legendstr);
+%     name = sprintf('%d MVAr',Q(i));
+%     legendstr{N+1} = strcat("Q_{setpoint} = " + '',name);
+%     legendstr{N+2} = 'Q_{setpoint} + 12.5 MVAr';
+%     legendstr{N+3} = 'Q_{setpoint} - 12.5 MVAr';
+% end
+% 
+% 
+% %%add labels and legend to the figure
+% axes_fontsize = 15;
+% titlesize = 20;
+% 
+% xlabel('Windspeed [m/s]','FontSize',axes_fontsize);
+% ylabel('Q [MVAr]','FontSize',axes_fontsize);
+% title('Windfarm Reactive Power Capability','FontSize',titlesize)
+% ax = gca;
+% ax.FontSize = axes_fontsize;
+% lgd = legend(legendstr);
+% lgd.NumColumns = 3;
+% lgd.FontSize = 10;

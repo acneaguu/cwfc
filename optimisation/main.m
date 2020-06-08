@@ -119,16 +119,19 @@ cases(:,2) =repmat(Qref.setpoint,1,1);
 % global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Optimisation.w3 = 0.1;              %Fixed weight of reactor switching
-Optimisation.w4 = 0.1;              %Fixed weight of extremeness of Qstrings
-w1 = 0.79:0.001:0.8;
+
+Optimisation.w3 = 0.05;      %Weight of reactor switching
+Optimisation.w4 = 0.05;      %Weight of the extremeness of Qstrings
+w1 = 0.8:0.005:(1-Optimisation.w3-Optimisation.w4);
+
 %sweep over different weights
 for k = 1:length(w1)
 %timer for sweep
 sweeptime = tic;
 %update weights
-Optimisation.w1 = w1(k);                            %Weight of Ploss
-Optimisation.w2 = (1-(Optimisation.w3+Optimisation.w4))-w1(k);        %Weight of switching
+
+Optimisation.w1 = w1(k);                                            %Weight of Ploss
+Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)-w1(k);        %Weight of switching
                 
 %%run different cases
     for j = 2:Optimisation.Ncases+1
@@ -248,8 +251,9 @@ Optimisation.w2 = (1-(Optimisation.w3+Optimisation.w4))-w1(k);        %Weight of
 % end
 
 %%total costs of optimisation
+total_cost = 0;
 for j = 2:Optimisation.Ncases+1
-    total_cost = sum(Results(j).total_cost_per_case);
+    total_cost = total_cost + Results(j).total_cost_per_case;
 end
 
 %%save different variables into a cell for comparison

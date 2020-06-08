@@ -119,8 +119,9 @@ cases(:,2) =repmat(Qref.setpoint,1,1);
 % global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Optimisation.w3 = 0.2;                              %Weight of the extremeness of Qstrings
-w1 = 0.79:0.005:(1-Optimisation.w3);
+Optimisation.w3 = 0.1;              %Weight of the 
+Optimisation.w4 = 0.1;              %Fixed weight of extremeness of Qstrings
+w1 = 0.79:0.001:0.8
 %sweep over different weights
 for k = 1:length(w1)
 %timer for sweep

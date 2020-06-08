@@ -33,7 +33,7 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
     
     %compute the total cost
     total_cost_per_run = Optimisation.c1 * Optimisation.timeinterval * Ploss + ...
-        Optimisation.c2 * (Tchanges+Reactor_changes);
+        Optimisation.c2 * Tchanges;
     
     %Computes resulting |Qpcc-Qref|
     slack = find(PFresults.bus(:,CONSTANTS.BUS_TYPE) == 3);

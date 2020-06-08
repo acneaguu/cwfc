@@ -119,15 +119,16 @@ cases(:,2) =repmat(Qref.setpoint,1,1);
 % global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Optimisation.w3 = 0.2;                              %Weight of the extremeness of Qstrings
-w1 = 0.79:0.005:(1-Optimisation.w3);
+Optimisation.w3 = 0.1;      %Weight of reactor switching
+Optimisation.w4 = 0.1;      %Weight of the extremeness of Qstrings
+w1 = 0:0.05:(1-Optimisation.w3-Optimisation.w4);
 %sweep over different weights
 for k = 1:length(w1)
 %timer for sweep
 sweeptime = tic;
 %update weights
-Optimisation.w1 = w1(k);                            %Weight of Ploss
-Optimisation.w2 = (1-Optimisation.w3)-w1(k);        %Weight of switching
+Optimisation.w1 = w1(k);                                            %Weight of Ploss
+Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)-w1(k);        %Weight of switching
                 
 %%run different cases
     for j = 2:Optimisation.Ncases+1

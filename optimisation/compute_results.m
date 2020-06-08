@@ -29,11 +29,14 @@ global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results;
         Results(Optimisation.t-1).best_run_solution(Optimisation.r_pos))); %relative reactor changes
     
     %Computes resulting extremeness of the setpoints
-    extremeness_setpoints = sum(abs(Xopt(Optimisation.wtg_pos | Optimisation.pvg_pos)));
+    extremeness_setpoints = sum(abs(Xin(Optimisation.wtg_pos | Optimisation.pvg_pos))...
+    /Systemdata.ub(Optimisation.wtg_pos | Optimisation.pvg_pos));
+    extremeness_setpoints = (extremeness_setpoints/(Optimisation.Nturbines+Optimisation.Npv));    
     
     %compute the total cost
     total_cost_per_run = Optimisation.c1 * Optimisation.timeinterval * Ploss + ...
-        Optimisation.c2 * Tchanges;
+        Optimisation.c2 * Tchanges + Optimisation.c3 * Reactor_changes + ...
+        Optimisation.c4* extremeness_setpoints;
     
     %Computes resulting |Qpcc-Qref|
     slack = find(PFresults.bus(:,CONSTANTS.BUS_TYPE) == 3);

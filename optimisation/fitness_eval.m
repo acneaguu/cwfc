@@ -45,7 +45,7 @@ if PFresults.success == 1
     [g, total_violations,composition] = compute_violation_constraints_v3();
     %----------------------------------------------------------------------
     %Objective function:
-    OF = compute_costs(Xout(np,:));
+    OF = compute_costs_v2(Xout(np,:));
     %------------------------------------------------------------------------
     
     

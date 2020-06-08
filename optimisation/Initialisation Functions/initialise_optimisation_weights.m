@@ -16,7 +16,9 @@ Optimisation.w4 = 0;                %Weight of the extremeness of Qstrings
 
 %Cost of objectives
 Optimisation.c1 = 80;               %cost in € of 1 MWh
-Optimisation.c2 = 2;                %cost of a tap switch
+Optimisation.c2 = 0.4;                %cost of a tap switch
+Optimisation.c3 = 0.4;
+Optimisation.c4 = 0.4/0.7;
 Optimisation.timeinterval = 0.25;   %time interval per case; used for 
                                     %computation of the cost of power losses
 end

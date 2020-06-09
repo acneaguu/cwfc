@@ -29,7 +29,7 @@ initialise_systemdata(system_13_350MVA);
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
 Optimisation.Ncases = 4;            %number of evaluated time instances
-Optimisation.Nruns = 1;             %number of runs per case
+Optimisation.Nruns = 5;             %number of runs per case
 Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -94,12 +94,12 @@ Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 %%define the testcase
 %v = [7 12 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
-% v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
-v = [15 15 15 15 15]';
-%v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
-v = [15 15 15 15 15];
+v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
+% v = [15 15 15 15 15]';
+% %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
+% v = [15 15 15 15 15];
 cases(:,1) = v;
-cases(:,2) =repmat(Qref.setpoint,1,1);
+cases(:,2) =repmat(Qref.setpoint,5,1);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -119,19 +119,31 @@ cases(:,2) =repmat(Qref.setpoint,1,1);
 % global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Optimisation.w3 = 0.15;      %Weight of reactor switching
-Optimisation.w4 = 0.15;      %Weight of the extremeness of Qstrings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Optimisation.w3 = 0.05;
+% Optimisation.w4 = 0.15;
+% w1 = 0:0.05:(1-Optimisation.w3-Optimisation.w4);
+% 
+% w3 = 0:0.05:0.2;
+% w4 = 0:0.05:0.2;
+% 
+% %sweep over different weights
+% for k = 1:length(w3)
+% %timer for sweep
+% sweeptime = tic;
+% %update weights
+% % Optimisation.w1 = w1(k);        %Weight of Ploss
+% % Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)-w1(k);        %Weight of switching
+% 
+% Optimisation.w3 = w3(k);
+% Optimisation.w4 = w4(k);
+% Optimisation.w1 = (1-Optimisation.w3-Optimisation.w4)/2;
+% Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)/2;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-w1 = 0:0.025:(1-Optimisation.w3-Optimisation.w4);
 
-%sweep over different weights
-for k = 1:length(w1)
-%timer for sweep
-sweeptime = tic;
-%update weights
-Optimisation.w1 = w1(k);                                            %Weight of Ploss
-Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)-w1(k);        %Weight of switching
-                
 %%run different cases
     for j = 2:Optimisation.Ncases+1
         
@@ -255,18 +267,21 @@ for j = 2:Optimisation.Ncases+1
     total_cost = total_cost + Results(j).total_cost_per_case;
 end
 
-%%save different variables into a cell for comparison
-Data{k}.Results = Results;
-Data{k}.Optimisation = Optimisation;
-Data{k}.total_costs = total_cost;
-Data{k}.total_sweeptime = toc(sweeptime);
-
-%%print sweep done
-fprintf('*****************************************\n')
-fprintf('Sweep %2d done!! Total sweeptime: %2f seconds\n',k,Data{k}.total_sweeptime)
-fprintf('*****************************************\n')
-end
-
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%save different variables into a cell for comparison
+% Data{k}.Results = Results;
+% Data{k}.Optimisation = Optimisation;
+% Data{k}.total_costs = total_cost;
+% Data{k}.total_sweeptime = toc(sweeptime);
+% 
+% %%print sweep done
+% fprintf('*****************************************\n')
+% fprintf('Sweep %2d done!! Total sweeptime: %2f seconds\n',k,Data{k}.total_sweeptime)
+% fprintf('*****************************************\n')
+% end
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%save the result if desired
 if store_results == 1
     savedata

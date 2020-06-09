@@ -120,8 +120,8 @@ cases(:,2) =repmat(Qref.setpoint,1,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Optimisation.w3 = 0.1;      %Weight of reactor switching
-Optimisation.w4 = 0.1;      %Weight of the extremeness of Qstrings
+Optimisation.w3 = 0.2;      %Weight of reactor switching
+Optimisation.w4 = 0.2;      %Weight of the extremeness of Qstrings
 
 w1 = 0:0.05:(1-Optimisation.w3-Optimisation.w4);
 

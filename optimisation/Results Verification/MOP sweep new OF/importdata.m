@@ -3,7 +3,6 @@ close all
 
 filelist = dir('*.mat');
 
-
 for i = 1:length(filelist(:,1))
     Datakk{i} = load(filelist(i,1).name,'Data');
 end

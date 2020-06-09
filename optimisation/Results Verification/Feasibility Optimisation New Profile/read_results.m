@@ -13,10 +13,10 @@ Ploss_withopt = zeros(Ndatapoints,4);
 for i = 2:length(Data{1,2}.Results)
     if Data{1,2}.Results(i).Times_converged >= 5
         Ploss_noopt(i-1,1) = Data{1,2}.Results(i).Ploss_mean;   %%no opt
-        Ploss_withopt(i-1,1) = Data{1,3}.Results(i).Ploss_mean; %%opt with Q
-        Ploss_withopt(i-1,2) = Data{1,4}.Results(i).Ploss_mean; %%opt with Q and taps
-        Ploss_withopt(i-1,3) = Data{1,1}.Results(i).Ploss_mean; %%opt with Q and  
-        Ploss_withopt(i-1,4) = Data{1,5}.Results(i).Ploss_mean; %% opt with everything
+        Ploss_withopt(i-1,1) = Data{1,3}.Results(i).Ploss_best; %%opt with Q
+        Ploss_withopt(i-1,2) = Data{1,4}.Results(i).Ploss_best; %%opt with Q and taps
+        Ploss_withopt(i-1,3) = Data{1,1}.Results(i).Ploss_best; %%opt with Q and  
+        Ploss_withopt(i-1,4) = Data{1,5}.Results(i).Ploss_best; %% opt with everything
     else
          Ploss_noopt(i-1,1) = 0;
          Ploss_withopt(i-1,1) = 0;

@@ -13,3 +13,4 @@ optimisation/main.m
 optimisation/compute_results.m
 optimisation/Results Verification/MOP sweep 2/sweep with w34 = 0.1_w1 from 0 to 0.8.mat
 optimisation/main.m
+optimisation/Initialisation Functions/initialise_optimisation_weights.m

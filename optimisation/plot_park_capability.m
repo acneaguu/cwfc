@@ -21,7 +21,7 @@ for i = 1:length(v)
     capability(i) = sum(-1*Q);
     p_out(i)= sum(P);
 end
-plot(v,p_out);
+% plot(v,p_out);
 %% plot active power capabiltiy 
 axes_fontsize = 15;
 titlesize = 20;

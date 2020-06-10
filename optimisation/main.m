@@ -13,14 +13,14 @@ rng default
 global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
 Optimisation.Nturbines = 13;                %number of turbine strings
-Optimisation.Npv = 0;                       %number of pv generator strings
+Optimisation.Npv = 4;                       %number of pv generator strings
 Optimisation.Ntr = 2; %2;                   %number of transformers with discrete tap positions
 Optimisation.Ntaps = [17;17];               %number of tap positions per transformer 
                                             %(must have dimension of Ntr and separate by ;)
 Optimisation.Nr = 1; %1                     %number of discrete reactors
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
-Optimisation.which_discrete = [14:16];      %indeces of the discrete variables
+Optimisation.which_discrete = [18:21];      %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
 initialise_systemdata(system_13_350MVA);    
@@ -158,10 +158,10 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
         
         %%compute the reactive power generation per string depending on the
         %%windspeed
-        [Qmin, Qmax] = generate_case(cases(j-1,1));
+        [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1),800);
 
         %%update boundaries lb/ub
-        [lb, ub]= boundary_initialise(Qmin, Qmax,0,0);
+        [lb, ub]= boundary_initialise(Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg);
         
         %%case duration timer
         start_case = tic;

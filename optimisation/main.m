@@ -101,6 +101,10 @@ v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
 cases(:,1) = v;
 cases(:,2) =repmat(Qref.setpoint,5,1);
 
+if Optimisation.Npv > 0
+    irradiance = [0 0 0 0 0 ];
+    cases(:,3) = irradiance;
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % fsmin = [0.2 0.35 0.5 1];
@@ -158,8 +162,11 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
         
         %%compute the reactive power generation per string depending on the
         %%windspeed
-        [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1),800);
-
+        if Optimisation.Npv > 0
+            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1),cases(j-1,3));
+        else
+            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1));
+        end
         %%update boundaries lb/ub
         [lb, ub]= boundary_initialise(Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg);
         

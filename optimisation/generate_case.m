@@ -13,10 +13,10 @@ Systemdata.mpc.gen(Systemdata.wtg_pos,CONSTANTS.PG) = P_wtg;
 
 %%repeat for pv
 if nargin > 1
-%%compute P and Q of the pvg strings
-[P_pvg, Q_pvg] = compute_pq_pvg(irradiance,Optimisation.Npv);
-Q_pv_max = Q_pvg;
-Q_pv_min = zeros(1,length(Q_pvg));
+    %%compute P and Q of the pvg strings
+    [P_pvg, Q_pvg] = compute_pq_pvg(irradiance,Optimisation.Npv);
+    Q_pv_max = Q_pvg;
+    Q_pv_min = zeros(1,length(Q_pvg));
 
 %%update casefile
 Systemdata.mpc.gen(Systemdata.pvg_pos,CONSTANTS.PG) = P_pvg;
@@ -26,9 +26,10 @@ Systemdata.mpc.bus(pv_busvec,CONSTANTS.BUS_TYPE) = 1;
 %%  Update branch status
 pv_branchvec = [10,16,23,29];
 Systemdata.mpc.branch(pv_branchvec,CONSTANTS.BR_STATUS)= 1;
+
 else
-   Q_pv_min = 0;
-   Q_pv_max = 0;
+    Q_pv_min = 0;
+    Q_pv_max = 0;
 end
 
 end

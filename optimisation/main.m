@@ -20,7 +20,7 @@ Optimisation.Nr = 1;                    %number of discrete reactors
 
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
-Optimisation.which_discrete = [18:21];      %indeces of the discrete variables
+Optimisation.which_discrete = [18:20];      %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
 initialise_systemdata(system_13_350MVA);    

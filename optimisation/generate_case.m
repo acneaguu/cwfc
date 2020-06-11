@@ -20,6 +20,12 @@ Q_pv_min = zeros(1,length(Q_pvg));
 
 %%update casefile
 Systemdata.mpc.gen(Systemdata.pvg_pos,CONSTANTS.PG) = P_pvg;
+%% Update bus status
+pv_busvec = [11,16,22,27];
+Systemdata.mpc.bus(pv_busvec,CONSTANTS.BUS_TYPE) = 1;
+%%  Update branch status
+pv_branchvec = [10,16,23,29];
+Systemdata.mpc.branch(pv_branchvec,CONSTANTS.BR_STATUS)= 1;
 else
    Q_pv_min = 0;
    Q_pv_max = 0;

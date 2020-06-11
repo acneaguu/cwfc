@@ -148,7 +148,7 @@ global parameter proc;
 % Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)/2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Populationsize = [100 200];
+Populationsize = [1 5 10 20 35 50];
 
 %%run different cases
 %     for j = 2:Optimisation.Ncases+1

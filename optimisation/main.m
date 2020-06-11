@@ -103,7 +103,6 @@ cases(:,2) =repmat(Qref.setpoint,5,1);
 
 if Optimisation.Npv > 0
     irradiance = [50 50 50 50 50 340 340 340 340 340 680 680 680 680 680 ...
-        510 510 510 510 510 170 170 170 170 170];
     cases(:,3) = irradiance;
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -121,6 +120,7 @@ end
 % parameter.n_random_ini = ndimmin(kkk);
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
+% Populationsize = [1 5 10 20 35 50];
 global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,12 +148,11 @@ global parameter proc;
 % Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)/2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Populationsize = [1 5 10 20 35 50];
+archive = [2 3 4 5];
 
 %%run different cases
      for j = 2:Optimisation.Ncases+1
-   %for j = 2:length(Populationsize)+1
-        
+ 
         %%set j for internal use
         Optimisation.t = j;
         

@@ -14,13 +14,13 @@ global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
 Optimisation.Nturbines = 13;                %number of turbine strings
 Optimisation.Npv = 4;                       %number of pv generator strings
-Optimisation.Ntr = 0; %2;                   %number of transformers with discrete tap positions
-Optimisation.Ntaps = [];%[17;17];               %number of tap positions per transformer                                             %(must have dimension of Ntr and separate by ;)
-Optimisation.Nr = 0; %1                     %number of discrete reactors
+Optimisation.Ntr = 2;                   %number of transformers with discrete tap positions
+Optimisation.Ntaps = [17;17];               %number of tap positions per transformer                                             %(must have dimension of Ntr and separate by ;)
+Optimisation.Nr = 1;                    %number of discrete reactors
 
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
-Optimisation.which_discrete = [];%[18:21];      %indeces of the discrete variables
+Optimisation.which_discrete = [18:21];      %indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
 initialise_systemdata(system_13_350MVA);    
@@ -149,12 +149,15 @@ global parameter proc;
 % Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)/2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-archive = [2 3 4 5];
-
+% archive = [2 3 4 5];
+Populationsize = [100];
 %%run different cases
 %     for j = 2:Optimisation.Ncases+1
-   for j = 2:length(archive)+1
-        parameter.n_tosave = archive(j);
+   for j = 2:2
+%         parameter.n_tosave = archive(j);
+        parameter.n_par = Populationsize(j-1);
+        proc.n_eval = 500*Populationsize(j-1);
+        
         %%set j for internal use
         Optimisation.t = j;
         
@@ -255,7 +258,7 @@ archive = [2 3 4 5];
         Results(j).Ploss_mean = mean(Results(j).Ploss(Results(j).Ploss < MaxPloss));
         
         %%save the best fitness and solution 
-        Results(j).Times_converged = sum(Results(j).Fbest<=1);
+        Results(j).Times_converged = sum(Results(j).Fbest<=1e3);
         best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);
         Results(j).best_run_fitness = min(Results(j).Fbest);
         Results(j).best_run_solution = Results(j).Xbest(best_index,:);

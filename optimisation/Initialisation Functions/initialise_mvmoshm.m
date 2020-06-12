@@ -18,7 +18,7 @@ proc.n_eval = Optimisation.Neval;
 %%Strategic parameters MVMO
 parameter.n_par=Optimisation.Populationsize;%Number of particles 
 
-parameter.n_tosave=3;                       %Archive size
+parameter.n_tosave=2;                       %Archive size
 parameter.fs_factor_start=1;              %Initial fs-factor 
 parameter.fs_factor_end= 1;                 %Final fs-factor
 parameter.ratio_gute_max=0.3;               %Initial portion of good particles    

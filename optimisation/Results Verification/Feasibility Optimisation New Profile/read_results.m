@@ -48,7 +48,7 @@ reduction_losses(:,1) = 1e3.*(Ploss_noopt-Ploss_withopt(:,1));
 
 yyaxis right
 plot(whichcase,reduction_losses(:,1),'-o','Color',right_col,'MarkerSize',3);
-ylabel('Loss reduction [kW]');
+ylabel('Loss Reduction [kW]');
 legend('Without optimisation','With optimisation','Feasibility of optimisation');
 
 axes_fontsize = 15;
@@ -108,7 +108,7 @@ plot(whichcase,reduction_losses(:,2),'--o','Color',darkblue,'MarkerSize',3);    
 plot(whichcase,reduction_losses(:,3),'-.o','Color',lightblue,'MarkerSize',3);     %reduction due to reactor vs only q
 plot(whichcase,reduction_losses(:,4),':o','Color',darkblue2,'LineWidth',1.25,'MarkerSize',3);     % reduction due to everything
 xlabel('Case')
-ylabel('Improvement of reduction in losses [kW]')
+ylabel('Improvement of Reduction in Losses [kW]')
 title('Improvement of Reduction in Active Power Losses with Different Controllable Devices','FontSize',20)
 ax = gca;
 ax.FontSize = axes_fontsize;

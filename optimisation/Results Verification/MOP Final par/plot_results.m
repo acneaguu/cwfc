@@ -95,8 +95,8 @@ plot(vcase,costs_w1_sweep(3,:),'--','Color',lightblue)
 plot(vcase,costs_withopt,'Color',green1)
 % plot(vcase,costs_onlyP,'Color',darkblue)
 title('Costs With and Without Optimisation','FontSize',titlesize)
-xlabel('case')
-ylabel('cost [€]')
+xlabel('Case')
+ylabel('Cost [€]')
 % lgd = legend('Costs without optimisation',...
 %     'Costs with w_{1} = 0.5','Costs with w_{1} = 0.6','Costs with w_{1} = 0.7',...
 %     'Costs with w_{1} = 0.8','Costs with w_{1} = 0.9','Costs with only
@@ -142,7 +142,7 @@ end
 figure(2);
 hold on
 title('Cumulative Costs for the Test Profile','FontSize',titlesize)
-xlabel('case')
+xlabel('Case')
 % xlim([24.97 25])
 
 plot(cases,total_costs_woopt_cum(1,:),'-','Color',red1)
@@ -153,7 +153,7 @@ plot(cases,total_costs_w1_sweep_cum(3,:),'-.','Color',darkblue2)
 plot(cases,total_costs_w1_sweep_cum(4,:),'--','Color','#0080ff')
 plot(cases,total_costs_withopt_cum,'-','Color',darkblue)
 
-ylabel('cumulative cost [€]')
+ylabel('Cumulative Cost [€]')
 
 ax = gca;
 ax.FontSize = axes_fontsize;

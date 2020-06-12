@@ -28,10 +28,10 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 25;            %number of evaluated time instances
+Optimisation.Ncases = 20;            %number of evaluated time instances
 Optimisation.Nruns = 5;             %number of runs per case
-Optimisation.Neval = 500*50;        %max allowed function evaluations
-Optimisation.Populationsize = 50;   %size of the population
+Optimisation.Neval = 500*35;        %max allowed function evaluations
+Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
@@ -92,17 +92,13 @@ Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 % Qref.tolerance = 0.005;
         
 %%define the testcase
-%v = [7 12 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 15 15 15 15 15]';
-%v = [7 7 7 7 7 15 15 15 15 15]';
- v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
-% v = [15 15 15 15 15]';
-% %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
-% v = [15 15 15 15 15];
+ v = [5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
+
 cases(:,1) = v;
-cases(:,2) =repmat(Qref.setpoint,5,1);
+cases(:,2) =repmat(Qref.setpoint,4,1);
 
 if Optimisation.Npv > 0
-    irradiance = [50 50 50 50 50 340 340 340 340 340 680 680 680 680 680 ...
+    irradiance = [340 340 340 340 340 680 680 680 680 680 ...
         510 510 510 510 510 170 170 170 170 170];
     cases(:,3) = irradiance;
 end

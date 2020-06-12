@@ -149,12 +149,12 @@ global parameter proc;
 % Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)/2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-archive = [2 3 4 5];
+m_final = [9 7 5 3 2 1];
 
 %%run different cases
 %     for j = 2:Optimisation.Ncases+1
-   for j = 2:5
-        parameter.n_tosave = archive(j-1);
+   for j = 2:length(m_final)+1
+        parameter.n_random_last = m_final(j-1);
         
         %%set j for internal use
         Optimisation.t = j;

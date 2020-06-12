@@ -44,7 +44,7 @@ plot(whichcase,Ploss_noopt,'-o','Color','red','MarkerSize',3)           %%no opt
 plot(whichcase,Ploss_withopt(:,1),'-o','Color',blue,'MarkerSize',3)   %%opt with Q
 ylabel('Loss [MW]')
 title('Active Power Losses: No Optimisation vs Optimisation','FontSize',20);
-reduction_losses(:,1) = 1e3.*(Ploss_noopt-Ploss_withopt(:,1));
+reduction_losses(:,1) = 1e3.*(Ploss_noopt-Ploss_withopt(:,4));
 
 yyaxis right
 plot(whichcase,reduction_losses(:,1),'-o','Color',right_col,'MarkerSize',3);

@@ -28,8 +28,8 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 10;             %number of runs per case
+Optimisation.Ncases = 25;            %number of evaluated time instances
+Optimisation.Nruns = 5;             %number of runs per case
 Optimisation.Neval = 500*50;        %max allowed function evaluations
 Optimisation.Populationsize = 50;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
@@ -94,7 +94,7 @@ Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 %%define the testcase
 %v = [7 12 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 15 15 15 15 15]';
 %v = [7 7 7 7 7 15 15 15 15 15]';
- v = [7 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
+ v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
 % v = [15 15 15 15 15]';
 % %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
 % v = [15 15 15 15 15];
@@ -102,7 +102,7 @@ cases(:,1) = v;
 cases(:,2) =repmat(Qref.setpoint,5,1);
 
 if Optimisation.Npv > 0
-    irradiance = [680 50 50 50 50 50 340 340 340 340 340 680 680 680 680 ...
+    irradiance = [50 50 50 50 50 340 340 340 340 340 680 680 680 680 680 ...
         510 510 510 510 510 170 170 170 170 170];
     cases(:,3) = irradiance;
 end
@@ -122,7 +122,7 @@ end
 % for kkkk = 1:length(ndimmax)
 % parameter.n_random_last = ndimmax(kkkk);
 % Populationsize = [1 5 10 20 35 50];
-global parameter proc;
+% global parameter proc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -149,12 +149,9 @@ global parameter proc;
 % Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)/2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-archive = [2 3 4 5];
 
 %%run different cases
-%     for j = 2:Optimisation.Ncases+1
-   for j = 2:5
-        parameter.n_tosave = archive(j-1);
+    for j = 2:Optimisation.Ncases+1
         
         %%set j for internal use
         Optimisation.t = j;
@@ -163,17 +160,17 @@ archive = [2 3 4 5];
         initialise_results_struct(); 
         
         %%compute the allowed range of Qpcc w.r.t. the setpoints
-%         qpcc_limits(cases(j-1,2)); 
-        qpcc_limits(cases(1,2));
+        qpcc_limits(cases(j-1,2)); 
+%         qpcc_limits(cases(1,2));
         
         %%compute the reactive power generation per string depending on the
         %%windspeed
         if Optimisation.Npv > 0
-%             [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1),cases(j-1,3));
-            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(1,1),cases(1,3));
+            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1),cases(j-1,3));
+%             [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(1,1),cases(1,3));
         else
-%             [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1));
-            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(1,1));            
+            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1));
+%             [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(1,1));            
         end
         %%update boundaries lb/ub
         [lb, ub]= boundary_initialise(Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg);
@@ -214,12 +211,12 @@ archive = [2 3 4 5];
 
         %%compute the Results(j) of the different OF parameters and Qpcc using the
         %%final solution and store them in results
-%         [Results(j).Ploss(i+1), Results(j).Tap_changes(i+1), Results(j).Reactors_changes(i+1)...
-%             ,Results(j).extremeness_setpoints(i+1), Results(j).total_cost_per_run(i+1), Results(j).Qaccuracy(i+1)]...
-%             = compute_results(Results(j).Xbest(i+1,:),cases(j-1,2));
         [Results(j).Ploss(i+1), Results(j).Tap_changes(i+1), Results(j).Reactors_changes(i+1)...
             ,Results(j).extremeness_setpoints(i+1), Results(j).total_cost_per_run(i+1), Results(j).Qaccuracy(i+1)]...
-            = compute_results(Results(j).Xbest(i+1,:),cases(1,2));
+            = compute_results(Results(j).Xbest(i+1,:),cases(j-1,2));
+%         [Results(j).Ploss(i+1), Results(j).Tap_changes(i+1), Results(j).Reactors_changes(i+1)...
+%             ,Results(j).extremeness_setpoints(i+1), Results(j).total_cost_per_run(i+1), Results(j).Qaccuracy(i+1)]...
+%             = compute_results(Results(j).Xbest(i+1,:),cases(1,2));
 
 
         %%initilise matrix with FitBest progress at each iteration

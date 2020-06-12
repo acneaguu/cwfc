@@ -9,8 +9,8 @@ Optimisation.p2 = 2;                %Penalty for Qref violation
 Optimisation.p3 = 1;                %Penalty for power violation
 
 %Weights of the OF
-Optimisation.w1 = 0.5;              %Weight of Ploss
-Optimisation.w2 = 0.4;                %Weight of transformer switches
+Optimisation.w1 = 0.7;              %Weight of Ploss
+Optimisation.w2 = 0.2;                %Weight of transformer switches
 Optimisation.w3 = 0.05;             %Weight of reactor switching
 Optimisation.w4 = 0.05;             %Weight of the extremeness of Qstrings
 

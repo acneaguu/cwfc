@@ -30,8 +30,8 @@ initialise_optimisation_weights();  %sets the weights of the different
                                     %constraints and objectives
 Optimisation.Ncases = 25;           %number of evaluated time instances
 Optimisation.Nruns = 5;             %number of runs per case
-Optimisation.Neval = 500*50;        %max allowed function evaluations
-Optimisation.Populationsize = 50;   %size of the population
+Optimisation.Neval = 500*35;        %max allowed function evaluations
+Optimisation.Populationsize = 35;   %size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
 
 Optimisation.print_progress = 1;    %Plots runs in command window
@@ -92,12 +92,8 @@ Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 % Qref.tolerance = 0.005;
         
 %%define the testcase
-%v = [7 12 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 15 15 15 15 15]';
-%v = [7 7 7 7 7 15 15 15 15 15]';
  v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
-% v = [15 15 15 15 15]';
-% %v = [3.5 3.5 3.5 3.5 3.5 4.5 4.5 4.5 4.5 4.5]';
-% v = [15 15 15 15 15];
+
 cases(:,1) = v;
 cases(:,2) =repmat(Qref.setpoint,5,1);
 

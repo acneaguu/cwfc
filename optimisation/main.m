@@ -14,9 +14,9 @@ global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
 Optimisation.Nturbines = 13;                %number of turbine strings
 Optimisation.Npv = 4;                       %number of pv generator strings
-Optimisation.Ntr = 2;                   %number of transformers with discrete tap positions
+Optimisation.Ntr = 2;                       %number of transformers with discrete tap positions
 Optimisation.Ntaps = [17;17];               %number of tap positions per transformer                                             %(must have dimension of Ntr and separate by ;)
-Optimisation.Nr = 1;                    %number of discrete reactors
+Optimisation.Nr = 1;                        %number of discrete reactors
 
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
@@ -28,7 +28,7 @@ initialise_systemdata(system_13_350MVA);
 %%Optimisation run settings
 initialise_optimisation_weights();  %sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 25;            %number of evaluated time instances
+Optimisation.Ncases = 25;           %number of evaluated time instances
 Optimisation.Nruns = 5;             %number of runs per case
 Optimisation.Neval = 500*35;        %max allowed function evaluations
 Optimisation.Populationsize = 35;   %size of the population

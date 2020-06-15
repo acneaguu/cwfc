@@ -3,7 +3,7 @@ close all
 
 filelist = dir('*.mat');
 
-for i = 1:length(filelist(:,1))
+for i = 1:4
     
     Data{i} = load(filelist(i,1).name,'Results');
 end
@@ -11,7 +11,7 @@ end
 Results_no_opt(1:6) = Data{1,2}.Results;
 Results_no_opt(7:26) = Data{1,1}.Results(7:26);
 Results_opt(1:6) = Data{1,4}.Results;
-Results_opt(7:26) = Data{1,3}.Results(7:26);
+Results_opt(7:26) = Data{1,3}.Results(2:21);
 
 
 for i = 2:length(Results_opt)

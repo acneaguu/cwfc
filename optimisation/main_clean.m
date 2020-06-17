@@ -109,55 +109,10 @@ if Optimisation.Npv > 0
         510 510 510 510 510 170 170 170 170 170];
     cases(:,3) = irradiance;
 end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% fsmin = [0.2 0.35 0.5 1];
-% fsmax = [2 5 10];
-% ndimmin = [1 0.9 0.8];
-% ndimmax = [1 0.5 0.3 0.1];
-% global parameter
-% for k = 1:length(fsmin)
-% parameter.fs_factor_start = fsmin(k);
-% for kk = 1:length(fsmax)
-% parameter.fs_factor_end = fsmax(kk);
-% for kkk = 1:length(ndimmin)
-% parameter.n_random_ini = ndimmin(kkk);
-% for kkkk = 1:length(ndimmax)
-% parameter.n_random_last = ndimmax(kkkk);
-% Populationsize = [1 5 10 20 35 50];
-% global parameter proc;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Optimisation.w3 = 0.05;
-% Optimisation.w4 = 0.15;
-% w1 = 0:0.05:(1-Optimisation.w3-Optimisation.w4);
-% 
-% w3 = 0:0.05:0.2;
-% w4 = 0:0.05:0.2;
-% 
-% %sweep over different weights
-% for k = 1:length(w3)
-% %timer for sweep
-% sweeptime = tic;
-% %update weights
-% % Optimisation.w1 = w1(k);        %Weight of Ploss
-% % Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)-w1(k);        %Weight of switching
-% 
-% Optimisation.w3 = w3(k);
-% Optimisation.w4 = w4(k);
-% Optimisation.w1 = (1-Optimisation.w3-Optimisation.w4)/2;
-% Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)/2;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%-------------------------------------------------------------------------
 %%Run different cases
     for j = 2:Optimisation.Ncases+1
-        
+        %%-------------Prepare for optimisation:---------------------
         %%Set j for internal use
         Optimisation.t = j;
         
@@ -166,21 +121,19 @@ end
         
         %%Compute the allowed range of Qpcc w.r.t. the setpoints
         qpcc_limits(cases(j-1,2)); 
-%         qpcc_limits(cases(1,2));
         
         %%Compute the reactive power generation per string depending on the
         %%windspeed
         if Optimisation.Npv > 0
             [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1),cases(j-1,3));
-%             [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(1,1),cases(1,3));
         else
-            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1));
-%             [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(1,1));            
+            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1));          
         end
         
         %%Update boundaries lb/ub
         [lb, ub]= boundary_initialise(Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg);
-        
+ 
+        %%-------------Start optimisation----------------------------------
         %%Case duration timer
         start_case = tic;
         
@@ -205,7 +158,8 @@ end
             case 4
                 [gbestfit, X] = mvmo_ceno(fun,lb,ub);
         end
-
+        
+        %%-------------Store the results into the results struct-----------
         %%Store the best solution and fitness of this run
         Results(j).Xbest(i+1,:) = round_discrete_vars(X);
         switch Optimisation.algorithm
@@ -220,10 +174,6 @@ end
         [Results(j).Ploss(i+1), Results(j).Tap_changes(i+1), Results(j).Reactors_changes(i+1)...
             ,Results(j).extremeness_setpoints(i+1), Results(j).total_cost_per_run(i+1), Results(j).Qaccuracy(i+1)]...
             = compute_results(Results(j).Xbest(i+1,:),cases(j-1,2));
-%         [Results(j).Ploss(i+1), Results(j).Tap_changes(i+1), Results(j).Reactors_changes(i+1)...
-%             ,Results(j).extremeness_setpoints(i+1), Results(j).total_cost_per_run(i+1), Results(j).Qaccuracy(i+1)]...
-%             = compute_results(Results(j).Xbest(i+1,:),cases(1,2));
-
 
         %%Initilise matrix with FitBest progress at each iteration
         if i == 1
@@ -236,79 +186,62 @@ end
                  repmat(Results(j).Violation_composition_progress(end,:,:),dis,1,1);
         end
         
-        %% RESULTS STRUCT USED FOR PERFORMANCE EVALUATION
-        %%store the progress of FitBest of this iteration
+        %%-------------Results struct used for performance evaluation------
+        %%Store the progress of FitBest of this iteration
         Results(j).Fit_progress(i+1,:) = Keeptrack.FitBest;
         Results(j).Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
         Results(j).runtime(i,1) = toc;
         
-        %%print the runtime of a run
+        %%Print the runtime of a run
         fprintf('Case %2d, Run %2d: %2f seconds \n',j-1,i,Results(j).runtime(i,1));
         
-        %%plot if desired
+        %%Plot if desired
         if plot == 1
             animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
         end
 
         end
         
-        %%calculate best/worst/mean of Ploss
+        %%Calculate best/worst/mean of Ploss
         MaxPloss = Systemdata.mpc.baseMVA;
         Results(j).Ploss_best = min(Results(j).Ploss);
         Results(j).Ploss_worst = max(Results(j).Ploss(Results(j).Ploss < MaxPloss));
         Results(j).Ploss_mean = mean(Results(j).Ploss(Results(j).Ploss < MaxPloss));
         
-        %%save the best fitness and solution 
+        %%Save the best fitness and solution 
         Results(j).Times_converged = sum(Results(j).Fbest<=1e3);
         best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);
         Results(j).best_run_fitness = min(Results(j).Fbest);
         Results(j).best_run_solution = Results(j).Xbest(best_index,:);
         
-        %%calculates consistency performance
+        %%Calculates consistency performance
         Results(j).avg_fitness = mean(Results(j).Fbest(2:end));
         Results(j).std_fitness = std(Results(j).Fbest(2:end));
         Results(j).std_solution = std(Results(j).Xbest(2:end,:));
         
-        %%calculate cost per case
+        %%Calculate cost per case
         Results(j).total_cost_per_case = mean(Results(j).total_cost_per_run(2:end));
-        %%compute the average runtime
+        
+        %%Compute the average runtime
         Results(j).avg_runtime = mean(Results(j).runtime(:,1));
         Results(j).total_runtime = toc(start_case);
         
-        %%print the total case runtime
+        %%Print the total case runtime
         fprintf('Case %2d, Total Runtime: %2f seconds \n',j-1,Results(j).total_runtime);
     end
-% end
-% end
-% end
-% end
 
-%%total costs of optimisation
+%Total costs of optimisation
 total_cost = 0;
 for j = 2:Optimisation.Ncases+1
     total_cost = total_cost + Results(j).total_cost_per_case;
 end
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%save different variables into a cell for comparison
-% Data{k}.Results = Results;
-% Data{k}.Optimisation = Optimisation;
-% Data{k}.total_costs = total_cost;
-% Data{k}.total_sweeptime = toc(sweeptime);
-% 
-% %%print sweep done
-% fprintf('*****************************************\n')
-% fprintf('Sweep %2d done!! Total sweeptime: %2f seconds\n',k,Data{k}.total_sweeptime)
-% fprintf('*****************************************\n')
-% end
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%save the result if desired
+%%-------------------------------------------------------------------------
+%%Save the result if desired
 if store_results == 1
     savedata
 end
 
-%%save and print the total execution time
+%%Save and print the total execution time
 total_execution_time = toc(total_execution_time);
 fprintf('Total Execution time: %2f seconds \n',total_execution_time);

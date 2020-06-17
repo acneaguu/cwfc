@@ -1,22 +1,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Task
-% Authors: Farley Rimon & Marouane Mastouri
-% Last edited: 16/05/2020
-%
-% This is a typical layout of an on-shore WPP. Parameters of system 
-% components were taken from a on-shore WPP in Zeewolde.
-%
-% See Matpower user's manual for details on the case file format.
+%%Authors: Farley Rimon & Marouane Mastouri
+%%Last edited: 16/05/2020
+%%See Matpower user's manual for details on the case file format.
+
+%%README:
+%%This function creates a MATPOWER casefile which is the system in
+%%question. The data for the branch resistances, reactances and
+%%susceptances are imported from an Excel file.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function mpc = system_13_350MVA
 %% MATPOWER Case Format : Version 2
 mpc.version = '2';
 
 %%-----  Power Flow Data  -----%%
-%% system MVA base
+%% System MVA base
 mpc.baseMVA = 350;
 
-%% bus data 
+%% Bus data 
 % bus_i	   type	    Pd	   Qd	    Gs	    Bs	   area	   Vm	   Va	   baseKV  zone	   Vmax	    Vmin
 mpc.bus = [
 	1       3       0       0       0       0       1       1       0        150     1       1.09   0.8576;        
@@ -48,14 +48,13 @@ mpc.bus = [
    27       4       0       0       0       0       1       1       0        33      1       1.09   0.8576;
    28       1       0       0       0       -12     1       1       0        33      1       1.09   0.8576;%shunt reactor
    ];
-%% generator data
-%% The Qmax and Qmin are set to 0 in order to test if the system convergs.
-%% The generating strings as well as the strings are modeled in the generator data and bus data.
+%% Generator data
+%%The generating strings as well as the strings are modeled in the generator data and bus data.
 %  bus	Pg	    Qg	    Qmax	Qmin	Vg	   mBase  status   Pmax    Pmin	    Pc1	   Pc2	  Qc1min  Qc1max  Qc2min  Qc2max  ramp_agc  ramp_10  ramp_30  ramp_q  apf
 mpc.gen = [
-	%%slack bus
+	%%Slack bus
     1	0         0       0        0        1.0     100     1      0        0       0       0       0       0       0       0       0       0       0       0       0;     
-    %%wtg strings
+    %%WTG strings
     8	33        22.4    22.4     22.4     1.0     100     1      32       32      0       0       0       0       0       0       0       0       0       0       0;
     9	29.4      19.15   19.15    19.15	1.0     100     1      28.6     28.6    0       0       0       0       0       0       0       0       0       0       0;
     10	28.8      19.6    19.6     19.6     1.0     100     1      28       28      0       0       0       0       0       0       0       0       0       0       0;
@@ -69,23 +68,24 @@ mpc.gen = [
     24	29.4      18.55   18.55    18.55    1.0     100     1      29.4     29.4    0       0       0       0       0       0       0       0       0       0       0;
     25	33.6      21.2    21.2     21.2     1.0     100     1      29.4     29.4    0       0       0       0       0       0       0       0       0       0       0;
     26	29.4      19.15   19.15    19.15    1.0     100     1      28.6     28.6    0       0       0       0       0       0       0       0       0       0       0;
-    %%pv strings
+    %%PV strings
     11	0         0       0        0        1.0     100     1      30.3     30.3    0       0       0       0       0       0       0       0       0       0       0;
     16	0         0       0        0        1.0     100     1      30.3     30.3    0       0       0       0       0       0       0       0       0       0       0;
     22	0         0       0        0        1.0     100     1      30.3     30.3    0       0       0       0       0       0       0       0       0       0       0;
     27	0         0       0        0        1.0     100     1      30.3     30.3    0       0       0       0       0       0       0       0       0       0       0;
-   %Equivalent grid
+    %%Equivalent grid
 ];
 
 
-%% branch data
+%% Branch data
 
-%%the p.u calculations are checked several times; lecture and the data of
-%%ABB are used in order to find the right p.u values for the transformer.
+%%The p.u calculations are checked several times; lecture and the data of
+%%the case study are used in order to find the right p.u values for the
+%%transformer.
 
 % fbus  tbus	   r	              x	                        b	        rateA              rateB             rateC            ratio   angle   status	 ratiomax	ratiomin
 mpc.branch = [
-    %Main bus to transformer
+    %%Main bus to transformer
     1   2       0.00363037037       0.01066             0.4135121331         400               400               400             0        0       1       0        0;
     2	3       0.000001793185185	0.000005087407407	0.002638843582       400               400               400             0        0       1       0        0;
     2   5       0.000001205125926	0.000003419037037	0.001773458113       400               400               400             0        0       1       0        0;
@@ -117,10 +117,11 @@ mpc.branch = [
     23  26      0.002805785124      0.01600550964       0.01228550909        138.8931543       138.8931543       138.8931543     0        0       1        0        0;   
     23  27      0.001703957759      0.009720171411      0.007461009172       138.8931543       138.8931543       138.8931543     0        0       0        0        0;
     
-    %Shunt reactor to bus bars
+    %%Shunt reactor to bus bars
     12  28      0.00005270422406	0.0003006495256     0.0002307725628      138.8931543       138.8931543       138.8931543     0        0       1        0        0;     
     17  28      0.00005270422406	0.0003006495256     0.0002307725628      138.8931543       138.8931543       138.8931543     0        0       1        0        0; 
     ];
-    mpc.branch(:,3:5) = xlsread('branch_calculations350.xlsx','K8:M38'); 
-    %last line to change to the correct values of Z corresponding to 350 MVA base
+
+    %%Line to change to the correct values of Z corresponding to 350 MVA base
+    mpc.branch(:,3:5) = xlsread('branch_calculations350.xlsx','K8:M38');  
 end

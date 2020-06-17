@@ -1,6 +1,9 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%README:
 %%This function is used to compute the constraint violations of the system.
 %%It returns a vector containing which constraints are violated ('1') and a
 %%number indicating the total number of violations.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [violation_vec, total_violations, composition] = compute_violation_constraints_v2()
 global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
 

@@ -30,3 +30,6 @@ plot(0:1500,sum(Qtot,1))
 title('Q_{solar} for different irradiances')
 xlabel('irradiance [W/m^{2}]')
 ylabel('Q_{solar} per string [MVAr]')
+
+figure(4)
+plot(Ptot(1,:),Qtot(1,:))

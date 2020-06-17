@@ -1,74 +1,70 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%README:
+%%This is the main script for the optimisation unit. In this script, the
+%%required variables are initialised, desired functions are called and the
+%%optimisation is started and ended. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear all;
 close all;
-%%load MATPOWER constants for convenience in the struct CONSTANTS
+
+%%Start timer
+total_execution_time = tic;
+
+%%Load MATPOWER constants for convenience in the struct CONSTANTS
 define_constants_struct();
+
 %%For reproducibility (needed for PS algorithm)
 rng default  
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%Optimisation problem specification and settings 
-%%setpoint at PCC given by TSO
-global Qref;    
-Qref.setpoint = -0.33; %in p.u. of baseMVA
-Qref.tolerance = 0.15;  %tolerance at Q = 0 MVar
-qpcc_limits();         %compute the allowed range of Qpcc w.r.t. the setpoints
-
-
+%%-------------------------------------------------------------------------
+%%%Optimisation problem specification and settings 
 %%Optimisation containts the optimisation problem parameters
-global Optimisation ff_par;
+global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
-Optimisation.Nturbines = 22;                %number of turbine strings
-Optimisation.Npv = 0;                       %number of pv generator strings
-Optimisation.Ntr = 0;                       %number of transformers with discrete tap positions
-Optimisation.Nr = 0;                        %number of discrete reactors
-Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
-    Optimisation.Ntr + Optimisation.Nr;     %number of optimisation variables
-logic_optvars();                            %generate logic vectors for different var indeces
-initialise_systemdata(system_41);
+Optimisation.Nturbines = 13;                %Number of turbine strings
+Optimisation.Npv = 4;                       %Number of pv generator strings
+Optimisation.Ntr = 2;                       %Number of transformers with discrete tap positions
+Optimisation.Ntaps = [17;17];               %Number of tap positions per transformer                                             %(must have dimension of Ntr and separate by ;)
+Optimisation.Nr = 1;                        %Number of discrete reactors
 
-%Ones describe the bounds of optimisation variables
-%lb = -30% of Pn (5MW), ub = 40% of Pn
-lb = [-2.5*ones(Optimisation.Nvars-4,1).' 0.851 0.87 -20 0];
-ub = [2.5*ones(Optimisation.Nvars-4,1).' 1.149 1.13 0 20];
+Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
+    Optimisation.Ntr + Optimisation.Nr;     %Number of optimisation variables
+Optimisation.which_discrete = [18:20];      %Indeces of the discrete variables
+% Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
+logic_optvars();                            %Logic vectors for optimisation vector
+initialise_systemdata(system_13_350MVA);    %Initialise the topology
 
 %%Optimisation run settings
-initialise_optimisation_weights();  %sets the weights of the different 
+initialise_optimisation_weights();  %Sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %number of evaluated time instances
-Optimisation.Nruns = 33;            %number of runs per case
-Optimisation.Neval = 5e3;           %max allowed function evaluations
-Optimisation.Populationsize = 200;   %size of the population
-Optimisation.algorithm = 4; %1 for ga, 2 for pso, 3 for cdeepso %4 for MVMO_SHM
+Optimisation.Ncases = 1;            %Number of evaluated time instances
+Optimisation.Nruns = 1;             %Number of runs per case
+Optimisation.Neval = 500*35;        %Max allowed function evaluations
+Optimisation.Populationsize = 35;   %Size of the population
+Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso 
+                                    %4 for MVMO_SHM
+Optimisation.print_progress = 1;    %Plots runs in command window
+Optimisation.print_interval = 2000; %Interval of printed steps
+Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
 
-Optimisation.print = 1;
-Optimisation.print_interval = 1000; %Prints interval
-
-%%settings to plot and store the results of the optimisation
+%%-------------------------------------------------------------------------
+%%Settings to plot the power flow and store the results of the optimisation
 plot = 0;
 store_results = 0;
 
-
+%%-------------------------------------------------------------------------
 %Results struct consits of the results of each optimal powerflow
 %%variables containing the best solutions at all evaluated optimisation
 %%runs (Fbest), a matrix containing the best solution at each optimisation
 %%run (Xbest), the progress of the best fitness value of each run
 %%(Fit_progress), the accuracy of Qpcc (Qaccuracy) and the values of the OF
 %%paramers at each run (Ploss, tchanges and rchanges)
-
 global Results;
-initialise_results_struct%%initialise the Results struct with NaNs
+Optimisation.t = 1;
+initialise_results_struct();
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%variable indicated which case is considered. For now, it is case 2 i.e.
-%%the case after the initalisation case. This value should change within a
-%%loop
-
+%%-------------------------------------------------------------------------
 %%Fitness evaluation function
-Optimisation.t = 2;
 switch Optimisation.algorithm
     case {1,2,3}
     fun = @(X)fitness_eval(X);
@@ -76,11 +72,7 @@ switch Optimisation.algorithm
     fun = str2func('fitness_eval');
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%parameters for the different algorithms
+%%Parameters for the different algorithms
 switch Optimisation.algorithm
     case 1
     options = optimoptions('ga', 'FunctionTolerance', 1e-9, ...
@@ -90,87 +82,233 @@ switch Optimisation.algorithm
     options=optimoptions('particleswarm','MaxIterations',...
         Optimisation.Neval,'SwarmSize',Optimisation.Populationsize);
     case 3
-    initialise_cdeepso(); %this function initialises the CDEEPSO settings
+    initialise_cdeepso(); %This function initialises the CDEEPSO settings
     
     case 4 
-    initialise_mvmoshm(); %this function initialises the MVMO-SHM settings
+    initialise_mvmoshm(); %This function initialises the MVMO-SHM settings
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%-------------------------------------------------------------------------
 %% run optimisation
-global Keeptrack FCount;    %some global vars to keep track of the calls of 
+global Keeptrack FCount;    %Some global vars to keep track of the calls of 
                             %the fitness evaluation funtion 
-                            
-for i = 1:Optimisation.Nruns
-% if i == 2 %for i = 2 you dont optimise for minimal power losses
-%     Optimisation.w1 =0 ;
+%%-------------------------------------------------------------------------
+%%Setpoint at PCC given by TSO
+global Qref;    
+Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
+Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
+
+%%-------------------------------------------------------------------------
+%%Define the testcase
+ v = [7 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
+
+cases(:,1) = v;
+cases(:,2) =repmat(Qref.setpoint,5,1);
+
+if Optimisation.Npv > 0
+    irradiance = [50 50 50 50 50 340 340 340 340 340 680 680 680 680 680 ...
+        510 510 510 510 510 170 170 170 170 170];
+    cases(:,3) = irradiance;
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% fsmin = [0.2 0.35 0.5 1];
+% fsmax = [2 5 10];
+% ndimmin = [1 0.9 0.8];
+% ndimmax = [1 0.5 0.3 0.1];
+% global parameter
+% for k = 1:length(fsmin)
+% parameter.fs_factor_start = fsmin(k);
+% for kk = 1:length(fsmax)
+% parameter.fs_factor_end = fsmax(kk);
+% for kkk = 1:length(ndimmin)
+% parameter.n_random_ini = ndimmin(kkk);
+% for kkkk = 1:length(ndimmax)
+% parameter.n_random_last = ndimmax(kkkk);
+% Populationsize = [1 5 10 20 35 50];
+% global parameter proc;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Optimisation.w3 = 0.05;
+% Optimisation.w4 = 0.15;
+% w1 = 0:0.05:(1-Optimisation.w3-Optimisation.w4);
+% 
+% w3 = 0:0.05:0.2;
+% w4 = 0:0.05:0.2;
+% 
+% %sweep over different weights
+% for k = 1:length(w3)
+% %timer for sweep
+% sweeptime = tic;
+% %update weights
+% % Optimisation.w1 = w1(k);        %Weight of Ploss
+% % Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)-w1(k);        %Weight of switching
+% 
+% Optimisation.w3 = w3(k);
+% Optimisation.w4 = w4(k);
+% Optimisation.w1 = (1-Optimisation.w3-Optimisation.w4)/2;
+% Optimisation.w2 = (1-Optimisation.w3-Optimisation.w4)/2;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%-------------------------------------------------------------------------
+%%Run different cases
+    for j = 2:Optimisation.Ncases+1
+        
+        %%Set j for internal use
+        Optimisation.t = j;
+        
+        %%Initialise the Results struct with NaNs for each case
+        initialise_results_struct(); 
+        
+        %%Compute the allowed range of Qpcc w.r.t. the setpoints
+        qpcc_limits(cases(j-1,2)); 
+%         qpcc_limits(cases(1,2));
+        
+        %%Compute the reactive power generation per string depending on the
+        %%windspeed
+        if Optimisation.Npv > 0
+            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1),cases(j-1,3));
+%             [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(1,1),cases(1,3));
+        else
+            [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(j-1,1));
+%             [Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg] = generate_case(cases(1,1));            
+        end
+        
+        %%Update boundaries lb/ub
+        [lb, ub]= boundary_initialise(Qmin_wtg, Qmax_wtg, Qmin_pvg, Qmax_pvg);
+        
+        %%Case duration timer
+        start_case = tic;
+        
+        %%Run a case multiple times
+        for i = 1:Optimisation.Nruns
+        tic;
+        fprintf('************* Case %d, Run %d *************\n',j-1, i);
+
+        %%Reinitialise fitness evaluation counter
+        FCount = 0;
+
+        %%Case of the different algorithms
+        switch Optimisation.algorithm
+            case 1
+                X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
+            case 2
+                X = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
+            case 3
+                ff_par.fitEval = 0;
+                ff_par.bestFitEval = 0;
+                [gbestfit, X] = CDEEPSO_algorithm(fun,lb,ub);
+            case 4
+                [gbestfit, X] = mvmo_ceno(fun,lb,ub);
+        end
+
+        %%Store the best solution and fitness of this run
+        Results(j).Xbest(i+1,:) = round_discrete_vars(X);
+        switch Optimisation.algorithm
+            case {1,2}
+                Results(j).Fbest(i+1) = Keeptrack.FitBest(end);
+            case {3,4}
+                Results(j).Fbest(i+1) = gbestfit;
+        end
+
+        %%Compute the Results(j) of the different OF parameters and Qpcc using the
+        %%final solution and store them in results
+        [Results(j).Ploss(i+1), Results(j).Tap_changes(i+1), Results(j).Reactors_changes(i+1)...
+            ,Results(j).extremeness_setpoints(i+1), Results(j).total_cost_per_run(i+1), Results(j).Qaccuracy(i+1)]...
+            = compute_results(Results(j).Xbest(i+1,:),cases(j-1,2));
+%         [Results(j).Ploss(i+1), Results(j).Tap_changes(i+1), Results(j).Reactors_changes(i+1)...
+%             ,Results(j).extremeness_setpoints(i+1), Results(j).total_cost_per_run(i+1), Results(j).Qaccuracy(i+1)]...
+%             = compute_results(Results(j).Xbest(i+1,:),cases(1,2));
+
+
+        %%Initilise matrix with FitBest progress at each iteration
+        if i == 1
+            Results(j).Fit_progress = NaN * zeros(Optimisation.Nruns+1,FCount);
+            Results(j).Violation_composition_progress = NaN * zeros(FCount,3,Optimisation.Nruns+1);
+        elseif FCount > size(Results(j).Fit_progress,2)
+            dis = FCount-size(Results(j).Fit_progress,2);
+            Results(j).Fit_progress(:,end+1:FCount) = repmat(Results(j).Fit_progress(:,end),1,dis);
+            Results(j).Violation_composition_progress(end+1:FCount,:,:) = ...
+                 repmat(Results(j).Violation_composition_progress(end,:,:),dis,1,1);
+        end
+        
+        %% RESULTS STRUCT USED FOR PERFORMANCE EVALUATION
+        %%store the progress of FitBest of this iteration
+        Results(j).Fit_progress(i+1,:) = Keeptrack.FitBest;
+        Results(j).Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
+        Results(j).runtime(i,1) = toc;
+        
+        %%print the runtime of a run
+        fprintf('Case %2d, Run %2d: %2f seconds \n',j-1,i,Results(j).runtime(i,1));
+        
+        %%plot if desired
+        if plot == 1
+            animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
+        end
+
+        end
+        
+        %%calculate best/worst/mean of Ploss
+        MaxPloss = Systemdata.mpc.baseMVA;
+        Results(j).Ploss_best = min(Results(j).Ploss);
+        Results(j).Ploss_worst = max(Results(j).Ploss(Results(j).Ploss < MaxPloss));
+        Results(j).Ploss_mean = mean(Results(j).Ploss(Results(j).Ploss < MaxPloss));
+        
+        %%save the best fitness and solution 
+        Results(j).Times_converged = sum(Results(j).Fbest<=1e3);
+        best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);
+        Results(j).best_run_fitness = min(Results(j).Fbest);
+        Results(j).best_run_solution = Results(j).Xbest(best_index,:);
+        
+        %%calculates consistency performance
+        Results(j).avg_fitness = mean(Results(j).Fbest(2:end));
+        Results(j).std_fitness = std(Results(j).Fbest(2:end));
+        Results(j).std_solution = std(Results(j).Xbest(2:end,:));
+        
+        %%calculate cost per case
+        Results(j).total_cost_per_case = mean(Results(j).total_cost_per_run(2:end));
+        %%compute the average runtime
+        Results(j).avg_runtime = mean(Results(j).runtime(:,1));
+        Results(j).total_runtime = toc(start_case);
+        
+        %%print the total case runtime
+        fprintf('Case %2d, Total Runtime: %2f seconds \n',j-1,Results(j).total_runtime);
+    end
 % end
-tic;
-fprintf('************* Run %d *************\n', i);
+% end
+% end
+% end
 
-%%reinitialise fitness evaluation counter
-FCount = 0;
-
-%%case of the different algorithms
-switch Optimisation.algorithm
-    case 1
-        X = ga(fun,Optimisation.Nvars,[],[],[],[],lb,ub,[],options);
-    case 2
-        X = particleswarm(fun,Optimisation.Nvars,lb,ub,options);
-    case 3
-        ff_par.fitEval = 0;
-        ff_par.bestFitEval = 0;
-        [gbestfit, X] = CDEEPSO_algorithm(fun,lb,ub);
-    case 4
-        [gbestfit, X] = mvmo_ceno(fun,lb,ub);
+%%total costs of optimisation
+total_cost = 0;
+for j = 2:Optimisation.Ncases+1
+    total_cost = total_cost + Results(j).total_cost_per_case;
 end
 
-%%store the best solution and fitness of this run
-Results.Xbest(i+1,:) = X;
-switch Optimisation.algorithm
-    case {1,2}
-        Results.Fbest(i+1) = Keeptrack.FitBest(end);
-    case {3,4}
-        Results.Fbest(i+1) = gbestfit;
-end
-
-   
-
-%%compute the results of the different OF parameters and Qpcc using the
-%%final solution and store them in results
-[Results.Ploss(i+1), Results.tchanges(i+1), Results.rchanges(i+1),...
-    Results.Qaccuracy(i+1)] = compute_results(X,i+1);
-
-%%initilise matrix with FitBest progress at each iteration
-if i == 1
-    Results.Fit_progress = NaN * zeros(Optimisation.Nruns+1,FCount);
-    Results.Violation_composition_progress = NaN * zeros(FCount,3,Optimisation.Nruns+1);
-elseif FCount > size(Results.Fit_progress,2)
-    dis = FCount-size(Results.Fit_progress,2);
-    Results.Fit_progress(:,end+1:FCount) = repmat(Results.Fit_progress(:,end),1,dis);
-    Results.Violation_composition_progress(end+1:FCount,:,:) = ...
-         repmat(Results.Violation_composition_progress(end,:,:),dis,1,1);
-end
-%%store the progress of FitBest of this iteration
-Results.Fit_progress(i+1,:) = Keeptrack.FitBest;
-Results.Violation_composition_progress(:,:,i+1) = Keeptrack.violation_composition;
-Results.runtime(i,1) = toc;
-fprintf('Run %2d: %2f seconds \n',i,Results.runtime(i,1));
-%%plot if desired
-if plot == 1
-    animated_plot_fitness(Keeptrack.SolBest,Keeptrack.FitBest);
-end
-
-end
-
-MaxPloss = 10;
-Results.Ploss_best = min(Results.Fbest);
-Results.Ploss_worst = max(Results.Fbest(Results.Fbest < 10));
-Results.Ploss_mean = mean(Results.Fbest(Results.Fbest < 10));
-Results.Times_converged = sum(Results.Fbest<10);
-Results.avg_runtime = mean(Results.runtime(:,1));
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%save different variables into a cell for comparison
+% Data{k}.Results = Results;
+% Data{k}.Optimisation = Optimisation;
+% Data{k}.total_costs = total_cost;
+% Data{k}.total_sweeptime = toc(sweeptime);
+% 
+% %%print sweep done
+% fprintf('*****************************************\n')
+% fprintf('Sweep %2d done!! Total sweeptime: %2f seconds\n',k,Data{k}.total_sweeptime)
+% fprintf('*****************************************\n')
+% end
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%save the result if desired
 if store_results == 1
     savedata
 end
 
+%%save and print the total execution time
+total_execution_time = toc(total_execution_time);
+fprintf('Total Execution time: %2f seconds \n',total_execution_time);

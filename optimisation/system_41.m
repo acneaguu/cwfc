@@ -1,17 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Task Force on Modern Heuristic Optimization Test Beds
-% Working Group on Modern Heuristic Optimization
-% Intelligent Systems Subcommittee
-% Power System Analysis, Computing, and Economic Committee
-%
-% Dr.-Ing. Jose L. Rueda (E-Mail: jose.rueda@uni-due.de)
-% Sebastian Wildenhues (E-Mail: sebastian.wildenhues@uni-due.de)
-% 11th February 2014
-%
-% This is a typical layout of an off-shore WPP. Parameters of system 
-% components were taken from a off-shore WPP in Germany.
-%
-% See Matpower user's manual for details on the case file format.
+%%README:
+%%Dr.-Ing. Jose L. Rueda (E-Mail: jose.rueda@uni-due.de)
+%%Sebastian Wildenhues (E-Mail: sebastian.wildenhues@uni-due.de)
+%%11th February 2014
+
+%%Task Force on Modern Heuristic Optimization Test Beds
+%%Working Group on Modern Heuristic Optimization
+%%Intelligent Systems Subcommittee
+%%Power System Analysis, Computing, and Economic Committee
+
+%%This is a typical layout of an off-shore WPP. Parameters of system 
+%%components were taken from a off-shore WPP in Germany.
+%%See Matpower user's manual for details on the case file format.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function mpc = system_41
 %% MATPOWER Case Format : Version 2
@@ -21,7 +21,7 @@ mpc.version = '2';
 %% system MVA base
 mpc.baseMVA = 100;
 
-%% bus data
+%% Bus data
 % bus_i	   type	    Pd	   Qd	    Gs	    Bs	   area	   Vm	   Va	   baseKV  zone	   Vmax	    Vmin
 mpc.bus = [
 	1       3       0       0       0       0       1       1       0        220     1       1.01 	0.99;
@@ -67,13 +67,13 @@ mpc.bus = [
    41       1       -5      0       0       0       1       1       0        0.95    1       1.05	0.95;
 ];
 
-%% generator data
+%% Generator data
 %  bus	Pg	    Qg	    Qmax	Qmin	Vg	   mBase  status   Pmax    Pmin	    Pc1	   Pc2	  Qc1min  Qc1max  Qc2min  Qc2max  ramp_agc  ramp_10  ramp_30  ramp_q  apf
 mpc.gen = [
 	1	0     0       1000     -1000	1.02	100     1       1000     0       0       0       0       0       0       0       0       0       0       0       0; %Equivalent grid
 ];
 
-%% branch data
+%% Branch data
 % fbus  tbus	   r	       x	      b	       rateA   rateB   rateC  ratio   angle  status	    ratiomax	ratiomin
 mpc.branch = [
 	1	2       0.0016      0.0640      0           200     200     200     1.01	0       1       1.149    0.851;

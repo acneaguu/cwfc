@@ -1,8 +1,11 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%README:
 %%This function is used to compute the constraint violations of the system.
 %%It returns a vector containing which constraints are violated ('1') and a
 %%number indicating the total number of violations.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [violation_vec, total_violations, composition] = compute_violation_constraints()
-global CONSTANTS Qref Systemdata PFresults Optimisation;
+global CONSTANTS Qref mpopt Systemdata PFresults Optimisation Results; 
 
     %% voltage violations
     %%1 if violation at bus j
@@ -10,7 +13,7 @@ global CONSTANTS Qref Systemdata PFresults Optimisation;
     %update slackbus voltage limits to the one corresponding to Qref
     slack = find(PFresults.bus(:,CONSTANTS.BUS_TYPE) == 3);
     index_slack = find(PFresults.gen(:,1) == slack);
-    Qpcc = PFresults.gen(index_slack,3)./PFresults.baseMVA;  
+    Qpcc = -1*PFresults.gen(index_slack,3)./PFresults.baseMVA;  
     vlimpcc = compute_vlimits(Qpcc);
     PFresults.bus(slack,CONSTANTS.VMAX:CONSTANTS.VMIN) = vlimpcc;
     
@@ -22,7 +25,7 @@ global CONSTANTS Qref Systemdata PFresults Optimisation;
     %%check if Q at PCC is near Qref within the range given by tolerance.
     %%1 if Qpcc is outside the dynamic limits calculated using
     %%qpcc_limits();
-    violation_Qpcc = ((Qpcc > Qref.limits(2)) | (Qpcc < Qref.limits(1)));
+    violation_Qpcc = Optimisation.p2*((Qpcc > Qref.limits(2)) | (Qpcc < Qref.limits(1)));
     %% line flow violations From
     %%1 if violation of current limit in a branch. The current limit is
     %%converted to an apparent power limit 'rate_A'

@@ -12,13 +12,22 @@ end
 % Results_no_opt(7:26) = Data{1,1}.Results(7:26);
 % Results_opt(1:6) = Data{1,4}.Results;
 % Results_opt(7:26) = Data{1,3}.Results(2:21);
+
+for i = 2:26
+   Data{1,2}.Results(i).total_cost_per_case = min(Data{1,2}.Results(i).total_cost_per_run(2:6));
+   Data{1,3}.Results(i).total_cost_per_case = min(Data{1,3}.Results(i).total_cost_per_run(2:6));
+end    
+    
+    
 Results_no_opt = Data{1,1}.Results;
 Results_opt = Data{1,2}.Results;
 Results_opt_tuned = Data{1,3}.Results;
 
 
+
+
 for i = 2:length(Results_opt)
-   Results_opt(i).total_cost_per_case = min(Results_opt(i).total_cost_per_run(2:6));
+
         if Results_no_opt(i).Times_converged >= 5
             costs_no_opt(i-1) =  Results_no_opt(i).total_cost_per_case;
             costs_with_opt(i-1) = Results_opt(i).total_cost_per_case;

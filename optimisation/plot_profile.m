@@ -41,7 +41,7 @@ Ncase = 1:length(cases(:,1));
 %%Plot
 fig = figure(1);
 set(fig,'defaultAxesColorOrder',[0, 0, 0;0, 0, 0]);
-title('Test Profile Optimisation Unit','FontSize',titlesize)
+% title('Test Profile Optimisation Unit','FontSize',titlesize)
 ax = gca;
 ax.FontSize = axes_fontsize;
 hold on
@@ -50,12 +50,12 @@ hold on
 yyaxis left
 plot(Ncase,P,'-b','LineWidth',1.5);
 plot(Ncase,Ppvg,'-','Color','#ff9d3b','LineWidth',1.5);
-ylabel('P_{max} [p.u.]','FontSize',axes_fontsize)
 
 %%Right plot is Qsetpoint
+ylabel('P [p.u.]','FontSize',axes_fontsize)
 yyaxis right
-stairs(Ncase,cases(:,2),'Color','red');
-ylabel('Q_{setpoint} [p.u.]','FontSize',axes_fontsize)
+stairs(Ncase,cases(:,2),'Color','green');
+ylabel('Q [p.u.]','FontSize',axes_fontsize)
 xlabel('Case','FontSize',axes_fontsize)
 
 %%Add legend

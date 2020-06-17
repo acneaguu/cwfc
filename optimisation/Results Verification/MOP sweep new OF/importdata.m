@@ -97,7 +97,7 @@ tot_reactorchanges_010 = sum(reactorchanges_010);
 tot_reactorchanges_015 = sum(reactorchanges_015);
 tot_reactorchanges_020 = sum(reactorchanges_020);
 
-dualplot = 0;
+dualplot = 1;
 
 figure
 if dualplot ~= 1

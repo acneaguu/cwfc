@@ -94,7 +94,7 @@ plot(vcase,costs_w1_sweep(3,:),'--','Color',lightblue)
 % plot(vcase,costs_w1_sweep(4,:))
 plot(vcase,costs_withopt,'Color',green1)
 % plot(vcase,costs_onlyP,'Color',darkblue)
-title('Costs With and Without Optimisation','FontSize',titlesize)
+%title('Costs With and Without Optimisation','FontSize',titlesize)
 xlabel('Case')
 ylabel('Cost [€]')
 % lgd = legend('Costs without optimisation',...
@@ -141,12 +141,12 @@ for i = 2:length(cases)
 end
 figure(2);
 hold on
-title('Cumulative Costs for the Test Profile','FontSize',titlesize)
+%title('Cumulative Costs for the Test Profile','FontSize',titlesize)
 xlabel('Case')
 % xlim([24.97 25])
 
-plot(cases,total_costs_woopt_cum(1,:),'-','Color',red1)
-plot(cases,total_costs_woopt_cum(2,:),'-','Color',orange)
+%plot(cases,total_costs_woopt_cum(1,:),'-','Color',red1)
+%plot(cases,total_costs_woopt_cum(2,:),'-','Color',orange)
 plot(cases,total_costs_w1_sweep_cum(1,:),'-','Color',blue)
 plot(cases,total_costs_w1_sweep_cum(2,:),'--','Color',lightblue)
 plot(cases,total_costs_w1_sweep_cum(3,:),'-.','Color',darkblue2)
@@ -157,8 +157,11 @@ ylabel('Cumulative Cost [€]')
 
 ax = gca;
 ax.FontSize = axes_fontsize;
-lgd = legend('Costs without optimisation \newlineand only Q',...
-    'Costs without optimisation \newlinewith better tap positions','Costs with w_{1} = 0.5',...
+% lgd = legend('Costs without optimisation \newlineand only Q',...
+%     'Costs without optimisation \newlinewith better tap positions','Costs with w_{1} = 0.5',...
+%     'Costs with w_{1} = 0.6','Costs with w_{1} = 0.7',...
+%     'Costs with w_{1} = 0.8','Costs with  w_{1} = 0.9');
+lgd = legend('Costs with w_{1} = 0.5',...
     'Costs with w_{1} = 0.6','Costs with w_{1} = 0.7',...
     'Costs with w_{1} = 0.8','Costs with  w_{1} = 0.9');
 lgd.Location = 'northwest';

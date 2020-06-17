@@ -38,7 +38,8 @@ P_a_string(:,Ntb+1:end) = P_a_pv.';
 %% Run simulation %%
 
 % run initial powerflow % 
-system = loadcase('system_13_350');
+
+system = loadcase('system_17');
 
 P_current_string(1,:) = P_current(:,m);
 

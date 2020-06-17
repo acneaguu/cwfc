@@ -1,10 +1,8 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%README:
-%%This function is used to compute the active and reactive power outputs of
-%%the different strings as function of the wind speed. The output are
-%%two vectors containing the P and Q of each string. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [P,Q] = compute_pq_wtg(windspeed,P_wtg)
+function [Q_wtg] = compute_QboundariesfromPWTG(P)
+%%Function that computes Q boundaries using P as an input instead of 
+%windspeed as an input
+
+    %% Compute Q
     %%WTG data
     %General cut in speed in m/s
     v_c_in = 3;    
@@ -21,29 +19,8 @@ function [P,Q] = compute_pq_wtg(windspeed,P_wtg)
     %Max positive/negative reactive power in MVAr generated for each string
     Q_wt_max = [21.2 18.55 19.15 10.9 22.4 19.15 12.2 19.6 22.4 13.248 19.6 19.6 19.6] ; 
     
-    %% Compute P
-    %%Initialise P
-    nsamples = length(windspeed);
-    P = zeros(nsamples,13);
-
-    %%Convert windspeed to Power using cubic wind power model
-    for i=1:13 
-        for j=1: nsamples
-            %%Apply boundary conditions to determine which equation is valid
-            if(windspeed(j) <= v_c_in) 
-                P(j,i) =0; 
-            elseif ( (windspeed(j) > v_c_in) &&  (windspeed(j) <= v_r) )    
-                P(j,i)=P_wt_max(i)*(windspeed(j)^3-v_c_in^3)/(v_r^3-v_c_in^3);    
-            elseif ((windspeed(j) > v_r) && (windspeed(j) <= v_c_off))
-                P(j,i) = P_wt_max(i);    
-            elseif (windspeed(j) > v_c_off)
-                P(j,i) = 0;
-            end 
-        end
-    end
-    
-    %% Compute Q
     %%Initialise Q
+    nsamples = 1;
     Q = zeros (nsamples, 13);
     
     %%Specifies slope MVAr/MW at beginning for each WTG string
@@ -76,4 +53,5 @@ function [P,Q] = compute_pq_wtg(windspeed,P_wtg)
             end 
         end
     end
+    Q_wtg = Q;
 end

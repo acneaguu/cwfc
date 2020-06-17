@@ -1,3 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%README:
+%%By: Dr. Jose L. Rueda
+%%Date: 02.03.2012
+%%Edited: Alex Neagu & Jinhan Bai
+%%Date: 11/05/2020
+
+%%This is the source code for the MVMO-SHM algorithm. It will return the
+%%solution resulting in the best fitness of the function fhd. The
+%%boundaries of the optimisation variables are given by lb and ub. Before
+%%running this function, initialise using initialise_mvmoshm function.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function  [Fout,Xout] = mvmo_ceno(fhd,lb,ub)
   
 
@@ -16,7 +28,6 @@ function  [Fout,Xout] = mvmo_ceno(fhd,lb,ub)
     global ipp
     global updated
     global nnnnnn
-    global Optimisation
     
     % put the bounds into the corresponding internal variables
     ps.x_min = lb;

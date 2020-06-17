@@ -28,22 +28,27 @@ Qpvg = sum(Qpvg,2)/350;
 axes_fontsize = 15;
 titlesize = 20;
 Ncase = 1:length(cases(:,1));
-
+P_available = P + Ppvg;
 %%plot
 fig = figure(1);
 set(fig,'defaultAxesColorOrder',[0, 0, 0;0, 0, 0]);
-title('Test Profile Optimisation Unit','FontSize',titlesize)
+%title('Test Profile Optimisation Unit','FontSize',titlesize)
 hold on
 %left plot is P
 yyaxis left
 plot(Ncase,P,'-b','LineWidth',1.5);
 plot(Ncase,Ppvg,'-','Color','#ff9d3b','LineWidth',1.5);
-ylabel('P_{max} [p.u.]','FontSize',axes_fontsize)
+ylabel('P [p.u.]','FontSize',axes_fontsize)
 %right plot is Qsetpoint
 yyaxis right
-stairs(Ncase,cases(:,2),'Color','red');
-ylabel('Q_{setpoint} [p.u.]','FontSize',axes_fontsize)
+stairs(Ncase,cases(:,2),'Color','green');
+ylabel('Q [p.u.]','FontSize',axes_fontsize)
 xlabel('Case','FontSize',axes_fontsize)
 
 ax = gca;
 ax.FontSize = axes_fontsize;
+lgd = legend('Generated Active Power: WTG Strings'...
+    ,'Generated Active Power: PVG Strings'...
+    , 'TSO Reactive Power Setpoints'); 
+lgd.FontSize = 15;
+lgd.Location = 'northwest';

@@ -41,10 +41,10 @@ hold on
 xlabel('Case')
 yyaxis left
 plot(whichcase,Ploss_noopt,'-o','Color','red','MarkerSize',3)           %%no opt
-plot(whichcase,Ploss_withopt(:,1),'-o','Color',blue,'MarkerSize',3)   %%opt with Q
+plot(whichcase,Ploss_withopt(:,4),'-o','Color',blue,'MarkerSize',3)   %%opt with Q
 ylabel('Loss [MW]')
-title('Active Power Losses: No Optimisation vs Optimisation','FontSize',20);
-reduction_losses(:,1) = 1e3.*(Ploss_noopt-Ploss_withopt(:,4));
+%title('Active Power Losses: No Optimisation vs Optimisation','FontSize',20);
+reduction_losses(:,1) = 1e3.*(Ploss_noopt-Ploss_withopt(:,4)); %reduction due to opt
 
 yyaxis right
 plot(whichcase,reduction_losses(:,1),'-o','Color',right_col,'MarkerSize',3);
@@ -73,7 +73,7 @@ plot(whichcase,Ploss_withopt(:,3),'-.o','Color',lightblue,'MarkerSize',3)  %%opt
 plot(whichcase,Ploss_withopt(:,4),':o','Color',darkblue2,'LineWidth',1.25,'MarkerSize',3)  %%opt with everything
 xlabel('Case')
 ylabel('Loss [MW]')
-title('Active Power Losses with Different Controllable Devices','FontSize',20)
+%title('Active Power Losses with Different Controllable Devices','FontSize',20)
 
 ax = gca;
 ax.FontSize = axes_fontsize;
@@ -92,7 +92,7 @@ xlabel('Case')
 ylabel('Loss [MW]')
 xlim([20.5 25.1])
 ylim([4.9 5.8])
-title({'Active Power Losses with Different Controllable Devices:';'zoomed in around case 21-25'},'FontSize',20)
+%title({'Active Power Losses with Different Controllable Devices:';'zoomed in around case 21-25'},'FontSize',20)
 
 ax = gca;
 ax.FontSize = axes_fontsize;
@@ -109,7 +109,7 @@ plot(whichcase,reduction_losses(:,3),'-.o','Color',lightblue,'MarkerSize',3);   
 plot(whichcase,reduction_losses(:,4),':o','Color',darkblue2,'LineWidth',1.25,'MarkerSize',3);     % reduction due to everything
 xlabel('Case')
 ylabel('Improvement of Reduction in Losses [kW]')
-title('Improvement of Reduction in Active Power Losses with Different Controllable Devices','FontSize',20)
+%title('Improvement of Reduction in Active Power Losses with Different Controllable Devices','FontSize',20)
 ax = gca;
 ax.FontSize = axes_fontsize;
 lgd = legend('Improvement with Q and taps','Improvement with Q and reactor', 'Improvement with Q, taps and reactor'); 

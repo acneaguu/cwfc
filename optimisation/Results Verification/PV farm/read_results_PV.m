@@ -46,7 +46,7 @@ yyaxis left
 plot(cases,costs_no_opt,'-o','Color','red','MarkerSize',3);
 plot(cases,costs_with_opt,'-o','Color','blue','MarkerSize',3); 
 ylabel('Costs [€]');
-title('Costs: No Optimisation vs Optimisation','FontSize',20);
+% title('Costs: No Optimisation vs Optimisation','FontSize',20);
 
 yyaxis right
 plot(cases,cost_reduction,'-o','Color',right_col,'MarkerSize',3);
@@ -69,16 +69,16 @@ yyaxis left
 plot(cases,costs_with_opt,'-o','Color','red','MarkerSize',3);
 plot(cases,costs_with_optpar,'-o','Color','blue','MarkerSize',3); 
 ylabel('Costs [€]');
-title('Tuning Comparison: Before vs After ','FontSize',20);
+% title('Tuning Comparison: Before vs After ','FontSize',20);
 
 yyaxis right
 plot(cases,reduction_improvement,'-o','Color',right_col,'MarkerSize',3);
-ylabel('Cost Reduction Improvement [€]');
+ylabel('Cost Improvement [€]');
 
 axes_fontsize = 15;
 ax2 = gca;
 ax2.FontSize = axes_fontsize;
-lgd2 = legend('Without Tuning','With Tuning','Reduction Improvement');
+lgd2 = legend('Without Tuning','With Tuning','Improvement');
 lgd2.FontSize = 15;
 lgd2.Location = 'northwest';
         

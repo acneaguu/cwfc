@@ -21,7 +21,7 @@ rng default
 %%Optimisation containts the optimisation problem parameters
 global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
-Optimisation.Nturbines = 13;                %Number of turbine strings
+Optimisation.Nturbines = 91;                %Number of turbine strings
 Optimisation.Npv = 4;                       %Number of pv generator strings
 Optimisation.Ntr = 2;                       %Number of transformers with discrete tap positions
 Optimisation.Ntaps = [17;17];               %Number of tap positions per transformer                                             %(must have dimension of Ntr and separate by ;)
@@ -29,16 +29,21 @@ Optimisation.Nr = 1;                        %Number of discrete reactors
 
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
     Optimisation.Ntr + Optimisation.Nr;     %Number of optimisation variables
-Optimisation.which_discrete = [18:20];      %Indeces of the discrete variables
+Optimisation.which_discrete = [(Optimisation.Nvars-Optimisation.Ntr-...
+    Optimisation.Nr):Optimisation.Nvars];   %Indeces of the discrete variables
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
-initialise_systemdata(system_13_350MVA);    %Initialise the topology
+if Optimisation.Nturbines == 13
+    initialise_systemdata(system_13_350MVA);    %Initialise the topology
+elseif Optimisation.Nturbines == 91
+    initialise_systemdata(system_13_stringlevel);    %Initialise the topology
+end
 
 %%Optimisation run settings
 initialise_optimisation_weights();  %Sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %Number of evaluated time instances
-Optimisation.Nruns = 1;             %Number of runs per case
+Optimisation.Ncases = 25;            %Number of evaluated time instances
+Optimisation.Nruns = 5;             %Number of runs per case
 Optimisation.Neval = 500*35;        %Max allowed function evaluations
 Optimisation.Populationsize = 35;   %Size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso 
@@ -95,11 +100,12 @@ global Keeptrack FCount;    %Some global vars to keep track of the calls of
 %%Setpoint at PCC given by TSO
 global Qref;    
 Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
-Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
+% Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
+Qref.tolerance = 6.25/Systemdata.mpc.baseMVA;
 
 %%-------------------------------------------------------------------------
 %%Define the testcase
- v = [7 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
+ v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
 
 cases(:,1) = v;
 cases(:,2) =repmat(Qref.setpoint,5,1);

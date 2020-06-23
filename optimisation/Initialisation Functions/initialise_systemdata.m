@@ -70,8 +70,8 @@ if Optimisation.Nr ~=0
     
     %%Find the branches to which the reactors belong
     Systemdata.shuntbranch = (Systemdata.mpc.branch(:,CONSTANTS.T_BUS)...
-    == find(Systemdata.shunts)|Systemdata.mpc.branch(:,CONSTANTS.F_BUS)...
-    == find(Systemdata.shunts))~=0;
+    == Systemdata.mpc.bus(Systemdata.shunts,CONSTANTS.BUS_I)|Systemdata.mpc.branch(:,CONSTANTS.F_BUS)...
+    == Systemdata.mpc.bus(Systemdata.shunts,CONSTANTS.BUS_I))~=0;
 else
     Systemdata.shunts = [];
     Systemdata.shuntbranch=[];

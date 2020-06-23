@@ -21,7 +21,7 @@ rng default
 %%Optimisation containts the optimisation problem parameters
 global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
-Optimisation.Nturbines = 13;                %Number of turbine strings
+Optimisation.Nturbines = 91;                %Number of turbine strings
 Optimisation.Npv = 4;                       %Number of pv generator strings
 Optimisation.Ntr = 2;                       %Number of transformers with discrete tap positions
 Optimisation.Ntaps = [17;17];               %Number of tap positions per transformer                                             %(must have dimension of Ntr and separate by ;)
@@ -42,15 +42,15 @@ end
 %%Optimisation run settings
 initialise_optimisation_weights();  %Sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 25;            %Number of evaluated time instances
-Optimisation.Nruns = 5;             %Number of runs per case
-Optimisation.Neval = 250*35;        %Max allowed function evaluations
+Optimisation.Ncases = 1;            %Number of evaluated time instances
+Optimisation.Nruns = 1;             %Number of runs per case
+Optimisation.Neval = 500*35;        %Max allowed function evaluations
 Optimisation.Populationsize = 35;   %Size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso 
                                     %4 for MVMO_SHM
 Optimisation.print_progress = 1;    %Plots runs in command window
 Optimisation.print_interval = 2000; %Interval of printed steps
-Optimisation.print_pfresults = 0;   %Plots powerflow results of optimal solution
+Optimisation.print_pfresults = 1;   %Plots powerflow results of optimal solution
 
 %%-------------------------------------------------------------------------
 %%Settings to plot the power flow and store the results of the optimisation
@@ -99,20 +99,20 @@ global Keeptrack FCount;    %Some global vars to keep track of the calls of
 %%-------------------------------------------------------------------------
 %%Setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286]; %in p.u. of baseMVA
+Qref.setpoint =  [0.286; -0.286; -0.143; 0; 0.143;]; %in p.u. of baseMVA
 % Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 Qref.tolerance = 6.25/Systemdata.mpc.baseMVA;
 
 %%-------------------------------------------------------------------------
 %%Define the testcase
- v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
+ v = [15 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15]';
 
 cases(:,1) = v;
 cases(:,2) =repmat(Qref.setpoint,5,1);
 
 if Optimisation.Npv > 0
-    irradiance = [50 50 50 50 50 340 340 340 340 340 680 680 680 680 680 ...
-        510 510 510 510 510 170 170 170 170 170];
+    irradiance = [170 50 50 50 50 50 340 340 340 340 340 680 680 680 680 680 ...
+        510 510 510 510 510 170 170 170 170];
     cases(:,3) = irradiance;
 end
 

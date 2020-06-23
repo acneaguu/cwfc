@@ -44,7 +44,7 @@ initialise_optimisation_weights();  %Sets the weights of the different
                                     %constraints and objectives
 Optimisation.Ncases = 25;            %Number of evaluated time instances
 Optimisation.Nruns = 5;             %Number of runs per case
-Optimisation.Neval = 500*35;        %Max allowed function evaluations
+Optimisation.Neval = 250*35;        %Max allowed function evaluations
 Optimisation.Populationsize = 35;   %Size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso 
                                     %4 for MVMO_SHM

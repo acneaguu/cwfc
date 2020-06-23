@@ -20,10 +20,10 @@ Optimisation.p3 = 1;                %Penalty for power violation
 % Optimisation.w4 = 0.05;             %Weight of the extremeness of Qstrings
 
 %Without optimisation
-Optimisation.w1 = 0.25;              %Weight of Ploss
-Optimisation.w2 = 0.25;              %Weight of transformer switches
-Optimisation.w3 = 0.25;              %Weight of reactor switching
-Optimisation.w4 = 0.25;              %Weight of the extremeness of Qstrings
+Optimisation.w1 = 0;              %Weight of Ploss
+Optimisation.w2 = 0;              %Weight of transformer switches
+Optimisation.w3 = 0;              %Weight of reactor switching
+Optimisation.w4 = 0;              %Weight of the extremeness of Qstrings
 
 %%Cost of objectives
 Optimisation.timeinterval = 0.25;   %Time interval per case; used for

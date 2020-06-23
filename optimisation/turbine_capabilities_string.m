@@ -5,7 +5,7 @@ stepsize = 0.1;
 vmin = 0;
 vmax = 30;
 v = vmin:stepsize:vmax;
-[P,Q] = compute_pq_wtg_string(7);
+[P,Q] = compute_pq_wtg_string(v);
 endsamp_string = 25/stepsize + 1;
 % figure(1)
 % plot(P(:,1),Q(:,1))

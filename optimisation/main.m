@@ -42,8 +42,8 @@ end
 %%Optimisation run settings
 initialise_optimisation_weights();  %Sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 1;            %Number of evaluated time instances
-Optimisation.Nruns = 1;             %Number of runs per case
+Optimisation.Ncases = 25;            %Number of evaluated time instances
+Optimisation.Nruns = 5;             %Number of runs per case
 Optimisation.Neval = 500*35;        %Max allowed function evaluations
 Optimisation.Populationsize = 35;   %Size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso 
@@ -99,20 +99,20 @@ global Keeptrack FCount;    %Some global vars to keep track of the calls of
 %%-------------------------------------------------------------------------
 %%Setpoint at PCC given by TSO
 global Qref;    
-Qref.setpoint =  [0.286; -0.286; -0.143; 0; 0.143;]; %in p.u. of baseMVA
+Qref.setpoint =  [-0.286; -0.143; 0; 0.143; 0.286;]; %in p.u. of baseMVA
 % Qref.tolerance = 0.0339/2; %tolerance at Q = 0 MVar
 Qref.tolerance = 6.25/Systemdata.mpc.baseMVA;
 
 %%-------------------------------------------------------------------------
 %%Define the testcase
- v = [15 4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15]';
+ v = [4.5 4.5 4.5 4.5 4.5 5 5 5 5 5 7 7 7 7 7 12 12 12 12 12 15 15 15 15 15]';
 
 cases(:,1) = v;
 cases(:,2) =repmat(Qref.setpoint,5,1);
 
 if Optimisation.Npv > 0
-    irradiance = [170 50 50 50 50 50 340 340 340 340 340 680 680 680 680 680 ...
-        510 510 510 510 510 170 170 170 170];
+    irradiance = [50 50 50 50 50 340 340 340 340 340 680 680 680 680 680 ...
+        510 510 510 510 510 170 170 170 170 170];
     cases(:,3) = irradiance;
 end
 

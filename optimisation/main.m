@@ -275,7 +275,7 @@ end
         Results(j).std_solution = std(Results(j).Xbest(2:end,:));
         
         %%calculate cost per case
-        Results(j).total_cost_per_case = mean(Results(j).total_cost_per_run(2:end));
+        Results(j).total_cost_per_case = min(Results(j).total_cost_per_run(2:end));
         %%compute the average runtime
         Results(j).avg_runtime = mean(Results(j).runtime(:,1));
         Results(j).total_runtime = toc(start_case);

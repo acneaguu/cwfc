@@ -264,7 +264,7 @@ end
         Results(j).Ploss_mean = mean(Results(j).Ploss);
         
         %%save the best fitness and solution 
-        Results(j).Times_converged = sum(Results(j).Fbest<=1e3);
+        Results(j).Times_converged = sum(Results(j).Fbest<=1e10);
         best_index = find(Results(j).Fbest == min(Results(j).Fbest),1);
         Results(j).best_run_fitness = min(Results(j).Fbest);
         Results(j).best_run_solution = Results(j).Xbest(best_index,:);

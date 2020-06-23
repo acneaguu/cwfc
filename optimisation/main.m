@@ -21,7 +21,7 @@ rng default
 %%Optimisation containts the optimisation problem parameters
 global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
-Optimisation.Nturbines = 91;                %Number of turbine strings
+Optimisation.Nturbines = 13;                %Number of turbine strings
 Optimisation.Npv = 4;                       %Number of pv generator strings
 Optimisation.Ntr = 2;                       %Number of transformers with discrete tap positions
 Optimisation.Ntaps = [17;17];               %Number of tap positions per transformer                                             %(must have dimension of Ntr and separate by ;)
@@ -259,10 +259,9 @@ end
         end
         
         %%calculate best/worst/mean of Ploss
-        MaxPloss = Systemdata.mpc.baseMVA;
         Results(j).Ploss_best = min(Results(j).Ploss);
-        Results(j).Ploss_worst = max(Results(j).Ploss(Results(j).Ploss < MaxPloss));
-        Results(j).Ploss_mean = mean(Results(j).Ploss(Results(j).Ploss < MaxPloss));
+        Results(j).Ploss_worst = max(Results(j).Ploss);
+        Results(j).Ploss_mean = mean(Results(j).Ploss);
         
         %%save the best fitness and solution 
         Results(j).Times_converged = sum(Results(j).Fbest<=1e3);

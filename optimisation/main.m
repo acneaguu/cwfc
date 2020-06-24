@@ -21,10 +21,13 @@ rng default
 %%Optimisation containts the optimisation problem parameters
 global Optimisation ff_par Systemdata;
 %%Description of variables to optimise
-Optimisation.Nturbines = 91;                %Number of turbine strings
+Optimisation.Nturbines = 91;                %Number of turbines:
+                                            %-13 for stringlevel, 
+                                            %-91 for turbinelevel
 Optimisation.Npv = 4;                       %Number of pv generator strings
 Optimisation.Ntr = 2;                       %Number of transformers with discrete tap positions
-Optimisation.Ntaps = [17;17];               %Number of tap positions per transformer                                             %(must have dimension of Ntr and separate by ;)
+Optimisation.Ntaps = [17;17];               %Number of tap positions per transformer                                             
+                                            %(must have dimension of Ntr and separate by ;)
 Optimisation.Nr = 1;                        %Number of discrete reactors
 
 Optimisation.Nvars = Optimisation.Nturbines + Optimisation.Npv + ...
@@ -34,16 +37,16 @@ Optimisation.which_discrete = [(Optimisation.Nvars-Optimisation.Ntr-...
 % Optimisation.steps =[0.0168235 0.0168235 1];%steps of the discrete variables
 logic_optvars();                            %Logic vectors for optimisation vector
 if Optimisation.Nturbines == 13
-    initialise_systemdata(system_13_350MVA);    %Initialise the topology
+    initialise_systemdata(system_13_350MVA);   %Initialise strinlevel topology
 elseif Optimisation.Nturbines == 91
-    initialise_systemdata(system_13_stringlevel);    %Initialise the topology
+    initialise_systemdata(system_91_100MVA);   %Initialise turbinelevel topology
 end
 
 %%Optimisation run settings
 initialise_optimisation_weights();  %Sets the weights of the different 
                                     %constraints and objectives
-Optimisation.Ncases = 25;            %Number of evaluated time instances
-Optimisation.Nruns = 5;             %Number of runs per case
+Optimisation.Ncases = 1;            %Number of evaluated time instances
+Optimisation.Nruns = 1;             %Number of runs per case
 Optimisation.Neval = 500*35;        %Max allowed function evaluations
 Optimisation.Populationsize = 35;   %Size of the population
 Optimisation.algorithm = 4;         %1 for ga, 2 for pso, 3 for cdeepso 

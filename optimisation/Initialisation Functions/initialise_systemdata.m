@@ -32,7 +32,7 @@ Systemdata.wtg_pos = logical([0; ones(Optimisation.Nturbines,1); ...
 %%If Nturbines = 91, the string model is used. Then, the turbine types are
 %%extracted from the excel file
 if Optimisation.Nturbines == 91
-    [~, types] = xlsread('Branch_calculations_with_strings.xlsx','Sheet1', 'O146:O251');
+    [~, types] = xlsread('Branch_calculations_turbinelevel.xlsx','Sheet1', 'O146:O251');
     Systemdata.wtg_type = types(not(strcmp('',types)));
 end                                          
 %%logic vector with 1 on pvg positions in gen matrix

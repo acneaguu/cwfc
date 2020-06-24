@@ -13,7 +13,7 @@ if Optimisation.Nturbines == 13
     [P_wtg, Q_wtg] = compute_pq_wtg(windspeed);
 elseif Optimisation.Nturbines == 91
     %%compute P and Q of different turbine types
-    [P, Q] = compute_pq_wtg_string(windspeed);
+    [P, Q] = compute_pq_wtg_turbinelevel(windspeed);
     
     %%initialise empty vars
     P_wtg = NaN * ones(1,Optimisation.Nturbines);

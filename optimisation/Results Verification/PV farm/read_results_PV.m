@@ -44,8 +44,8 @@ for i = 2:length(Results_opt)
             
             
 %             reduction_improvement(i-1) = costs_with_opt(i-1)- cost_turbinelevel(i-1); 
-            reduction_improvement(i-1) = cost_with_opt_turbinelevel(i-1)- cost_equalw(i-1); 
-%             reduction_improvement(i-1) = Results_opt(i).best_run_fitness - Results_turbinelevel(i).best_run_fitness; 
+%             reduction_improvement(i-1) = cost_with_opt_turbinelevel(i-1)- cost_equalw(i-1); 
+            reduction_improvement(i-1) = Results_opt(i).best_run_fitness - Results_opt_tuned(i).best_run_fitness; 
             
         end
 end
@@ -101,7 +101,7 @@ ylabel('Cost Improvement [€]');
 axes_fontsize = 15;
 ax2 = gca;
 ax2.FontSize = axes_fontsize;
-lgd2 = legend('String level','Turbine level','Improvement');
+lgd2 = legend('Without tuning','With tuning','Improvement');
 lgd2.FontSize = 15;
 lgd2.Location = 'northwest';
         

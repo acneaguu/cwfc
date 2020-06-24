@@ -39,9 +39,10 @@ for i = 2:length(Results_opt)
             cost_equalw(i-1) = Results_opt_equal_ws(i).total_cost_per_case;
             cost_no_opt_turbinelevel(i-1) = Results_turbinelevel_no_opt(i).total_cost_per_case;
             
-%             cost_reduction(i-1) = costs_no_opt(i-1)-costs_with_opt(i-1);
-            cost_reduction(i-1) = cost_no_opt_turbinelevel(i-1)-cost_with_opt_turbinelevel(i-1);
-            
+            cost_reduction_stringlevel(i-1) = costs_no_opt(i-1)-costs_with_opt(i-1);
+            cost_reduction_turbinelevel(i-1) = cost_no_opt_turbinelevel(i-1)-cost_with_opt_turbinelevel(i-1);
+            relative_reduction_str(i-1) = cost_reduction_stringlevel(i-1)/costs_no_opt(i-1);
+            relative_reduction_tur(i-1) = cost_reduction_turbinelevel(i-1)/cost_no_opt_turbinelevel(i-1);
             
 %             reduction_improvement(i-1) = costs_with_opt(i-1)- cost_turbinelevel(i-1); 
 %             reduction_improvement(i-1) = cost_with_opt_turbinelevel(i-1)- cost_equalw(i-1); 
@@ -66,13 +67,13 @@ set(fig1,'defaultAxesColorOrder',[left_col;left_col]);
 hold on
 xlabel('Case')
 yyaxis left
-plot(cases(1:24),cost_no_opt_turbinelevel(1:24),'-o','Color','red','MarkerSize',3);
-plot(cases(1:24),cost_with_opt_turbinelevel(1:24),'-o','Color','blue','MarkerSize',3); 
+plot(cases,costs_no_opt,'-o','Color','red','MarkerSize',3);
+plot(cases,costs_with_opt,'-o','Color','blue','MarkerSize',3); 
 ylabel('Costs [€]');
 % title('Costs: No Optimisation vs Optimisation','FontSize',20);
 
 yyaxis right
-plot(cases(1:24),cost_reduction(1:24),'-o','Color',right_col,'MarkerSize',3);
+plot(cases,cost_reduction_stringlevel,'-o','Color',right_col,'MarkerSize',3);
 ylabel('Cost Reduction [€]');
 
 
@@ -83,8 +84,46 @@ lgd1 = legend('Without optimisation','With optimisation','Feasibility of optimis
 lgd1.FontSize = 15;
 lgd1.Location = 'northwest';
 
+fig1 = figure(2);
+left_col = [0 0 0];
+right_col = [0/255 128/255 0];
+set(fig1,'defaultAxesColorOrder',[left_col;left_col]);
+hold on
+xlabel('Case')
+yyaxis left
+plot(cases,cost_no_opt_turbinelevel,'-o','Color','red','MarkerSize',3);
+plot(cases,cost_with_opt_turbinelevel,'-o','Color','blue','MarkerSize',3); 
+ylabel('Costs [€]');
+% title('Costs: No Optimisation vs Optimisation','FontSize',20);
 
-fig2 = figure(2);
+yyaxis right
+plot(cases,cost_reduction_turbinelevel,'-o','Color',right_col,'MarkerSize',3);
+ylabel('Cost Reduction [€]');
+
+axes_fontsize = 15;
+ax1 = gca;
+ax1.FontSize = axes_fontsize;
+lgd1 = legend('Without optimisation','With optimisation','Feasibility of optimisation');
+lgd1.FontSize = 15;
+lgd1.Location = 'northwest';
+
+fig2 = figure(3);
+set(fig2,'defaultAxesColorOrder',[left_col;left_col]);
+hold on
+xlabel('Case')
+plot(cases,relative_reduction_str,'-o','Color','red','MarkerSize',3);
+plot(cases,relative_reduction_tur,'-o','Color','blue','MarkerSize',3); 
+ylabel('Relative reduction');
+% title('Tuning Comparison: Before vs After ','FontSize',20);
+
+axes_fontsize = 15;
+ax2 = gca;
+ax2.FontSize = axes_fontsize;
+lgd2 = legend('String level','Turbine level');
+lgd2.FontSize = 15;
+lgd2.Location = 'northwest';
+
+fig2 = figure(4);
 set(fig2,'defaultAxesColorOrder',[left_col;left_col]);
 hold on
 xlabel('Case')
@@ -104,4 +143,6 @@ ax2.FontSize = axes_fontsize;
 lgd2 = legend('Without tuning','With tuning','Improvement');
 lgd2.FontSize = 15;
 lgd2.Location = 'northwest';
+
+
         

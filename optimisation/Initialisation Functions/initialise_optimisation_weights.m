@@ -14,7 +14,6 @@ Optimisation.p3 = 1;                %Penalty for power violation
 
 %%Weights of the OF
 %With opt:
-Optimisation.w1 = 0.7;              %Weight of Ploss
 % Optimisation.w1 = 0.7;              %Weight of Ploss
 % Optimisation.w2 = 0.2;              %Weight of transformer switches
 % Optimisation.w3 = 0.05;             %Weight of reactor switching
